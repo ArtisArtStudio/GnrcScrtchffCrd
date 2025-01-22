@@ -263,7 +263,16 @@ var pct =new Array(9);
     
         // create new scratchers
         var scratchers = new Array(1);
-        
+        const cmessage = {
+            message: 'This is a very long message!!! It wraps the text inside the heart. This is a test to see how the text wraps'
+          };
+        const title = {
+            prop: 'To Jennifer'
+        };
+        const cmessagelimit = {
+            limit: 110
+        }
+
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
             scratchers[i] = new Scratcher('scratcher' + i1);
@@ -272,7 +281,7 @@ var pct =new Array(9);
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
             scratchers[i].setImages('images/empty.png','images/foreground.jpg');
-            scratchers[i].setText('This is a very long message!!! It wraps the text inside the heart. This is a test to see how the text wraps');
+            scratchers[i].setText(cmessage.message);
         }
        
         // get notifications of this scratcher changing
@@ -281,17 +290,22 @@ var pct =new Array(9);
         //scratchers[3].addEventListener('reset', scratchersChanged);
         scratchers[0].addEventListener('scratchesended', scratcher1Changed);
         
-        const para = {
-            prop: 'Customize the Scratch off card here'
-          };
-          
-          const pane = new Pane();
-          const f = pane.addFolder({
-            title: 'Parameters',
+        
+          const pane = new Pane({
+            title: 'Customization Parameters',
             expanded: true,
-          });
-          
-          f.addBinding(para, 'prop', {
+          });          //const f = pane.addFolder({
+          //  title: 'Customization Parameters',
+          //  expanded: true,
+          //});
+          pane.addBinding(title,'prop',{
+            view: 'text',
+            label: 'Title',
+          }).on('change', (ev) => {
+                console.log(ev.value);
+                scratchers[0].setText(ev.value);
+            });
+          pane.addBinding(cmessage, 'message', {
             //f.addBlade({
             view: 'text',
             label: 'Message',
@@ -299,7 +313,9 @@ var pct =new Array(9);
                 console.log(ev.value);
                 scratchers[0].setText(ev.value);
             });
-        //var canvas = document.getElementById('scratcher1');
+        const climit = pane.addBinding(cmessagelimit,'limit');
+        
+                      //var canvas = document.getElementById('scratcher1');
         //canvas.onmousemove = null;
         // Or if you didn't want to do it every scratch (to save CPU), you
         // can just do it on 'scratchesended' instead of 'scratch':
