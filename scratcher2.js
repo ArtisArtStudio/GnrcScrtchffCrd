@@ -221,8 +221,9 @@ Scratcher = (function() {
         mainctx.clip();
         // Step 4: stamp the foreground on the display canvas (source-over)
         mainctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
-        mainctx.font = "20pt Calibri";
-        mainctx.fillText(this.cmessage, 0, h/3,300);
+        mainctx.font = "16pt Calibri";
+        printAtWordWrap(mainctx,this.cmessage,20,h/3,20,270);
+        //mainctx.fillText(this.cmessage, 0, h/3,300);
 
         mainctx.clip();
         mainctx.closePath();
@@ -263,7 +264,40 @@ Scratcher = (function() {
         
 
     };
-
+    function printAtWordWrap( context , text, x, y, lineHeight, fitWidth)
+{
+    fitWidth = fitWidth || 0;
+    
+    if (fitWidth <= 0)
+    {
+        context.fillText( text, x, y );
+        return;
+    }
+    var words = text.split(' ');
+    var currentLine = 0;
+    var idx = 1;
+    while (words.length > 0 && idx <= words.length)
+    {
+        var str = words.slice(0,idx).join(' ');
+        var w = context.measureText(str).width;
+        if ( w > fitWidth-(currentLine*10) )
+        {
+            if (idx==1)
+            {
+                idx=2;
+            }
+            context.fillText( words.slice(0,idx-1).join(' '), x+(currentLine*10), y + (lineHeight*currentLine) );
+            currentLine++;
+            words = words.splice(idx-1);
+            idx = 1;
+        }
+        else
+        {idx++;}
+    }
+    if  (idx > 0)
+        context.fillText( words.join(' '), x+(currentLine*10), y + (lineHeight*currentLine) );
+}
+  
     /**
      * Draw a scratch line
      * 

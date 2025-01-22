@@ -272,7 +272,7 @@ var pct =new Array(9);
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
             scratchers[i].setImages('images/empty.png','images/foreground.jpg');
-            scratchers[i].setText('This is a very long message!!!');
+            scratchers[i].setText('This is a very long message!!! It wraps the text inside the heart. This is a test to see how the text wraps');
         }
        
         // get notifications of this scratcher changing
