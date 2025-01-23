@@ -258,6 +258,7 @@ var pct =new Array(9);
             view: 'textarea',
             label: 'Message',
             rows:6,
+            limit:110,
             }).on('change', (ev) => {
                 scratchers[0].setText(ev.value)
                 var st = cmes.element.querySelector('textarea').value;
