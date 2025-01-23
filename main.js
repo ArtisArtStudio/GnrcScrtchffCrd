@@ -217,7 +217,7 @@ var pct =new Array(9);
             message: 'This is a very long message!!! It wraps the text inside the heart. This is a test to see how the text wraps'
           };
         const title = {
-            prop: 'To Jennifer'
+            prop: 'To my lovely wife!'
         };
 
         for (i = 0; i < scratchers.length; i++) {
