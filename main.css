@@ -43,18 +43,16 @@ overscroll-behavior-y: contain;
 } */
 
 .pagetop h1 {
-font-family: "Yesteryear", cursive;
+font-family: "Birthstone", cursive;
 display:flexbox;
-font-weight: 400;
 flex-direction: column;
-font-size: calc(5rem + 1vw);
+font-size: calc(3rem + 1vw);
 text-align: center;
-text-shadow: -1px -1px 0 #ffdf75, 1px -1px 0 #756000, -1px 1px 0 #584100, 1px 1px 0 #584100,  2px  6px 6px #4d4c4c, 4px  12px 6px #fffdfd;
+white-space: normal;
+//text-shadow: 2px  6px 6px #4d4c4c, 4px  12px 6px #fffdfd;
 
 } 
-#or {
-  font-size: calc(3rem + 1vw);
-}
+
 .pagetop h3 {
 font-family: "Bona Nova SC", serif;
 flex-direction: column;
@@ -90,20 +88,11 @@ white-space:normal;
   margin-right: auto;
   width: 100%;
 }
-#baby
-{
-  white-space: normal;
-}
-#boy{
+#surprise{
   line-height: 5vh;
   text-align: center;
 }
-#t1 {
-  width: 80%;
-}
-.images{
-  max-width: 300px !important;
-}
+
 #scratcher-box {
   width:22em;
   align-content: center;
@@ -128,9 +117,7 @@ white-space:normal;
   .pagetop h1 {
     font-size: calc(5rem + 3vw);
   }
-  .images{
-    max-width: 350px !important;
-  } 
+  
 }
 
 /* @media (max-width: 430px), (max-height:670px) {
@@ -157,12 +144,9 @@ white-space:normal;
     font-size: calc(1.5rem + 1.2vw);
   }
   .pagetop h1 {
-    font-size: calc(5rem + 4vw);
+    font-size: calc(3rem + 4vw);
   }
 
-  #boy{
-    line-height: 10vh !important;
-  }
   #scratcher-box {
     position:absolute;
     width: 30em;
@@ -180,13 +164,8 @@ white-space:normal;
     font-size: calc(1.5rem + 1.2vh);
   } 
   .pagetop h1 {
-    font-size: calc(5rem + 3vw);
+    font-size: calc(3rem + 3vw);
   }
-
-    #boy{
-    line-height: 12vh !important;
-  }
-
   .pagetop h4 {
     font-size: 2vh;
   }
@@ -215,10 +194,6 @@ white-space:normal;
       -o-transform-origin: top left;
       transform-origin: top left;
   } */
-  #boy {
-    line-height: 10vh !important;
-  }
-
   #scratcher-box {
     position:absolute;
     width: 21em;
@@ -230,7 +205,7 @@ white-space:normal;
 
 @media (max-width: 320px) { 
    .pagetop h1 {
-    font-size: calc(3.5rem + 2vw);
+    font-size: calc(1.5rem + 2vw);
   }
   .pagetop h3 {
     font-size: calc(1.2rem + 0.5vw);
@@ -238,12 +213,7 @@ white-space:normal;
   .pagetop h4 {
     font-size: calc(0.6rem + 0.6vw) ;
   }
-  #boy {
-    line-height: 12vh !important;
-  }
-  .images{
-    max-width: 70% !important;
-  } 
+
   #scratcher-box {
     position:absolute;
     width: 15em;

@@ -219,9 +219,6 @@ var pct =new Array(9);
         const title = {
             prop: 'To Jennifer'
         };
-        const cmessagelimit = {
-            limit: 110
-        }
 
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
@@ -247,13 +244,27 @@ var pct =new Array(9);
         });
         pane.registerPlugin(TextareaPlugin);
 
-        const ctitle = pane.addBinding(title,'prop',{
-            view: 'text',
-            label: 'Title',
-          }).on('change', (ev) => {
-                console.log(ev.value);
-                scratchers[0].setText(ev.value);
+        const ctitle= pane.addBinding(title, 'prop', {
+            view: 'textarea',
+            label: 'Message',
+            rows:2,
+            limit:20,
+            }).on('change', (ev) => {
+                var st = ctitle.element.querySelector('textarea').value;
+                var char = 20 - st.length;
+                tlimit.value=char + " characters left";
+                $('#surprise').text(ev.value);
+
             });
+            const tlimit = pane.addBlade({
+                view: 'text',
+                label: '',
+                parse: (v) => String(v),
+                value: '20 characters left',
+                disabled: true
+            });
+        var st = ctitle.element.querySelector('textarea').value;
+        tlimit.value=20-st.length + " characters left";
         const cmes= pane.addBinding(cmessage, 'message', {
             view: 'textarea',
             label: 'Message',
@@ -264,20 +275,20 @@ var pct =new Array(9);
                 var st = cmes.element.querySelector('textarea').value;
                 var stext = cmes.element.querySelector('textarea');
                 var char = 110 - st.length;
-                climit.value=char + " Characters Remaining";
+                climit.value=char + " characters left";
                 
             });
         
-
+          
         const climit = pane.addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
-            value: '100 Characters remaining',
+            value: '110 Characters remaining',
             disabled: true
         });
         var st = cmes.element.querySelector('textarea').value;
-        climit.value=110-st.length + " Characters Remaining";
+        climit.value=110-st.length + " characters left";
         /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
