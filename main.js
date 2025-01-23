@@ -264,10 +264,7 @@ var pct =new Array(9);
                 var stext = cmes.element.querySelector('textarea');
                 var char = 110 - st.length;
                 climit.value=char + " Characters Remaining";
-                if (char==0){
-                    console.log("log");
-                    cmes.disabled=true;
-                }
+                
             });
         
 
