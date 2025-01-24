@@ -214,7 +214,7 @@ var pct =new Array(9);
         // create new scratchers
         var scratchers = new Array(1);
         const cmessage = {
-            message: 'This is a very long message!!! It wraps the text inside the heart. This is a test to see how the text wraps'
+            message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
           };
         const title = {
             prop: 'To my lovely wife!'
@@ -246,7 +246,7 @@ var pct =new Array(9);
 
         const ctitle= pane.addBinding(title, 'prop', {
             view: 'textarea',
-            label: 'Message',
+            label: 'Title',
             rows:2,
             limit:20,
             }).on('change', (ev) => {
@@ -256,6 +256,8 @@ var pct =new Array(9);
                 $('#surprise').text(ev.value);
 
             });
+            var st = ctitle.element.querySelector('textarea').value;
+            //alert(ctitle.element);
             const tlimit = pane.addBlade({
                 view: 'text',
                 label: '',
@@ -273,7 +275,6 @@ var pct =new Array(9);
             }).on('change', (ev) => {
                 scratchers[0].setText(ev.value)
                 var st = cmes.element.querySelector('textarea').value;
-                var stext = cmes.element.querySelector('textarea');
                 var char = 110 - st.length;
                 climit.value=char + " characters left";
                 
@@ -289,6 +290,18 @@ var pct =new Array(9);
         });
         var st = cmes.element.querySelector('textarea').value;
         climit.value=110-st.length + " characters left";
+        
+        const inputs = document.querySelectorAll('textarea');
+        inputs.forEach(input => {
+        input.setAttribute('autocomplete', 'off')
+	    input.setAttribute('autocorrect', 'off')
+	    input.setAttribute('autocapitalize', 'off')
+	    input.setAttribute('spellcheck', false)
+        }); 
+
+        cmes.element.querySelector('textarea').setAttribute('maxlength', 110)
+        ctitle.element.querySelector('textarea').setAttribute('maxlength', 20)
+
         /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
