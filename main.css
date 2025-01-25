@@ -11,14 +11,14 @@ html {
   box-sizing: inherit;
   white-space:nowrap;
 }
-td.bck {
+/* td.bck {
   background-image:url('images/scratch.png');
   background-size:contain;
 
-}
+} */
 body {
   height: 100vh;
-  background-image: url(images/background.jpg);
+  background-image: url(images/background0.jpg);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -47,6 +47,7 @@ font-family: "Birthstone", cursive;
 display:flexbox;
 flex-direction: column;
 font-size: calc(3rem + 1vw);
+font-weight: 400;
 text-align: center;
 white-space: normal;
 
@@ -179,7 +180,7 @@ white-space:normal;
     font-size: calc(0.7rem + 0.8vw) ;
   }
   .pagetop h1 {
-    font-size: calc(5rem + 1.8vw);
+    font-size: calc(3rem + 1.8vw);
   }
     .pagetop h3 {
     font-size: calc(1.3rem + 0.5vw);
@@ -203,7 +204,7 @@ white-space:normal;
 
 @media (max-width: 320px) { 
    .pagetop h1 {
-    font-size: calc(1.5rem + 2vw);
+    font-size: calc(3rem + 2vw);
   }
   .pagetop h3 {
     font-size: calc(1.2rem + 0.5vw);

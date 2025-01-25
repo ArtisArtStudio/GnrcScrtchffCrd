@@ -227,7 +227,7 @@ var pct =new Array(9);
             // set up this listener before calling setImages():
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
-            scratchers[i].setImages('images/empty.png','images/foreground.jpg');
+            scratchers[i].setImages('images/empty.png','images/foreground0.jpg');
             scratchers[i].setText(cmessage.message);
         }
        
@@ -243,33 +243,62 @@ var pct =new Array(9);
             expanded: true,
         });
         pane.registerPlugin(TextareaPlugin);
-
+        const backgrnd = pane.addBlade({
+            view: 'list',
+            label: 'Background',
+            options: [
+              {text: 'Blue Floral', value: 'background0.jpg'},
+              {text: 'Green Watercolor', value: 'background1.jpg'},
+              {text: 'Pink-Blue1', value: 'background2.jpg'},
+              {text: 'Pink-Blue2', value: 'background3.jpg'},
+              {text: 'Christmas1', value: 'background4.jpg'},
+            ],
+            value: 'background0.jpg',
+            }).on('change', (ev) => {
+                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + ')';
+          });
         const ctitle= pane.addBinding(title, 'prop', {
             view: 'textarea',
             label: 'Title',
             rows:2,
-            limit:20,
+            limit:22,
             }).on('change', (ev) => {
                 var st = ctitle.element.querySelector('textarea').value;
-                var char = 20 - st.length;
+                var char = 22 - st.length;
                 tlimit.value=char + " characters left";
                 $('#surprise').text(ev.value);
 
             });
-            var st = ctitle.element.querySelector('textarea').value;
             //alert(ctitle.element);
-            const tlimit = pane.addBlade({
-                view: 'text',
-                label: '',
-                parse: (v) => String(v),
-                value: '20 characters left',
-                disabled: true
-            });
+        const tlimit = pane.addBlade({
+            view: 'text',
+            label: '',
+            parse: (v) => String(v),
+            value: '22 characters left',
+            disabled: true
+        });
+        
         var st = ctitle.element.querySelector('textarea').value;
         tlimit.value=20-st.length + " characters left";
+
+        const tfont = pane.addBlade({
+            view: 'list',
+            label: 'Title Font',
+            options: [
+              {text: 'Font1', value: 'Birthstone'},
+              {text: 'Font2', value: 'Mea Culpa'},
+              {text: 'Font3', value: 'Oooh Baby'},
+              {text: 'Font4', value: 'Girassol'},
+              {text: 'Font5', value: 'Playball'},
+            ],
+            value: 'Birthstone',
+            }).on('change', (ev) => {
+                $('#surprise').css('font-family',ev.value);
+
+          });
         const cmes= pane.addBinding(cmessage, 'message', {
             view: 'textarea',
-            label: 'Message',
+            label: 'Message Under Scratch Area',
             rows:6,
             limit:110,
             }).on('change', (ev) => {
@@ -277,7 +306,7 @@ var pct =new Array(9);
                 var st = cmes.element.querySelector('textarea').value;
                 var char = 110 - st.length;
                 climit.value=char + " characters left";
-                
+                scratchers[0].reset();
             });
         
           
@@ -295,13 +324,36 @@ var pct =new Array(9);
         inputs.forEach(input => {
         input.setAttribute('autocomplete', 'off')
 	    input.setAttribute('autocorrect', 'off')
-	    input.setAttribute('autocapitalize', 'off')
 	    input.setAttribute('spellcheck', false)
         }); 
 
         cmes.element.querySelector('textarea').setAttribute('maxlength', 110)
-        ctitle.element.querySelector('textarea').setAttribute('maxlength', 20)
+        ctitle.element.querySelector('textarea').setAttribute('maxlength', 22)
 
+        const foregrnd = pane.addBlade({
+            view: 'list',
+            label: 'Foreground',
+            options: [
+              {text: 'Golden Glitter', value: 'foreground0.jpg'},
+              {text: 'Red Glitter', value: 'foreground1.jpg'},
+              {text: 'Silver Glitter', value: 'foreground2.jpg'},
+    
+            ],
+            value: 'foreground0.jpg',
+            }).on('change', (ev) => {
+                scratchers[0].setImages('images/empty.png','images/' + ev.value);
+            });
+            const shape = pane.addBlade({
+                view: 'list',
+                label: 'Shape',
+                options: [
+                  {text: 'Heart', value: 'hearth'},
+                  {text: 'Circle', value: 'circle'},        
+                ],
+                value: 'circle',
+                }).on('change', (ev) => {
+                    scratchers[0].reset();
+                });
         /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
