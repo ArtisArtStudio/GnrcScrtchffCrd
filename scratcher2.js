@@ -79,6 +79,7 @@ Scratcher = (function() {
      * @param cmessage [string] canvas message text
      * @param backImage [string, optional] URL to background (bottom) image
      * @param frontImage [string, optional] URL to foreground (top) image
+     * @param shape [string] scratcher shape
      */
     function Scratcher(canvasId, backImage, frontImage, cmessage) {
         this.canvas = {
@@ -114,7 +115,9 @@ Scratcher = (function() {
     };
     Scratcher.prototype.setText = function(cmessage) {
         this.cmessage = cmessage;
-
+    };
+    Scratcher.prototype.setShape = function(shape) {
+        this.shape = shape;
     };
     /**
      * Returns how scratched the scratcher is
@@ -199,14 +202,31 @@ Scratcher = (function() {
 
         tempctx.save();
         tempctx.beginPath();
-        draw(tempctx,w*0.5,0,w,w);
+        switch(this.shape) {
+            case 'heart':
+                drawHeart(tempctx,w*0.5,0,w,w);
+                break;
+            case 'circle':
+                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                break;
+            default:
+                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+            }
         tempctx.closePath();
         tempctx.clip();
         // Step 2: stamp the draw on the temp (source-over)
         tempctx.drawImage(this.canvas.draw, 0, 0);
         tempctx.beginPath();
-        draw(tempctx,w*0.5,0,w,w);
-
+        switch(this.shape) {
+            case 'heart':
+                drawHeart(tempctx,w*0.5,0,w,w);
+                break;
+            case 'circle':
+                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                break;
+            default:
+                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+            }
         tempctx.clip();
         tempctx.closePath();
         //tempctx.restore();
@@ -216,18 +236,46 @@ Scratcher = (function() {
         
         mainctx.save();
         mainctx.beginPath();
-        draw(mainctx,w*0.5,0,w,w);
+        switch(this.shape) {
+            case 'heart':
+                drawHeart(mainctx,w*0.5,0,w,w);
+                break;
+            case 'circle':
+                mainctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                break;
+            default:
+                mainctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+            }
         mainctx.closePath();
         mainctx.clip();
         // Step 4: stamp the foreground on the display canvas (source-over)
         mainctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
+        switch(this.shape) {
+            case 'heart':
+                break;
+            case 'circle':
+                mainctx.arc(0, 0, 150, 0, Math.PI * 2, true);
+                break;
+            default:
+                mainctx.arc(0, 0, 150, 0, Math.PI * 2, true);
+            }
         mainctx.fillStyle = '#FFF';
         mainctx.fillRect(0,0,w,h);
         mainctx.fillStyle = '#000';
-        mainctx.font = "16pt Calibri";
-        printAtWordWrap(mainctx,this.cmessage,18,h/3,20,270);
-        //mainctx.fillText(this.cmessage, 0, h/3,300);
-
+        switch(this.shape) {
+            case 'heart':
+                mainctx.font = "16pt Calibri";
+                printAtWordWrap(mainctx,this.cmessage,18,h/3,20,270,9);
+                break;
+            case 'circle':
+                mainctx.font = "18pt Calibri";
+                printAtWordWrap(mainctx,this.cmessage,18,h/3,22,270,0);                
+                break;
+            default:
+                mainctx.font = "18pt Calibri";
+                printAtWordWrap(mainctx,this.cmessage,18,h/3,22,270,0);            
+            }
+        
         mainctx.clip();
         mainctx.closePath();
         mainctx.restore();
@@ -235,7 +283,7 @@ Scratcher = (function() {
         mainctx.drawImage(this.canvas.temp, 0, 0);
 
     };
-    function draw(context, x, y, width, height){
+    function drawHeart(context, x, y, width, height){
         let topCurveHeight = height * 0.3;
         context.moveTo(x, y + topCurveHeight);
         // top left curve
@@ -267,7 +315,7 @@ Scratcher = (function() {
         
 
     };
-    function printAtWordWrap( context , text, x, y, lineHeight, fitWidth)
+    function printAtWordWrap( context , text, x, y, lineHeight, fitWidth,indent)
 {
     fitWidth = fitWidth || 0;
     
@@ -279,7 +327,6 @@ Scratcher = (function() {
     var words = text.split(' ');
     var currentLine = 0;
     var idx = 1;
-    var indent = 9;
     while (words.length > 0 && idx <= words.length)
     {
         var str = words.slice(0,idx).join(' ');

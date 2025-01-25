@@ -229,6 +229,8 @@ var pct =new Array(9);
     
             scratchers[i].setImages('images/empty.png','images/foreground0.jpg');
             scratchers[i].setText(cmessage.message);
+            scratchers[i].setShape('heart');
+
         }
        
         // get notifications of this scratcher changing
@@ -347,11 +349,12 @@ var pct =new Array(9);
                 view: 'list',
                 label: 'Shape',
                 options: [
-                  {text: 'Heart', value: 'hearth'},
+                  {text: 'Heart', value: 'heart'},
                   {text: 'Circle', value: 'circle'},        
                 ],
-                value: 'circle',
+                value: 'heart',
                 }).on('change', (ev) => {
+                    scratchers[0].setShape(ev.value);
                     scratchers[0].reset();
                 });
         /* const elem = cmes.element.querySelector('input');
