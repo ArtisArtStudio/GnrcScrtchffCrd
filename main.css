@@ -57,6 +57,7 @@ white-space: normal;
 font-family: "Bona Nova SC", serif;
 flex-direction: column;
 font-size:calc(1.5rem + 0.6vw);
+font-weight: 400;
 color: #000000 !important;
 text-align: center;
 white-space:normal;
@@ -103,7 +104,7 @@ white-space:normal;
   -moz-transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  top: 70%;
+  top: 75%;
   left: 50%;
 }
 /* Styles for mobile phones */ 
@@ -114,7 +115,7 @@ white-space:normal;
     font-size: calc(0.7rem + 1vw) ;
   }
   .pagetop h1 {
-    font-size: calc(5rem + 3vw);
+    font-size: calc(4rem + 3vw);
   }
   
 }
@@ -150,7 +151,7 @@ white-space:normal;
     position:absolute;
     width: 30em;
     height: 30em; 
-    top: 60%;
+    top: 65%;
   } 
   .pagetop h4 {
     font-size: 2vh;
@@ -172,7 +173,7 @@ white-space:normal;
     position:absolute;
     width: 26em;
     height: 26em; 
-    top: 73%;
+    top: 78%;
   }
 }
 @media (max-width: 375px), (max-height:667px) {
@@ -197,7 +198,7 @@ white-space:normal;
     position:absolute;
     width: 21em;
     height: 21em; 
-    top: 70%;
+    top: 75%;
   }
   
 } 
@@ -217,7 +218,7 @@ white-space:normal;
     position:absolute;
     width: 15em;
     height: 15em; 
-    top: 68%;
+    top: 73%;
   }
  
   #H3 {

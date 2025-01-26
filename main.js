@@ -292,6 +292,8 @@ var pct =new Array(9);
               {text: 'Font3', value: 'Oooh Baby'},
               {text: 'Font4', value: 'Girassol'},
               {text: 'Font5', value: 'Playball'},
+              {text: 'Font6', value: 'Engagement'},
+
             ],
             value: 'Birthstone',
             }).on('change', (ev) => {

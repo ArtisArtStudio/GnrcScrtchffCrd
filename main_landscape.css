@@ -11,11 +11,11 @@ html {
   box-sizing: inherit;
   white-space:nowrap;
 }
-td.bck {
+/* td.bck {
   background-image:url('images/scratch.png');
   background-size:contain;
 
-}
+} */
 body {
   height: 100vh;
   position: relative;
@@ -126,11 +126,6 @@ text-align: right;
 
 @media (max-width:620px){ 
   
-  #t1
-  {
-    width: calc(40% - 10px);
-
-  }
   #reveal {
     width: calc(45% - 10px);
 
@@ -138,7 +133,7 @@ text-align: right;
 }
 @media (min-height: 365px) and (max-width: 671px) { 
   .pagetop h1 {
-    font-size: calc(5rem + 1vw);
+    font-size: calc(3rem + 1vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
@@ -146,10 +141,7 @@ text-align: right;
   .pagetop h3 {
     font-size: calc(1rem + 1vw);
   }
-  #t1
-  {
-    width: calc(50% - 10px);
-  }
+
   #reveal {
     width: calc(50% - 10px);
 
@@ -163,7 +155,7 @@ text-align: right;
 }
 @media (max-height: 375px){ 
   .pagetop h1 {
-    font-size: calc(5rem + 0.55vw);
+    font-size: calc(3rem + 0.55vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
@@ -177,11 +169,7 @@ text-align: right;
     top: 50%;
     left: 0%;
   }
-  #t1
-  {
-    width: calc(50% - 10px);
-
-  }
+ 
   #reveal {
     width: calc(50% - 10px);
 
@@ -193,7 +181,7 @@ text-align: right;
 }
 @media (min-height:336px) and (min-width: 672px) { 
   .pagetop h1 {
-    font-size: calc(5rem + 1vw);
+    font-size: calc(3rem + 1vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
@@ -228,9 +216,7 @@ text-align: right;
     top: 52%;
     left: 5%;
   } 
-  .images{
-    max-width: 250px !important;
-  } 
+
 }
 @media screen and (max-height:290px){ 
   .pagetop h1 {
@@ -242,12 +228,7 @@ text-align: right;
     top: 52%;
     left: 3vw;
   } 
-  #boy{
-    line-height: 25vh !important;
-  }
-  .images{
-    max-width: 250px !important;
-  } 
+  
 }
 /* @media (max-height:351px) and (min-height:319){ 
   
