@@ -259,6 +259,7 @@ var pct =new Array(9);
             }).on('change', (ev) => {
                 document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + ')';
           });
+
         const ctitle= pane.addBinding(title, 'prop', {
             view: 'textarea',
             label: 'Title',
@@ -281,7 +282,7 @@ var pct =new Array(9);
         });
         
         var st = ctitle.element.querySelector('textarea').value;
-        tlimit.value=20-st.length + " characters left";
+        tlimit.value=22-st.length + " characters left";
 
         const tfont = pane.addBlade({
             view: 'list',
@@ -300,6 +301,29 @@ var pct =new Array(9);
                 $('#surprise').css('font-family',ev.value);
 
           });
+          const ctext= pane.addBinding(title, 'prop', {
+            view: 'textarea',
+            label: 'Text under Title',
+            rows:3,
+            limit:50,
+            }).on('change', (ev) => {
+                var st = ctitle.element.querySelector('textarea').value;
+                var char = 22 - st.length;
+                tlimit.value=char + " characters left";
+                $('#surprise').text(ev.value);
+
+            });
+            //alert(ctitle.element);
+        const ttext = pane.addBlade({
+            view: 'text',
+            label: '',
+            parse: (v) => String(v),
+            value: '50 characters left',
+            disabled: true
+        });
+        
+        var st = ctitle.element.querySelector('textarea').value;
+        ttext.value=50-st.length + " characters left";
         const cmes= pane.addBinding(cmessage, 'message', {
             view: 'textarea',
             label: 'Message Under Scratch Area',
