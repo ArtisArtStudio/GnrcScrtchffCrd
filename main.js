@@ -219,7 +219,9 @@ var pct =new Array(9);
         const title = {
             prop: 'To my lovely wife!'
         };
-
+        const text = {
+            prop: 'I have a special gift. Scratch to see it! Jamie'
+        };
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
             scratchers[i] = new Scratcher('scratcher' + i1);
@@ -301,7 +303,7 @@ var pct =new Array(9);
                 $('#surprise').css('font-family',ev.value);
 
           });
-          const ctext= pane.addBinding(title, 'prop', {
+          const ctext= pane.addBinding(text, 'prop', {
             view: 'textarea',
             label: 'Text under Title',
             rows:3,
@@ -383,6 +385,14 @@ var pct =new Array(9);
                     scratchers[0].setShape(ev.value);
                     scratchers[0].reset();
                 });
+            const btn = pane.addButton({
+                title: 'Create the Link',
+            });
+            
+           
+            btn.on('click', () => {
+                
+            });
         /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
