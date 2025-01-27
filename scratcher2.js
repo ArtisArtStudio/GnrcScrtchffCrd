@@ -265,11 +265,11 @@ Scratcher = (function() {
         switch(this.shape) {
             case 'heart':
                 mainctx.font = "16pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,18,h/3,20,270,9);
+                printAtWordWrap(mainctx,this.cmessage,150,h/3,20,270,9);
                 break;
             case 'circle':
                 mainctx.font = "18pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,18,h/3,22,270,0);                
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,22,270,0);                
                 break;
             default:
                 mainctx.font = "18pt Calibri";
@@ -318,7 +318,7 @@ Scratcher = (function() {
     function printAtWordWrap( context , text, x, y, lineHeight, fitWidth,indent)
 {
     fitWidth = fitWidth || 0;
-    
+    context.textAlign="center";
     if (fitWidth <= 0)
     {
         context.fillText( text, x, y );
@@ -337,7 +337,7 @@ Scratcher = (function() {
             {
                 idx=2;
             }
-            context.fillText( words.slice(0,idx-1).join(' '), x+(currentLine*indent), y + (lineHeight*currentLine) );
+            context.fillText( words.slice(0,idx-1).join(' '), x, y + (lineHeight*currentLine) );
             currentLine++;
             words = words.splice(idx-1);
             idx = 1;
@@ -346,7 +346,7 @@ Scratcher = (function() {
         {idx++;}
     }
     if  (idx > 0)
-        context.fillText( words.join(' '), x+(currentLine*indent), y + (lineHeight*currentLine) );
+        context.fillText( words.join(' '), x, y + (lineHeight*currentLine) );
 }
   
     /**

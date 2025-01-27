@@ -296,6 +296,7 @@ button:hover {
 .nosoundbtn, .withsoundbtn {
   float: left;
   width: 50%;
+  
 }
 
 /* Add a color to the cancel button */

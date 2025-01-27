@@ -393,7 +393,10 @@ var pct =new Array(9);
             btn.on('click', () => {
                 
             });
-        /* const elem = cmes.element.querySelector('input');
+            var prev = btn.element.querySelector('button').getAttribute("style");
+            var added = 'background-color:rgb(1, 231, 12) ;box-shadow:  0 -0.25rem 1.5rem rgb(25, 247, 5) inset, 0 0.75rem 0.5rem rgba(255,255,255, 0.4) inset, 0 0.25rem 0.5rem 0 rgb(255, 226, 61) inset;'
+            btn.element.querySelector('button').setAttribute('style', prev+added);
+            /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
         }); */
