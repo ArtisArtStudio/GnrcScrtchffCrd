@@ -265,7 +265,7 @@ Scratcher = (function() {
         switch(this.shape) {
             case 'heart':
                 mainctx.font = "16pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,150,h/3,20,270,9);
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,20,270,9);
                 break;
             case 'circle':
                 mainctx.font = "18pt Calibri";
@@ -273,7 +273,7 @@ Scratcher = (function() {
                 break;
             default:
                 mainctx.font = "18pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,18,h/3,22,270,0);            
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,22,270,0);            
             }
         
         mainctx.clip();

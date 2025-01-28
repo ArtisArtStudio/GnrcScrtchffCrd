@@ -7,13 +7,8 @@
 /*import {confetti} from 'https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/umd/confetti.js';*/
 import {Pane} from './tweakpane-4.0.5.min.js';
 import * as TextareaPlugin from './tweakpane-textarea-plugin.min.js';
+var wholelink='';
 
-var rnd;
-// locations of correct gender circles
-var loc = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
-// location of other gender which will give scratch further warning
-var oloc = [[4,5,9],[1,2,7],[1,3,4],[3,5,8],[1,4,9],[1,2,7],[3,4,7],[1,2,6]];
-var pct =new Array(9);
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -22,26 +17,19 @@ var pct =new Array(9);
      */
 
     var color1 = '#ff95c8';
-    var color2 = '#5194f8';
-    var color3 ='#969696';
     var colortxt1 = '#ff0b9a';
-    var colortxt2= '#7FB1ED';
-    var colortxt3= '#000000';
     //Select the background color
     var color =color1;
     //Select the text color
     var colortxt = colortxt1;
     var gendertext1 = "It is a Girl!";
-    var gendertext2 = "It is a Boy!";
-    var gendertext3= "It is a Demo!";
     //Select the gender text
     var gendertext = gendertext1;
-    var surname;
     var soundHandle = new Audio();
     var triggered=false;
     var nosound=true;
-    var params = new URLSearchParams(window.location.search.slice(1));
-    var pct1=0, pct2=0, pct3=0, pct4=0, pct5=0, pct6 = 0;
+    //var params = new URLSearchParams(window.location.search.slice(1));
+    var pct1=0;
 
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
@@ -154,16 +142,8 @@ var pct =new Array(9);
         
         
 
-        surname = params.get('surname');
-        if (surname !=null && surname.replace(/\s/g, '').length) {
-            $("#baby").text('baby ' + surname);
-        } else {
-            $("#baby").text('the baby');
-            document.getElementById('surname').style.fontWeight="normal";
-            $('#baby').css('font-weight', 'normal');
-
-        }
-       document.getElementById('surname').innerHTML= surname;
+        //surname = params.get('surname');
+        
 
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
@@ -171,16 +151,17 @@ var pct =new Array(9);
             nosound=true;
         });
         $('.withsoundbtn').on("click", function (e) {
-            document.getElementById('id01').style.display='none';
-            nosound=false;
-            if (soundHandle.currentTime!=0) {return;}
-                soundHandle = document.getElementById('soundHandle');  
-                soundHandle.autoplay = true;
-                soundHandle.muted=false;
-                soundHandle.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
-                soundHandle.src = 'audio/celebrate.mp3';
-                soundHandle.play();
-                soundHandle.pause();
+            if (navigator.share) {
+                navigator.share({
+                  //title: 'Love Coupon',
+                  text : wholelink
+                }).then(() => {
+
+                })
+                .catch(console.error);
+              } else {
+                alert("Unfortunately sharing is not supported by your browser/platform. Please take a screenshot instead");
+            }
         });
         document.addEventListener(
             "visibilitychange",
@@ -388,14 +369,45 @@ var pct =new Array(9);
             const btn = pane.addButton({
                 title: 'Create the Link',
             });
-            
-           
+                       
             btn.on('click', () => {
-                
+                document.getElementById('id01').style.display='block';
+                var params = new URLSearchParams();
+                params.append("title1",title.value);
+                params.append("back1",backgrnd.value);
+
+                window.open(
+                    'https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString(),
+                    '_blank' 
+                  );             
             });
+            'https://artisartstudio.github.io/GnrcScrtchffCrd/index.html?t=This is a gender reveal&t1=This is a gender reveal scratch off for family. It&t3=This is a gender reveal scratch off for family. It contains high level sound. Do you want to continue with sou&b=1&f=2&s=1&sc=1'
             var prev = btn.element.querySelector('button').getAttribute("style");
-            var added = 'background-color:rgb(1, 231, 12) ;box-shadow:  0 -0.25rem 1.5rem rgb(25, 247, 5) inset, 0 0.75rem 0.5rem rgba(255,255,255, 0.4) inset, 0 0.25rem 0.5rem 0 rgb(255, 226, 61) inset;'
+        
+            var added = '  background: #3b88d8;  background: -moz-linear-gradient(0% 100% 90deg, #377ad0, #52a8e8);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a8e8), to(#377ad0)); background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);  border-top: 1px solid #4081af;   border-right: 1px solid #2e69a3; border-bottom: 1px solid #20559a;  border-left: 1px solid #2e69a3;  -moz-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #3275bc;  -webkit-background-clip: padding-box;'
+
             btn.element.querySelector('button').setAttribute('style', prev+added);
+
+            
+            
+            const btn2 = pane.addButton({
+                title: 'Help',
+            });
+                       
+            btn2.on('click', () => {
+
+            });
+            
+            const btn1 = pane.addButton({
+                title: 'Hide the Panel',
+            });
+                       
+            btn1.on('click', () => {
+                pane.expanded= false;
+            });
+            
+
+        
             /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);
