@@ -5,10 +5,8 @@
  */
 /*import {startParticles, stopParticles, startConfetti, stopConfetti} from './particles.js';*/
 /*import {confetti} from 'https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/umd/confetti.js';*/
-import {Pane} from './tweakpane-4.0.5.min.js';
-import * as TextareaPlugin from './tweakpane-textarea-plugin.min.js';
 var wholelink='';
-
+var params;
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -16,19 +14,9 @@ var wholelink='';
      * From http://diveintohtml5.info/
      */
 
-    var color1 = '#ff95c8';
-    var colortxt1 = '#ff0b9a';
-    //Select the background color
-    var color =color1;
-    //Select the text color
-    var colortxt = colortxt1;
-    var gendertext1 = "It is a Girl!";
-    //Select the gender text
-    var gendertext = gendertext1;
     var soundHandle = new Audio();
     var triggered=false;
     var nosound=true;
-    //var params = new URLSearchParams(window.location.search.slice(1));
     var pct1=0;
 
     function supportsCanvas() {
@@ -42,14 +30,6 @@ var wholelink='';
     function checkpct() {
         if (!triggered) {
             if (pct1 > 23) {
-                $('#surprise').text(gendertext);
-                $('#surprise').css('color', colortxt);
-
-                document.getElementsByTagName("body")[0].style.backgroundColor = color;
-                document.getElementsByTagName("body")[0].style.backgroundImage = 'none';
-                
-                //document.getElementsByTagName("body")[0].style.backgroundImage.animation = 'gradient 15s ease infinite';
-                $('#H3').hide();
                 confetti_effect();
             }
         }
@@ -116,17 +96,9 @@ var wholelink='';
             scratchers[i].reset();
         }
         
-        $('#tboy').hide();
-        $('#boy').show();
-        $('#or').show();
-        $('#girl').show();
-        $('.images').show();
-
-        document.getElementsByTagName("body")[0].style.backgroundColor = "#ffffff";
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background.jpg)';
         // document.getElementById('testtext').remove();
 
-        $('#H3').show();
+        //$('#H3').show();
         triggered = false;
         soundHandle.pause();
         soundHandle.currentTime = 0;    
@@ -147,21 +119,10 @@ var wholelink='';
 
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
-            document.getElementById('id01').style.display='none';
-            nosound=true;
+            
         });
         $('.withsoundbtn').on("click", function (e) {
-            if (navigator.share) {
-                navigator.share({
-                  //title: 'Love Coupon',
-                  text : wholelink
-                }).then(() => {
-
-                })
-                .catch(console.error);
-              } else {
-                alert("Unfortunately sharing is not supported by your browser/platform. Please take a screenshot instead");
-            }
+            
         });
         document.addEventListener(
             "visibilitychange",
@@ -174,7 +135,7 @@ var wholelink='';
           );
    
         
-        document.getElementById("resetbutton").style.backgroundColor = colortxt;
+        //document.getElementById("resetbutton").style.backgroundColor = colortxt;
 
         // called each time a scratcher loads
         function onScratcherLoaded(ev) {
@@ -194,15 +155,25 @@ var wholelink='';
     
         // create new scratchers
         var scratchers = new Array(1);
-        const cmessage = {
-            message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
-          };
-        const title = {
-            prop: 'To my lovely wife!'
-        };
-        const text = {
-            prop: 'I have a special gift. Scratch to see it! Jamie'
-        };
+        
+        //var end = window.btoa( rb ); 
+        //end = window.atob( rb );
+        //var esg = window.atob( mrb );
+        params = new URLSearchParams(window.location.search.slice(1));
+
+        var backgrnd = params.get("bck1");
+        var foregrnd = params.get("fr1");
+        var ctitle = window.atob(params.get("ttl1"));
+        var tfont = params.get("tfnt1");
+        var ctext = window.atob(params.get("ttl2"));
+        var cmes = window.atob(params.get("cmes"));
+
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background'+backgrnd+ '.jpg)';
+        $('#surprise').text(ctitle);
+        $('#surprise').css('font-family',tfont);
+        $('#H3').text(ctext);
+
+
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
             scratchers[i] = new Scratcher('scratcher' + i1);
@@ -210,203 +181,11 @@ var wholelink='';
             // set up this listener before calling setImages():
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
-            scratchers[i].setImages('images/empty.png','images/foreground0.jpg');
-            scratchers[i].setText(cmessage.message);
+            scratchers[i].setImages('images/empty.png','images/foreground' +foregrnd+ '.jpg');
+            scratchers[i].setText(cmes);
             scratchers[i].setShape('heart');
 
         }
-       
-        // get notifications of this scratcher changing
-        // (These aren't "real" event listeners; they're implemented on top
-        // of Scratcher.)
-        //scratchers[3].addEventListener('reset', scratchersChanged);
-        scratchers[0].addEventListener('scratchesended', scratcher1Changed);
-        
-        
-        const pane = new Pane({
-            title: 'Customization Parameters',
-            expanded: true,
-        });
-        pane.registerPlugin(TextareaPlugin);
-        const backgrnd = pane.addBlade({
-            view: 'list',
-            label: 'Background',
-            options: [
-              {text: 'Blue Floral', value: 'background0.jpg'},
-              {text: 'Green Watercolor', value: 'background1.jpg'},
-              {text: 'Pink-Blue1', value: 'background2.jpg'},
-              {text: 'Pink-Blue2', value: 'background3.jpg'},
-              {text: 'Christmas1', value: 'background4.jpg'},
-            ],
-            value: 'background0.jpg',
-            }).on('change', (ev) => {
-                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + ')';
-          });
-
-        const ctitle= pane.addBinding(title, 'prop', {
-            view: 'textarea',
-            label: 'Title',
-            rows:2,
-            limit:22,
-            }).on('change', (ev) => {
-                var st = ctitle.element.querySelector('textarea').value;
-                var char = 22 - st.length;
-                tlimit.value=char + " characters left";
-                $('#surprise').text(ev.value);
-
-            });
-            //alert(ctitle.element);
-        const tlimit = pane.addBlade({
-            view: 'text',
-            label: '',
-            parse: (v) => String(v),
-            value: '22 characters left',
-            disabled: true
-        });
-        
-        var st = ctitle.element.querySelector('textarea').value;
-        tlimit.value=22-st.length + " characters left";
-
-        const tfont = pane.addBlade({
-            view: 'list',
-            label: 'Title Font',
-            options: [
-              {text: 'Font1', value: 'Birthstone'},
-              {text: 'Font2', value: 'Mea Culpa'},
-              {text: 'Font3', value: 'Oooh Baby'},
-              {text: 'Font4', value: 'Girassol'},
-              {text: 'Font5', value: 'Playball'},
-              {text: 'Font6', value: 'Engagement'},
-
-            ],
-            value: 'Birthstone',
-            }).on('change', (ev) => {
-                $('#surprise').css('font-family',ev.value);
-
-          });
-          const ctext= pane.addBinding(text, 'prop', {
-            view: 'textarea',
-            label: 'Text under Title',
-            rows:3,
-            limit:50,
-            }).on('change', (ev) => {
-                var st = ctitle.element.querySelector('textarea').value;
-                var char = 22 - st.length;
-                tlimit.value=char + " characters left";
-                $('#surprise').text(ev.value);
-
-            });
-            //alert(ctitle.element);
-        const ttext = pane.addBlade({
-            view: 'text',
-            label: '',
-            parse: (v) => String(v),
-            value: '50 characters left',
-            disabled: true
-        });
-        
-        var st = ctitle.element.querySelector('textarea').value;
-        ttext.value=50-st.length + " characters left";
-        const cmes= pane.addBinding(cmessage, 'message', {
-            view: 'textarea',
-            label: 'Message Under Scratch Area',
-            rows:6,
-            limit:110,
-            }).on('change', (ev) => {
-                scratchers[0].setText(ev.value)
-                var st = cmes.element.querySelector('textarea').value;
-                var char = 110 - st.length;
-                climit.value=char + " characters left";
-                scratchers[0].reset();
-            });
-        
-          
-        const climit = pane.addBlade({
-            view: 'text',
-            label: '',
-            parse: (v) => String(v),
-            value: '110 Characters remaining',
-            disabled: true
-        });
-        var st = cmes.element.querySelector('textarea').value;
-        climit.value=110-st.length + " characters left";
-        
-        const inputs = document.querySelectorAll('textarea');
-        inputs.forEach(input => {
-        input.setAttribute('autocomplete', 'off')
-	    input.setAttribute('autocorrect', 'off')
-	    input.setAttribute('spellcheck', false)
-        }); 
-
-        cmes.element.querySelector('textarea').setAttribute('maxlength', 110)
-        ctitle.element.querySelector('textarea').setAttribute('maxlength', 22)
-
-        const foregrnd = pane.addBlade({
-            view: 'list',
-            label: 'Foreground',
-            options: [
-              {text: 'Golden Glitter', value: 'foreground0.jpg'},
-              {text: 'Red Glitter', value: 'foreground1.jpg'},
-              {text: 'Silver Glitter', value: 'foreground2.jpg'},
-    
-            ],
-            value: 'foreground0.jpg',
-            }).on('change', (ev) => {
-                scratchers[0].setImages('images/empty.png','images/' + ev.value);
-            });
-            const shape = pane.addBlade({
-                view: 'list',
-                label: 'Shape',
-                options: [
-                  {text: 'Heart', value: 'heart'},
-                  {text: 'Circle', value: 'circle'},        
-                ],
-                value: 'heart',
-                }).on('change', (ev) => {
-                    scratchers[0].setShape(ev.value);
-                    scratchers[0].reset();
-                });
-            const btn = pane.addButton({
-                title: 'Create the Link',
-            });
-                       
-            btn.on('click', () => {
-                document.getElementById('id01').style.display='block';
-                var params = new URLSearchParams();
-                params.append("title1",title.value);
-                params.append("back1",backgrnd.value);
-
-                window.open(
-                    'https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString(),
-                    '_blank' 
-                  );             
-            });
-            'https://artisartstudio.github.io/GnrcScrtchffCrd/index.html?t=This is a gender reveal&t1=This is a gender reveal scratch off for family. It&t3=This is a gender reveal scratch off for family. It contains high level sound. Do you want to continue with sou&b=1&f=2&s=1&sc=1'
-            var prev = btn.element.querySelector('button').getAttribute("style");
-        
-            var added = '  background: #3b88d8;  background: -moz-linear-gradient(0% 100% 90deg, #377ad0, #52a8e8);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a8e8), to(#377ad0)); background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);  border-top: 1px solid #4081af;   border-right: 1px solid #2e69a3; border-bottom: 1px solid #20559a;  border-left: 1px solid #2e69a3;  -moz-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #3275bc;  -webkit-background-clip: padding-box;'
-
-            btn.element.querySelector('button').setAttribute('style', prev+added);
-
-            
-            
-            const btn2 = pane.addButton({
-                title: 'Help',
-            });
-                       
-            btn2.on('click', () => {
-
-            });
-            
-            const btn1 = pane.addButton({
-                title: 'Hide the Panel',
-            });
-                       
-            btn1.on('click', () => {
-                pane.expanded= false;
-            });
-            
-
         
             /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
