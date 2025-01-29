@@ -148,6 +148,8 @@ var params;
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
             wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
+            //wholelink='./index.html' + "?" + params.toString(); // Test page
+
             window.open(
                 wholelink,'_blank' 
               );             
@@ -382,10 +384,10 @@ var params;
                 //var esg = window.atob( mrb );
                 params.append("bck1",backgrnd.value);
                 params.append("fr1",foregrnd.value);
-                params.append("ttl1",window.btoa(ctitle.element.querySelector('textarea').value));
+                params.append("ttl1",window.btoa(encodeURIComponent(ctitle.element.querySelector('textarea').value)));
                 params.append("tfnt1",tfont.value);
-                params.append("ttl2",window.btoa(ctext.element.querySelector('textarea').value));
-                params.append("cmes",window.btoa(cmes.element.querySelector('textarea').value));
+                params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
+                params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
 
 
             });

@@ -163,10 +163,10 @@ var params;
 
         var backgrnd = params.get("bck1");
         var foregrnd = params.get("fr1");
-        var ctitle = window.atob(params.get("ttl1"));
+        var ctitle = decodeURIComponent(window.atob(params.get("ttl1")));
         var tfont = params.get("tfnt1");
-        var ctext = window.atob(params.get("ttl2"));
-        var cmes = window.atob(params.get("cmes"));
+        var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
+        var cmes = decodeURIComponent(window.atob(params.get("cmes")));
 
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
