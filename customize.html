@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Birthstone&display=swap&family=Mea+Culpa&display=swap&family=Oooh+Baby&display=swap&family=Girassol&family=Playball&display=swap&family=Engagement&family=Roboto&display=swap" rel="stylesheet">
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/> 
+<meta name="color-scheme" content="dark only">
+<title></title>
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.8.0/dist/confetti.browser.min.js"></script>
+
+<link href="main.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="main_landscape.css" media="screen and (orientation: landscape) and (max-width: 1023px)">
+<script src="scratcher2.js" type="text/javascript"></script>
+<script src="customize.js" type="module"></script>
+<!-- begin common pre2 -->
+</head>
+<!-- begin common pagetop -->
+<body spellcheck="false" autocomplete="off" aria-autocomplete="false">
+  <div id="id01" class="modal">
+    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close">×</span>
+    <form class="modal-content" action="javascript:void(0);">
+      <div class="container">
+        <h2 id="intro">Your link with the customized Scratch off has been generated. Click below to go to the link to test it first then click share to share it.</h4>      
+        <!-- <h5 style="color:red; white-space: normal;">This is a demo with limited functionality. So only middle row can be scratched.</h5> -->
+        <div class="clearfix">
+          <button type="button" class="nosoundbtn">Go to the Link</button>
+          <button type="button" class="withsoundbtn">Share</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<div class="pagetop">  
+ <!-- .pagetop -->
+<br>
+ <audio id="soundHandle" style="display:none;" src="audio/celebrate.mp3" type="audio/mpeg"></audio>
+ 
+ 
+<h1 id="title" style="line-height: 10vh;"> 
+  <span id="surprise" style="color:#000000;white-space: normal;">To my lovely wife!</span>
+
+</h1>
+<br>
+<div id="reveal">
+<table style="width: 100%;">
+  <tr>
+    <td ><h3 id="H3">I have a special gift. Scratch to see it! Jamie</h3>
+  </td>
+</tr>
+</table>
+<br>
+</div>
+</div>
+<div id="mainbody">
+<!-- end common pagetop -->
+
+<!-- Begin scratcher -->
+<br>
+
+
+
+<p><noscript>(This page requires JavaScript to run correctly. Please enable JavaScript from your Browser's settings.)</noscript></p>
+<div id="scratcher-box">
+  <table id="table1" style="margin-top: auto;margin-bottom: auto;margin-left: auto;margin-right: auto;">
+      
+    <tr> <td colspan="3"><input type="button" id="resetbutton" value="Start Again!" style="display: none;"></input></td>
+    </tr>
+    <!-- <tr><td colspan="3"><div class="tabletop"><h4 id="scratcher3Pct" style="display:none">Find the gender</h4>
+    </div></td></tr> -->
+    <tr><td class="bck">
+      <canvas id="scratcher1" width="300" height= "300"><a style="color: #000000;">Enter your text here</a></canvas>
+    </td>
+    </tr>
+    </table>
+	<br>
+  <br>
+  
+</div> <!-- #canvas-box -->
+<!-- End scratcher -->
+<div id="scratcher-bottom-margin">
+  <a href="https://artisartprintables.etsy.com" style="text-decoration:none">
+  <p style="color:white; text-shadow: 1px 1px 10px #000000;">Copyright &#169 2024 ArtisArtPrintables Studio.</p>
+</div> </a>
+<div hidden id="lamebrowser">
+  <p><strong>Your browser doesn't support HTML canvas.</strong> Get a modern browser such
+  as <a href="http://www.google.com/chrome/">Chrome</a>,
+  <a href="http://firefox.com/">Firefox</a>, <a href="http://www.opera.com/">Opera</a>, or
+  <a href="http://windows.microsoft.com/en-us/internet-explorer/products/ie/home">IE9</a>.
+  And then, only then, will you be able to see this page. Sorry!</p>
+  </div>
+</html>
+<!-- end common pagebottom -->
