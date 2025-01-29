@@ -147,7 +147,6 @@ var params;
 
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
-            wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
             //wholelink='./index.html' + "?" + params.toString(); // Test page
 
             window.open(
@@ -388,6 +387,7 @@ var params;
                 params.append("tfnt1",tfont.value);
                 params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
                 params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
+                wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
 
 
             });
