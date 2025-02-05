@@ -207,10 +207,10 @@ Scratcher = (function() {
                 drawHeart(tempctx,w*0.5,0,w,w);
                 break;
             case 'circle':
-                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
                 break;
             default:
-                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
             }
         tempctx.closePath();
         tempctx.clip();
@@ -222,10 +222,10 @@ Scratcher = (function() {
                 drawHeart(tempctx,w*0.5,0,w,w);
                 break;
             case 'circle':
-                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
                 break;
             default:
-                tempctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
             }
         tempctx.clip();
         tempctx.closePath();
@@ -241,10 +241,10 @@ Scratcher = (function() {
                 drawHeart(mainctx,w*0.5,0,w,w);
                 break;
             case 'circle':
-                mainctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                mainctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
                 break;
             default:
-                mainctx.arc(150, 150, 150, 0, Math.PI * 2, true);
+                mainctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
             }
         mainctx.closePath();
         mainctx.clip();
@@ -254,26 +254,27 @@ Scratcher = (function() {
             case 'heart':
                 break;
             case 'circle':
-                mainctx.arc(0, 0, 150, 0, Math.PI * 2, true);
+                mainctx.arc(0, 0, w*0.5, 0, Math.PI * 2, true);
                 break;
             default:
-                mainctx.arc(0, 0, 150, 0, Math.PI * 2, true);
+                mainctx.arc(0, 0, w*0.5, 0, Math.PI * 2, true);
             }
         mainctx.fillStyle = '#FFF';
         mainctx.fillRect(0,0,w,h);
         mainctx.fillStyle = '#000';
+        var iw = window.innerWidth;
         switch(this.shape) {
             case 'heart':
-                mainctx.font = "16pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,20,270,9);
+                mainctx.font =  iw/30 + "pt Calibri";
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/25,w-30,9);
                 break;
             case 'circle':
-                mainctx.font = "18pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,22,270,0);                
+                mainctx.font = iw/30 + "pt Calibri";;
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/20,w-50,0);                
                 break;
             default:
                 mainctx.font = "18pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,22,270,0);            
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/20,w-50,0);            
             }
         
         mainctx.clip();

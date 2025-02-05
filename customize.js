@@ -44,18 +44,12 @@ var params;
             if (pct1 > 23) {
                 $('#surprise').text(gendertext);
                 $('#surprise').css('color', colortxt);
-
-                document.getElementsByTagName("body")[0].style.backgroundColor = color;
-                document.getElementsByTagName("body")[0].style.backgroundImage = 'none';
-                
-                //document.getElementsByTagName("body")[0].style.backgroundImage.animation = 'gradient 15s ease infinite';
-                $('#H3').hide();
                 confetti_effect();
             }
         }
     };
     function scratcher1Changed(ev) {
-        pct[0] = (this.fullAmount(40) * 100)|0;
+        pct1 = (this.fullAmount(40) * 100)|0;
         checkpct();
     };
    
@@ -133,18 +127,20 @@ var params;
         return false;
     };
     
-    
+    function fitCanvastoDiv() {
+        var canvas = document.getElementById("scratcher1");
+        var $td = $('canvas').parent();
+        canvas.width = $td.width();
+        canvas.height = $td.height();
+    }
     function initPage() {
         var scratcherLoadedCount = 0;
         var scratchers = [];
         var pct = [];
         var i, i1;    
         
-        
-
+        fitCanvastoDiv();
         //surname = params.get('surname');
-        
-
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
             //wholelink='./index.html' + "?" + params.toString(); // Test page
@@ -230,6 +226,7 @@ var params;
             title: 'Customization Parameters',
             expanded: true,
         });
+        
         pane.registerPlugin(TextareaPlugin);
         const backgrnd = pane.addBlade({
             view: 'list',
@@ -405,7 +402,9 @@ var params;
             });
                        
             btn2.on('click', () => {
-
+                window.open(
+                    './help.html','_blank' 
+                  );   
             });
             
             const btn1 = pane.addButton({
@@ -416,8 +415,8 @@ var params;
                 pane.expanded= false;
             });
             
-
-        
+            var p = document.querySelectorAll("tp-dfwv");
+            console.log(p[0]);
             /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);

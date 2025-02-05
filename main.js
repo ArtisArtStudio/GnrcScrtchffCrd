@@ -105,7 +105,12 @@ var params;
         return false;
     };
     
-    
+    function fitCanvastoDiv() {
+        var canvas = document.getElementById("scratcher1");
+        var $td = $('canvas').parent();
+        canvas.width = $td.width();
+        canvas.height = $td.height();
+    }
     function initPage() {
         var scratcherLoadedCount = 0;
         var scratchers = [];
@@ -113,9 +118,7 @@ var params;
         var i, i1;    
         
         
-
-        //surname = params.get('surname');
-        
+        fitCanvastoDiv();
 
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
