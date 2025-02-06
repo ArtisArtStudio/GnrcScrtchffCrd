@@ -238,15 +238,22 @@ var params;
             view: 'list',
             label: 'Background',
             options: [
-              {text: 'Blue Floral', value: '0'},
-              {text: 'Pink Floral', value: '1'},
-              {text: 'Pink-Blue1', value: '2'},
-              {text: 'Pink-Blue2', value: '3'},
-              {text: 'Christmas1', value: '4'},
+              {text: 'Blue-Floral', value: 'Blue-Floral'},
+              {text: 'Christmas1', value: 'Christmas1'},
+              {text: 'Green1', value: 'Green1'},
+              {text: 'Halloween1', value: 'Halloween1'},
+              {text: 'Pink1', value: 'Pink1'},
+              {text: 'Pink-Blue1', value: 'Pink-Blue1'},
+              {text: 'Pink-Blue2', value: 'Pink-Blue2'},
+              {text: 'Pink-Floral', value: 'Pink-Floral'},
+              {text: 'StPatricks1', value: 'StPatricks1'},
+              {text: 'StPatricks2', value: 'StPatricks2'},
+              {text: 'Turquoise1', value: 'Turquoise1'},
+              {text: 'Valentines1', value: 'Valentines1'},
             ],
-            value: '0',
+            value: 'Blue-Floral',
             }).on('change', (ev) => {
-                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background' + ev.value + '.jpg)';
+                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + '.jpg)';
           });
 
         const ctitle= pane.addBinding(title, 'prop', {
@@ -283,6 +290,8 @@ var params;
               {text: 'Font4', value: 'Girassol'},
               {text: 'Font5', value: 'Playball'},
               {text: 'Font6', value: 'Engagement'},
+              {text: 'Halloween Font1', value: 'Creepster'},
+
 
             ],
             value: 'Birthstone',
@@ -356,7 +365,16 @@ var params;
               {text: 'Golden Glitter', value: '0'},
               {text: 'Red Glitter', value: '1'},
               {text: 'Silver Glitter', value: '2'},
-    
+              {text: 'Green Glitter', value: '3'},
+              {text: 'Pink Glitter', value: '4'},
+              {text: 'Pink Metallic1', value: '5'},
+              {text: 'Gold Metallic1', value: '6'},
+              {text: 'Gold Metallic2', value: '7'},
+              {text: 'Silver Metallic1', value: '8'},
+              {text: 'Silver Metallic2', value: '9'},
+              {text: 'Green Metallic', value: '10'},
+              {text: 'Halloween1', value: '11'},
+
             ],
             value: '0',
             }).on('change', (ev) => {

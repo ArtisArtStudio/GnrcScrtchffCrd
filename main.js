@@ -171,7 +171,7 @@ var params;
         var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
         var cmes = decodeURIComponent(window.atob(params.get("cmes")));
 
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background'+backgrnd+ '.jpg)';
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
