@@ -262,19 +262,18 @@ Scratcher = (function() {
         mainctx.fillStyle = '#FFF';
         mainctx.fillRect(0,0,w,h);
         mainctx.fillStyle = '#000';
-        var iw = window.innerWidth;
         switch(this.shape) {
             case 'heart':
-                mainctx.font =  iw/30 + "pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/25,w-30,9);
+                mainctx.font =  w/18 + "pt Calibri";
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/15,w-30,9);
                 break;
             case 'circle':
-                mainctx.font = iw/30 + "pt Calibri";;
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/20,w-50,0);                
+                mainctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,0);                
                 break;
             default:
-                mainctx.font = "18pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,iw/20,w-50,0);            
+                mainctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,0);                       
             }
         
         mainctx.clip();

@@ -138,7 +138,31 @@ var params;
         var scratchers = [];
         var pct = [];
         var i, i1;    
-        
+        const root = document.documentElement;
+        var iw = Math.min(window.innerWidth,screen.availWidth)/2;
+            if (iw<300) {
+                iw=300;
+            }
+        root.style.setProperty('--pane-width',iw.toString() + "px" );
+        iw = 2*(iw/3);
+            if (iw<200) {
+                iw=200;
+            }
+        root.style.setProperty('--tp-blade-value-width',iw.toString() + "px" );
+        iw = Math.min(window.innerHeight,screen.availHeight)/30;
+        if (iw<20) {
+            iw=20;
+        }
+        root.style.setProperty('--tp-container-unit-size',iw.toString() + "px" );
+        iw = Math.min(window.innerHeight,screen.availHeight)/50;
+        if (iw<15) {
+            iw=15;
+        }
+        root.style.setProperty('--f-size',iw.toString() + "px" );
+        iw=iw-3;
+        root.style.setProperty('--fl-size',iw.toString() + "px" );
+
+        //console.log(iw.toString() + "px");
         fitCanvastoDiv();
         //surname = params.get('surname');
         //document.getElementById('id01').style.display='block';
