@@ -35,7 +35,7 @@ var params;
         }
     };
     function scratcher1Changed(ev) {
-        pct[0] = (this.fullAmount(40) * 100)|0;
+        pct1 = (this.fullAmount(40) * 100)|0;
         checkpct();
     };
    
@@ -89,7 +89,7 @@ var params;
      */
     function onResetClicked(scratchers) {
         var i;
-        pct = [];
+        pct1 = 0;
         //$("#scratcher3Pct").hide();
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {

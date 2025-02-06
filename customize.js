@@ -15,20 +15,10 @@ var params;
      *
      * From http://diveintohtml5.info/
      */
-
-    var color1 = '#ff95c8';
-    var colortxt1 = '#ff0b9a';
-    //Select the background color
-    var color =color1;
-    //Select the text color
-    var colortxt = colortxt1;
-    var gendertext1 = "It is a Girl!";
-    //Select the gender text
-    var gendertext = gendertext1;
+   
     var soundHandle = new Audio();
     var triggered=false;
     var nosound=true;
-    //var params = new URLSearchParams(window.location.search.slice(1));
     var pct1=0;
 
     function supportsCanvas() {
@@ -42,8 +32,6 @@ var params;
     function checkpct() {
         if (!triggered) {
             if (pct1 > 23) {
-                $('#surprise').text(gendertext);
-                $('#surprise').css('color', colortxt);
                 confetti_effect();
             }
         }
@@ -103,24 +91,16 @@ var params;
      */
     function onResetClicked(scratchers) {
         var i;
-        pct = [];
+        pct1 = 0;
         //$("#scratcher3Pct").hide();
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
             scratchers[i].reset();
         }
         
-        $('#tboy').hide();
-        $('#boy').show();
-        $('#or').show();
-        $('#girl').show();
-        $('.images').show();
-
-        document.getElementsByTagName("body")[0].style.backgroundColor = "#ffffff";
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/background.jpg)';
         // document.getElementById('testtext').remove();
 
-        $('#H3').show();
+        //$('#H3').show();
         triggered = false;
         soundHandle.pause();
         soundHandle.currentTime = 0;    
@@ -199,7 +179,7 @@ var params;
           );
    
         
-        document.getElementById("resetbutton").style.backgroundColor = colortxt;
+        //document.getElementById("resetbutton").style.backgroundColor = colortxt;
 
         // called each time a scratcher loads
         function onScratcherLoaded(ev) {
@@ -259,7 +239,7 @@ var params;
             label: 'Background',
             options: [
               {text: 'Blue Floral', value: '0'},
-              {text: 'Green Watercolor', value: '1'},
+              {text: 'Pink Floral', value: '1'},
               {text: 'Pink-Blue1', value: '2'},
               {text: 'Pink-Blue2', value: '3'},
               {text: 'Christmas1', value: '4'},
