@@ -154,6 +154,8 @@ var params;
             iw=20;
         }
         root.style.setProperty('--tp-container-unit-size',iw.toString() + "px" );
+        iw=iw/5;
+        root.style.setProperty('--tp-container-unit-spacing',iw.toString() + "px" );
         iw = Math.min(window.innerHeight,screen.availHeight)/50;
         if (iw<15) {
             iw=15;
