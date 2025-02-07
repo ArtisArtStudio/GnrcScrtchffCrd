@@ -170,6 +170,7 @@ var params;
         var tfont = params.get("tfnt1");
         var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
         var cmes = decodeURIComponent(window.atob(params.get("cmes")));
+        var shp1 = decodeURIComponent(window.atob(params.get("shp1")));
 
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
@@ -186,7 +187,7 @@ var params;
     
             scratchers[i].setImages('images/empty.png','images/foreground' +foregrnd+ '.jpg');
             scratchers[i].setText(cmes);
-            scratchers[i].setShape('heart');
+            scratchers[i].setShape(shp1);
 
         }
         

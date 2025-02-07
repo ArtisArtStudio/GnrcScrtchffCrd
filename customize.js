@@ -242,6 +242,7 @@ var params;
               {text: 'Christmas1', value: 'Christmas1'},
               {text: 'Green1', value: 'Green1'},
               {text: 'Halloween1', value: 'Halloween1'},
+              {text: 'Halloween2', value: 'Halloween2'},
               {text: 'Pink1', value: 'Pink1'},
               {text: 'Pink-Blue1', value: 'Pink-Blue1'},
               {text: 'Pink-Blue2', value: 'Pink-Blue2'},
@@ -408,6 +409,8 @@ var params;
                 params.append("tfnt1",tfont.value);
                 params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
                 params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
+                params.append("shp1",window.btoa(encodeURIComponent(shape.element.querySelector('textarea').value)));
+
                 wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
 
 
@@ -438,9 +441,7 @@ var params;
             btn1.on('click', () => {
                 pane.expanded= false;
             });
-            
-            var p = document.querySelectorAll("tp-dfwv");
-            console.log(p[0]);
+        
             /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
             scratchers[0].setText(elem.value);

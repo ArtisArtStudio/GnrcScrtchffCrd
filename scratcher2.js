@@ -330,7 +330,12 @@ Scratcher = (function() {
     while (words.length > 0 && idx <= words.length)
     {
         var str = words.slice(0,idx).join(' ');
+        var st = words.slice(idx-1,idx).join(' ');
+
         var w = context.measureText(str).width;
+        if (context.measureText(st).width>fitWidth){
+        console.log(st+" is a text too long to fit. Please change" );
+        }
         if ( w > fitWidth - (currentLine*indent*2) )
         {
             if (idx==1)
