@@ -20,7 +20,8 @@ var params;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-
+    var mycanvas;
+    var scratchers = [];
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -115,7 +116,6 @@ var params;
     }
     function initPage() {
         var scratcherLoadedCount = 0;
-        var scratchers = [];
         var pct = [];
         var i, i1;    
         const root = document.documentElement;
@@ -165,7 +165,7 @@ var params;
                 })
                 .catch(console.error);
               } else {
-                alert("Unfortunately sharing is not supported by your browser/platform. Please take a screenshot instead");
+                alert("Unfortunately sharing is not supported by your browser/platform. Please go to the link and use your browser's address bar to copy the link instead");
             }
         });
         document.addEventListener(
@@ -323,14 +323,15 @@ var params;
         
         var st = ctext.element.querySelector('textarea').value;
         ttext.value=50-st.length + " characters left";
-        
+        mycanvas =scratchers[0].mainCanvas();
+
         const cmes= pane.addBinding(cmessage, 'message', {
             view: 'textarea',
             label: 'Message Under Scratch Area',
             rows:6,
             limit:110,
             }).on('change', (ev) => {
-                scratchers[0].setText(ev.value)
+                scratchers[0].setText(ev.value);
                 var st = cmes.element.querySelector('textarea').value;
                 var char = 110 - st.length;
                 climit.value=char + " characters left";
@@ -398,18 +399,24 @@ var params;
             });
                        
             btn.on('click', () => {
+                if (scratchers[0].getLW()) {
+                    alert ("Your message under scratch area contains words that are too long to fit in. Please use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
+                    return;
+                }
                 document.getElementById('id01').style.display='block';
                 params = new URLSearchParams();
                 //var end = window.btoa( rb ); 
                 //end = window.atob( rb );
                 //var esg = window.atob( mrb );
+                //CheckLongWords(cmes.element.querySelector('textarea').value);
+
                 params.append("bck1",backgrnd.value);
                 params.append("fr1",foregrnd.value);
                 params.append("ttl1",window.btoa(encodeURIComponent(ctitle.element.querySelector('textarea').value)));
                 params.append("tfnt1",tfont.value);
                 params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
                 params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
-                params.append("shp1",window.btoa(encodeURIComponent(shape.element.querySelector('textarea').value)));
+                params.append("shp1",shape.value);
 
                 wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
 

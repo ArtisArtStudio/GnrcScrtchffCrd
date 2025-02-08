@@ -80,12 +80,13 @@ Scratcher = (function() {
      * @param backImage [string, optional] URL to background (bottom) image
      * @param frontImage [string, optional] URL to foreground (top) image
      * @param shape [string] scratcher shape
+     * @param containslongw {boolean}
      */
     function Scratcher(canvasId, backImage, frontImage, cmessage) {
         this.canvas = {
             'main': $('#' + canvasId).get(0),
             'temp':null,
-            'draw':null
+            'draw':null,
         };
         this.mouseDown = false;
 
@@ -94,7 +95,7 @@ Scratcher = (function() {
         this._setupCanvases(); // finish setup from constructor now
     
         this.setImages(backImage, frontImage);
-        
+        this.containslongw=false;
 
     
         this._eventListeners = {};
@@ -115,6 +116,9 @@ Scratcher = (function() {
     };
     Scratcher.prototype.setText = function(cmessage) {
         this.cmessage = cmessage;
+    };
+    Scratcher.prototype.getLW = function() {
+        return containslongw;
     };
     Scratcher.prototype.setShape = function(shape) {
         this.shape = shape;
@@ -327,6 +331,7 @@ Scratcher = (function() {
     var words = text.split(' ');
     var currentLine = 0;
     var idx = 1;
+    var lw = false;
     while (words.length > 0 && idx <= words.length)
     {
         var str = words.slice(0,idx).join(' ');
@@ -334,8 +339,9 @@ Scratcher = (function() {
 
         var w = context.measureText(str).width;
         if (context.measureText(st).width>fitWidth){
-        console.log(st+" is a text too long to fit. Please change" );
-        }
+            this.containslongw = true;
+            lw=true;
+        } 
         if ( w > fitWidth - (currentLine*indent*2) )
         {
             if (idx==1)
@@ -352,6 +358,10 @@ Scratcher = (function() {
     }
     if  (idx > 0)
         context.fillText( words.join(' '), x, y + (lineHeight*currentLine) );
+    if (!lw) {
+        this.containslongw=false;
+    }
+
 }
   
     /**
