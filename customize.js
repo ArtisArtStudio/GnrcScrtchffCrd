@@ -158,8 +158,9 @@ var params;
         $('.withsoundbtn').on("click", function (e) {
             if (navigator.share) {
                 navigator.share({
-                  //title: 'Love Coupon',
-                  text : wholelink
+                  title: 'Something Special',
+                  text : "Here is something for you",
+                  url: wholelink
                 }).then(() => {
 
                 })
