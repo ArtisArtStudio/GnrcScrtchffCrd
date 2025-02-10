@@ -114,6 +114,7 @@ var params;
         canvas.width = $td.width();
         canvas.height = $td.height();
     }
+   
     function initPage() {
         var scratcherLoadedCount = 0;
         var pct = [];
@@ -166,7 +167,7 @@ var params;
                 })
                 .catch(console.error);
               } else {
-                alert("Unfortunately sharing is not supported by your browser/platform. Please go to the link and use your browser's address bar to copy the link instead");
+                display_dialog("Unfortunately sharing is not supported by your browser/platform. Please go to the link and use your browser's address bar to copy the link instead");
             }
         });
         document.addEventListener(
@@ -399,12 +400,11 @@ var params;
                 title: 'Create the Link',
             });
                        
-            btn.on('click', () => {
+            btn.on('click', async () => {
                 if (scratchers[0].getLW()) {
-                    alert ("Your message under scratch area contains words that are too long to fit in. Please use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
+                    alert ("Your message under scratch area contains words that are too long to fit in. \nPlease use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
                     return;
                 }
-                document.getElementById('id01').style.display='block';
                 params = new URLSearchParams();
                 //var end = window.btoa( rb ); 
                 //end = window.atob( rb );
@@ -420,10 +420,27 @@ var params;
                 params.append("shp1",shape.value);
 
                 wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
-
+                try {
+                const result = await ShortenURL(wholelink);
+                wholelink = result;              
+                //alert(result);
+                } catch(error) {
+                    var error_text;
+                    switch (error) {
+                        case 429:
+                            error_text = "Server is busy to handle the URL shortening request.\n\n Try again a few minutes later.";
+                            break;                    
+                        default:
+                            error_text = "An error occurred during URL shortening process.\n\n Please uncheck 'Shorten URL' to try without this option.";
+                            break;
+                    }
+                    display_dialog(error_text);
+                  return;
+                       
+                }
+                document.getElementById('id01').style.display='block';
 
             });
-            'https://artisartstudio.github.io/GnrcScrtchffCrd/index.html?t=This is a gender reveal&t1=This is a gender reveal scratch off for family. It&t3=This is a gender reveal scratch off for family. It contains high level sound. Do you want to continue with sou&b=1&f=2&s=1&sc=1'
             var prev = btn.element.querySelector('button').getAttribute("style");
         
             var added = '  background: #3b88d8;  background: -moz-linear-gradient(0% 100% 90deg, #377ad0, #52a8e8);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a8e8), to(#377ad0)); background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);  border-top: 1px solid #4081af;   border-right: 1px solid #2e69a3; border-bottom: 1px solid #20559a;  border-left: 1px solid #2e69a3;  -moz-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #3275bc;  -webkit-background-clip: padding-box;'
@@ -455,7 +472,51 @@ var params;
             scratchers[0].setText(elem.value);
         }); */
     };
-
+    function display_dialog(text) {
+        $( "#error" ).text(text);
+                    $( function() {
+                        $( "#dialog-message" ).dialog({
+                            modal: true,
+                            width: 'auto',
+                            height: 'auto',
+                            buttons: {
+                                Ok: function() {
+                                $( this ).dialog( "close" );
+                                }
+                            },
+                            show: {
+                                effect: "slide",
+                                duration: 1000
+                              },
+                        });
+                    });
+    }
+    async function ShortenURL(link)
+    {
+        return new Promise(function (resolve, reject) {
+        const url = 'https://spoo.me/';
+        const data = new URLSearchParams();
+        data.append('url', link);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+    
+        xhr.send(data); 
+        xhr.onload = function () {
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                var a = JSON.parse(xhr.responseText);
+                resolve(a.short_url);
+            } else {
+                reject(xhr.status);
+            }
+        };
+        xhr.onerror = function () {
+            reject(xhr.status);
+        };
+        });
+    }
     
     /**
      * Handle page load
