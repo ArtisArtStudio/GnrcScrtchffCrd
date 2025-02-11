@@ -328,7 +328,13 @@ table {
   bottom: 1px;
   right: 1px;
   } 
-
+  .ui-widget-overlay
+  {
+    opacity: .80 !important; /* Make sure to change both of these, as IE only sees the second one */
+    filter: Alpha(Opacity=80) !important;
+  
+    background: rgb(50, 50, 50) !important; /* This will make it darker */
+  }
 #resetbutton {
 border: none;
 padding: 10px 20px;

@@ -120,6 +120,7 @@ var params;
         var pct = [];
         var i, i1;    
         const root = document.documentElement;
+        $( "#dialog-message" ).hide();
         var iw = Math.min(window.innerWidth,screen.availWidth)/2;
             if (iw<300) {
                 iw=300;
@@ -396,15 +397,30 @@ var params;
                     scratchers[0].setShape(ev.value);
                     scratchers[0].reset();
                 });
+
+            const PARAMS = {
+                Shorten: true,
+            };
+                  
+            const shortURL = pane.addBlade({
+                view: 'boolean', 
+                label: 'Shorten', 
+                value: true, 
+
+            }).on('change',(ev) => {
+                ev.Shorten =false;
+            });
             const btn = pane.addButton({
                 title: 'Create the Link',
             });
                        
             btn.on('click', async () => {
                 if (scratchers[0].getLW()) {
-                    alert ("Your message under scratch area contains words that are too long to fit in. \nPlease use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
+                    display_dialog("Your message under scratch area contains words that are too long to fit in. \nPlease use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
                     return;
                 }
+                console.log(shortURL.value);
+
                 params = new URLSearchParams();
                 //var end = window.btoa( rb ); 
                 //end = window.atob( rb );
@@ -428,10 +444,10 @@ var params;
                     var error_text;
                     switch (error) {
                         case 429:
-                            error_text = "Server is busy to handle the URL shortening request.\n\n Try again a few minutes later.";
+                            error_text = "Server is busy to handle the URL shortening request. Try again a few minutes later.";
                             break;                    
                         default:
-                            error_text = "An error occurred during URL shortening process.\n\n Please uncheck 'Shorten URL' to try without this option.";
+                            error_text = "An error occurred during URL shortening process.Please check your internet connection or uncheck 'Shorten URL' to try without this option.";
                             break;
                     }
                     display_dialog(error_text);
@@ -485,10 +501,15 @@ var params;
                                 }
                             },
                             show: {
-                                effect: "slide",
+                                effect: "highlight",
                                 duration: 1000
                               },
                         });
+                    });
+                    $(".ui-widget-overlay").css({
+                        background:"rgb(0, 0, 0)",
+                        opacity: ".10 !important",
+                        filter: "Alpha(Opacity=10)",
                     });
     }
     async function ShortenURL(link)
@@ -501,8 +522,6 @@ var params;
         xhr.open('POST', url, true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('Accept', 'application/json');
-        
-    
         xhr.send(data); 
         xhr.onload = function () {
             if (xhr.status == 200 && xhr.readyState == 4) {

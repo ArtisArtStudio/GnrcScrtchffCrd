@@ -332,17 +332,21 @@ Scratcher = (function() {
     var currentLine = 0;
     var idx = 1;
     var lw = false;
+    var lwcount=0;
     while (words.length > 0 && idx <= words.length)
     {
         var str = words.slice(0,idx).join(' ');
         var st = words.slice(idx-1,idx).join(' ');
-
         var w = context.measureText(str).width;
-        if (context.measureText(st).width>fitWidth){
+        if (st.length>9) {
+            console.log(st);
+            lwcount++;
+        }
+        if (context.measureText(st).width>fitWidth- (currentLine*Math.pow(indent,1.55)) || currentLine>6 || (lwcount>6 && currentLine>6)){
             this.containslongw = true;
             lw=true;
-        } 
-        if ( w > fitWidth - (currentLine*indent*2) )
+        }
+        if ( w > fitWidth - (currentLine*Math.pow(indent,1.55)))
         {
             if (idx==1)
             {
@@ -361,7 +365,7 @@ Scratcher = (function() {
     if (!lw) {
         this.containslongw=false;
     }
-
+    console.log(lwcount);
 }
   
     /**
