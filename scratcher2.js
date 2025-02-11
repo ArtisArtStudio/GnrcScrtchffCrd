@@ -273,11 +273,11 @@ Scratcher = (function() {
                 break;
             case 'circle':
                 mainctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,0);                
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
                 break;
             default:
                 mainctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,0);                       
+                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
             }
         
         mainctx.clip();
@@ -333,16 +333,17 @@ Scratcher = (function() {
     var idx = 1;
     var lw = false;
     var lwcount=0;
+    for (let index = 0; index < words.length; index++) {
+        if (words[index].length>9) {
+            lwcount++;
+        };
+    }
     while (words.length > 0 && idx <= words.length)
     {
         var str = words.slice(0,idx).join(' ');
         var st = words.slice(idx-1,idx).join(' ');
         var w = context.measureText(str).width;
-        if (st.length>9) {
-            console.log(st);
-            lwcount++;
-        }
-        if (context.measureText(st).width>fitWidth- (currentLine*Math.pow(indent,1.55)) || currentLine>6 || (lwcount>6 && currentLine>6)){
+        if (context.measureText(st).width>fitWidth-(currentLine*Math.pow(indent,1.55)) || (lwcount>5 && currentLine>5 && indent>2)){
             this.containslongw = true;
             lw=true;
         }
@@ -365,7 +366,7 @@ Scratcher = (function() {
     if (!lw) {
         this.containslongw=false;
     }
-    console.log(lwcount);
+    //alert(lwcount+ " "+currentLine);
 }
   
     /**

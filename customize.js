@@ -402,13 +402,8 @@ var params;
                 Shorten: true,
             };
                   
-            const shortURL = pane.addBlade({
-                view: 'boolean', 
-                label: 'Shorten', 
-                value: true, 
-
-            }).on('change',(ev) => {
-                ev.Shorten =false;
+            const shortURL = pane.addBinding(PARAMS,"Shorten",{
+                label: 'Shorten URL', 
             });
             const btn = pane.addButton({
                 title: 'Create the Link',
@@ -419,7 +414,7 @@ var params;
                     display_dialog("Your message under scratch area contains words that are too long to fit in. \nPlease use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
                     return;
                 }
-                console.log(shortURL.value);
+                
 
                 params = new URLSearchParams();
                 //var end = window.btoa( rb ); 
@@ -436,26 +431,26 @@ var params;
                 params.append("shp1",shape.value);
 
                 wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
-                try {
-                const result = await ShortenURL(wholelink);
-                wholelink = result;              
-                //alert(result);
-                } catch(error) {
-                    var error_text;
-                    switch (error) {
+                if (shortURL.element.querySelector('input').checked){
+                    try {
+                        const result = await ShortenURL(wholelink);
+                        wholelink = result;              
+                    } catch(error) {
+                        var error_text;
+                        switch (error) {
                         case 429:
                             error_text = "Server is busy to handle the URL shortening request. Try again a few minutes later.";
                             break;                    
                         default:
-                            error_text = "An error occurred during URL shortening process.Please check your internet connection or uncheck 'Shorten URL' to try without this option.";
-                            break;
-                    }
-                    display_dialog(error_text);
-                  return;
+                                error_text = "An error occurred during URL shortening process.Please check your internet connection or uncheck 'Shorten URL' to try without this option.";
+                                break;
+                        }
+                        display_dialog(error_text);
+                        return;
                        
+                    }
                 }
                 document.getElementById('id01').style.display='block';
-
             });
             var prev = btn.element.querySelector('button').getAttribute("style");
         
