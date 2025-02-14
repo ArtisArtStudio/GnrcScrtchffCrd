@@ -99,7 +99,12 @@ text-align: right;
     text-align: right;
 } 
 
-
+#surprise{
+  line-height: 23vh;
+  display: inline-table;
+  padding-right: 5px;
+  width: 55%;
+}
 #reveal {
   float: right;
   display: inline-table;

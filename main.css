@@ -28,7 +28,7 @@ html {
 }
 body {
   height: 100vh;
-  background-image: url(images/Blue-Floral.jpg);
+  /*background-image: url(images/Blue-Floral.jpg);*/
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;

@@ -21,6 +21,7 @@ var params;
     var nosound=true;
     var pct1=0;
     var mycanvas;
+    var tfs;
     var scratchers = [];
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
@@ -32,6 +33,7 @@ var params;
      */
     function checkpct() {
         if (!triggered) {
+            alert(pct1);
             if (pct1 > 23) {
                 confetti_effect();
             }
@@ -121,6 +123,8 @@ var params;
         var i, i1;    
         const root = document.documentElement;
         $( "#dialog-message" ).hide();
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/Blue-Floral.jpg)';
+        tfs = $('#surprise').css('font-size');
         var iw = Math.min(window.innerWidth,screen.availWidth)/2;
             if (iw<300) {
                 iw=300;
@@ -236,16 +240,42 @@ var params;
             expanded: true,
         });
         
+        const btn2 = pane.addButton({
+            title: 'Help',
+        });
+                   
+        btn2.on('click', () => {
+            window.open(
+                './help.html','_blank' 
+              );   
+        });
+        
+        const btn1 = pane.addButton({
+            title: 'Hide the Panel',
+        });
+                   
+        btn1.on('click', () => {
+            pane.expanded= false;
+        });
         pane.registerPlugin(TextareaPlugin);
-        const backgrnd = pane.addBlade({
+        const tab = pane.addTab({
+            pages: [
+              {title: 'Step 1'},
+              {title: 'Step 2'},
+              {title: 'Finish'},
+            ],
+          });
+        const backgrnd = tab.pages[0].addBlade({
             view: 'list',
             label: 'Background',
             options: [
               {text: 'Blue-Floral', value: 'Blue-Floral'},
               {text: 'Christmas1', value: 'Christmas1'},
+              {text: 'Cream_waves', value: 'Cream_waves'},
               {text: 'Green1', value: 'Green1'},
               {text: 'Halloween1', value: 'Halloween1'},
               {text: 'Halloween2', value: 'Halloween2'},
+              {text: 'Halloween3', value: 'Halloween3'},
               {text: 'Pink1', value: 'Pink1'},
               {text: 'Pink-Blue1', value: 'Pink-Blue1'},
               {text: 'Pink-Blue2', value: 'Pink-Blue2'},
@@ -260,7 +290,7 @@ var params;
                 document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + '.jpg)';
           });
 
-        const ctitle= pane.addBinding(title, 'prop', {
+        const ctitle= tab.pages[0].addBinding(title, 'prop', {
             view: 'textarea',
             label: 'Title',
             rows:2,
@@ -273,7 +303,7 @@ var params;
 
             });
             //alert(ctitle.element);
-        const tlimit = pane.addBlade({
+        const tlimit = tab.pages[0].addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
@@ -284,7 +314,7 @@ var params;
         var st = ctitle.element.querySelector('textarea').value;
         tlimit.value=22-st.length + " characters left";
 
-        const tfont = pane.addBlade({
+        const tfont = tab.pages[0].addBlade({
             view: 'list',
             label: 'Title Font',
             options: [
@@ -301,9 +331,21 @@ var params;
             value: 'Birthstone',
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
-
           });
-          const ctext= pane.addBinding(text, 'prop', {
+          const tfontsize = tab.pages[0].addBlade({
+            view: 'list',
+            label: 'Title Font Size',
+            options: [
+              {text: 'Smaller', value: '-20'},
+              {text: 'Normal', value: '0'},
+              {text: 'Bigger', value: '20'},
+            ],
+            value: '0',
+            }).on('change', (ev) => {
+                var arrCurSize=tfs.toUpperCase().split("PX");
+                $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(ev.value)+"PX"))); 
+          });
+          const ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
             label: 'Text under Title',
             rows:3,
@@ -316,7 +358,7 @@ var params;
 
             });
 
-        const ttext = pane.addBlade({
+        const ttext = tab.pages[0].addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
@@ -328,7 +370,7 @@ var params;
         ttext.value=50-st.length + " characters left";
         mycanvas =scratchers[0].mainCanvas();
 
-        const cmes= pane.addBinding(cmessage, 'message', {
+        const cmes= tab.pages[0].addBinding(cmessage, 'message', {
             view: 'textarea',
             label: 'Message Under Scratch Area',
             rows:6,
@@ -342,7 +384,7 @@ var params;
             });
         
           
-        const climit = pane.addBlade({
+        const climit = tab.pages[0].addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
@@ -363,7 +405,7 @@ var params;
         ctitle.element.querySelector('textarea').setAttribute('maxlength', 22)
         ctext.element.querySelector('textarea').setAttribute('maxlength', 50)
 
-        const foregrnd = pane.addBlade({
+        const foregrnd = tab.pages[0].addBlade({
             view: 'list',
             label: 'Foreground',
             options: [
@@ -385,7 +427,7 @@ var params;
             }).on('change', (ev) => {
                 scratchers[0].setImages('images/empty.png','images/foreground' + ev.value +'.jpg');
             });
-            const shape = pane.addBlade({
+            const shape = tab.pages[0].addBlade({
                 view: 'list',
                 label: 'Shape',
                 options: [
@@ -402,10 +444,10 @@ var params;
                 Shorten: true,
             };
                   
-            const shortURL = pane.addBinding(PARAMS,"Shorten",{
+            const shortURL = tab.pages[2].addBinding(PARAMS,"Shorten",{
                 label: 'Shorten URL', 
             });
-            const btn = pane.addButton({
+            const btn = tab.pages[2].addButton({
                 title: 'Create the Link',
             });
                        
@@ -460,23 +502,7 @@ var params;
 
             
             
-            const btn2 = pane.addButton({
-                title: 'Help',
-            });
-                       
-            btn2.on('click', () => {
-                window.open(
-                    './help.html','_blank' 
-                  );   
-            });
-            
-            const btn1 = pane.addButton({
-                title: 'Hide the Panel',
-            });
-                       
-            btn1.on('click', () => {
-                pane.expanded= false;
-            });
+           
         
             /* const elem = cmes.element.querySelector('input');
         elem.addEventListener('keyup', () => {
