@@ -45,6 +45,7 @@ CrispyToast.renderToast = function(toast) {
     CrispyToast.removeToast(toast);
     Timer=null;
   }, toast.timeout);
+  console.log(toast.timeout);
 };
 
 

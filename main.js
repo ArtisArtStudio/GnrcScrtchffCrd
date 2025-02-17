@@ -18,7 +18,8 @@ var params;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-
+    var scratchers = [];
+    var scratchLimit=25;
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -29,7 +30,15 @@ var params;
      */
     function checkpct() {
         if (!triggered) {
-            if (pct1 > 23) {
+            if (pct1 > 0 && pct1 < scratchLimit) {
+                if (CrispyToast.toasts.length===0) {
+                    CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
+                }
+            }
+            if (pct1 > scratchLimit) {
+                if(CrispyToast.toasts.length!=0){
+                    CrispyToast.clearall();
+                }
                 confetti_effect();
             }
         }
@@ -64,10 +73,10 @@ var params;
              var particleCount = 5 ;
              (function frame() {
              // launch a few confetti from the left edge
-             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#FFFFFF']}
+             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
              );
              // and launch a few from the right edge
-             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },colors: ['#FFFFFF']}
+             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }}
              );
           
              // keep going until we are out of time
@@ -90,15 +99,12 @@ var params;
     function onResetClicked(scratchers) {
         var i;
         pct1 = 0;
-        //$("#scratcher3Pct").hide();
+        CrispyToast.toasts=[];
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
             scratchers[i].reset();
         }
         
-        // document.getElementById('testtext').remove();
-
-        //$('#H3').show();
         triggered = false;
         soundHandle.pause();
         soundHandle.currentTime = 0;    
@@ -111,9 +117,9 @@ var params;
         canvas.width = $td.width();
         canvas.height = $td.height();
     }
+   
     function initPage() {
         var scratcherLoadedCount = 0;
-        var scratchers = [];
         var pct = [];
         var i, i1;    
         
@@ -165,18 +171,19 @@ var params;
         params = new URLSearchParams(window.location.search.slice(1));
 
         var backgrnd = params.get("bck1");
-        var foregrnd = params.get("fr1");
+        var foregrnd = window.atob(params.get("fr1"));
         var ctitle = decodeURIComponent(window.atob(params.get("ttl1")));
-        var tfont = params.get("tfnt1");
+        var tfont = window.atob(params.get("tfnt1"));
         var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
         var cmes = decodeURIComponent(window.atob(params.get("cmes")));
         var shp1 = params.get("shp1");
-
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/'+backgrnd+ '.jpg)';
+        var tfs = params.get("tfs");
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
-
+        var arrCurSize=$('#surprise').css('font-size').toUpperCase().split("PX");
+        $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(tfs)+"PX"))); 
 
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
@@ -185,7 +192,7 @@ var params;
             // set up this listener before calling setImages():
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
-            scratchers[i].setImages('images/empty.png','images/foreground' +foregrnd+ '.jpg');
+            scratchers[i].setImages('images/empty.jpg','images/fore/' +foregrnd+ '.jpg');
             scratchers[i].setText(cmes);
             scratchers[i].setShape(shp1);
 

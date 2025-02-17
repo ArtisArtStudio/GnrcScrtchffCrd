@@ -156,8 +156,8 @@ Scratcher = (function() {
             }
         }
         var n = count/total;
-        n= (n*100)| 0;
-        if (n>23){
+        //n= (n*100)| 0;
+         if (n>30){
 
             var mainctx = this.canvas.main.getContext('2d');
             var drawctx = this.canvas.draw.getContext('2d');
@@ -167,8 +167,38 @@ Scratcher = (function() {
             drawctx.globalCompositeOperation = 'source-over';
             drawctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
            
+        } 
+        return count/total;
+    };
+     /**
+     * Draw a scratch line
+     * 
+     * Dispatches the 'scratch' event.
+     *
+     * @param x,y the coordinates
+     * @param fresh start a new line if true
+     */
+     Scratcher.prototype.scratchLine = function(x, y, fresh) {
+        var can = this.canvas.draw;
+        var ctx = can.getContext('2d', { willReadFrequently: true });
+        
+        //can.getContext("2d", { willReadFrequently: true });
+        ctx.lineWidth = 30;
+        ctx.lineCap = ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#f00'; //'rgba(0, 0, 0, 0.03)'; // can be any opaque color
+        
+        if (fresh) {
+            ctx.beginPath();
+            // this +0.01 hackishly causes Linux Chrome to draw a
+            // "zero"-length line (a single point), otherwise it doesn't
+            // draw when the mouse is clicked but not moved:
+            ctx.moveTo(x+0.01, y);
         }
-        return count / total;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    
+        // call back if we have it
+        this.dispatchEvent(this.createEvent('scratch'));
     };
     
     /**
@@ -369,37 +399,7 @@ Scratcher = (function() {
     //alert(lwcount+ " "+currentLine);
 }
   
-    /**
-     * Draw a scratch line
-     * 
-     * Dispatches the 'scratch' event.
-     *
-     * @param x,y the coordinates
-     * @param fresh start a new line if true
-     */
-    Scratcher.prototype.scratchLine = function(x, y, fresh) {
-        var can = this.canvas.draw;
-        var ctx = can.getContext('2d');
-        
-        can.getContext("2d", { willReadFrequently: true });
-        ctx.lineWidth = 20;
-        ctx.lineCap = ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#ff'; //'rgba(0, 0, 0, 0.03)'; // can be any opaque color
-        
-        if (fresh) {
-            ctx.beginPath();
-            // this +0.01 hackishly causes Linux Chrome to draw a
-            // "zero"-length line (a single point), otherwise it doesn't
-            // draw when the mouse is clicked but not moved:
-            ctx.moveTo(x+0.01, y);
-        }
-        ctx.lineTo(x, y);
-        ctx.stroke();
-    
-        // call back if we have it
-        this.dispatchEvent(this.createEvent('scratch'));
-    };
-    
+   
     /**
      * Set up the main canvas and listeners
      */

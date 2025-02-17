@@ -23,6 +23,7 @@ var params;
     var mycanvas;
     var tfs;
     var scratchers = [];
+    var scratchLimit=25;
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -33,8 +34,15 @@ var params;
      */
     function checkpct() {
         if (!triggered) {
-            alert(pct1);
-            if (pct1 > 23) {
+            if (pct1 > 0 && pct1 < scratchLimit) {
+                if (CrispyToast.toasts.length===0) {
+                    CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
+                }
+            }
+            if (pct1 > scratchLimit) {
+                if(CrispyToast.toasts.length!=0){
+                    CrispyToast.clearall();
+                }
                 confetti_effect();
             }
         }
@@ -69,10 +77,10 @@ var params;
              var particleCount = 5 ;
              (function frame() {
              // launch a few confetti from the left edge
-             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#FFFFFF']}
+             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
              );
              // and launch a few from the right edge
-             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },colors: ['#FFFFFF']}
+             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }}
              );
           
              // keep going until we are out of time
@@ -95,15 +103,12 @@ var params;
     function onResetClicked(scratchers) {
         var i;
         pct1 = 0;
-        //$("#scratcher3Pct").hide();
+        CrispyToast.toasts=[];
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
             scratchers[i].reset();
         }
-        
-        // document.getElementById('testtext').remove();
-
-        //$('#H3').show();
+       
         triggered = false;
         soundHandle.pause();
         soundHandle.currentTime = 0;    
@@ -123,7 +128,7 @@ var params;
         var i, i1;    
         const root = document.documentElement;
         $( "#dialog-message" ).hide();
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/Blue-Floral.jpg)';
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
         tfs = $('#surprise').css('font-size');
         var iw = Math.min(window.innerWidth,screen.availWidth)/2;
             if (iw<300) {
@@ -222,7 +227,7 @@ var params;
             // set up this listener before calling setImages():
             scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
-            scratchers[i].setImages('images/empty.png','images/foreground0.jpg');
+            scratchers[i].setImages('images/empty.jpg','images/fore/Goldeng.jpg');
             scratchers[i].setText(cmessage.message);
             scratchers[i].setShape('heart');
 
@@ -287,7 +292,7 @@ var params;
             ],
             value: 'Blue-Floral',
             }).on('change', (ev) => {
-                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/' + ev.value + '.jpg)';
+                document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/' + ev.value + '.jpg)';
           });
 
         const ctitle= tab.pages[0].addBinding(title, 'prop', {
@@ -405,28 +410,33 @@ var params;
         ctitle.element.querySelector('textarea').setAttribute('maxlength', 22)
         ctext.element.querySelector('textarea').setAttribute('maxlength', 50)
 
+        tab.pages[0].addBlade({
+            view: 'separator',
+          });
+
         const foregrnd = tab.pages[0].addBlade({
             view: 'list',
             label: 'Foreground',
             options: [
-              {text: 'Golden Glitter', value: '0'},
-              {text: 'Red Glitter', value: '1'},
-              {text: 'Silver Glitter', value: '2'},
-              {text: 'Green Glitter', value: '3'},
-              {text: 'Pink Glitter', value: '4'},
-              {text: 'Pink Metallic1', value: '5'},
-              {text: 'Gold Metallic1', value: '6'},
-              {text: 'Gold Metallic2', value: '7'},
-              {text: 'Silver Metallic1', value: '8'},
-              {text: 'Silver Metallic2', value: '9'},
-              {text: 'Green Metallic', value: '10'},
-              {text: 'Halloween1', value: '11'},
+              {text: 'Golden Glitter', value: 'Goldeng'},
+              {text: 'Gold Metallic1', value: 'Goldenm1'},
+              {text: 'Gold Metallic2', value: 'Goldenm2'},
+              {text: 'Green Glitter', value: 'Greeng'},
+              {text: 'Green Metallic', value: 'Greenm'},
+              {text: 'Halloween1', value: 'Halloween1'},
+              {text: 'Pink Glitter', value: 'Pinkg'},
+              {text: 'Pink Metallic1', value: 'Pinkm1'},
+              {text: 'Red Glitter', value: 'Redg'},
+              {text: 'Silver Glitter', value: 'Silverg'},             
+              {text: 'Silver Metallic1', value: 'Silverm1'},
+              {text: 'Silver Metallic2', value: 'Silverm2'},
 
             ],
-            value: '0',
+            value: 'Goldeng',
             }).on('change', (ev) => {
-                scratchers[0].setImages('images/empty.png','images/foreground' + ev.value +'.jpg');
+                scratchers[0].setImages('images/empty.jpg','images/fore/' + ev.value +'.jpg');
             });
+
             const shape = tab.pages[0].addBlade({
                 view: 'list',
                 label: 'Shape',
@@ -465,9 +475,10 @@ var params;
                 //CheckLongWords(cmes.element.querySelector('textarea').value);
 
                 params.append("bck1",backgrnd.value);
-                params.append("fr1",foregrnd.value);
+                params.append("fr1",window.btoa(foregrnd.value));
                 params.append("ttl1",window.btoa(encodeURIComponent(ctitle.element.querySelector('textarea').value)));
-                params.append("tfnt1",tfont.value);
+                params.append("tfnt1",window.btoa(tfont.value));
+                params.append("tfs",tfontsize.value);
                 params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
                 params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
                 params.append("shp1",shape.value);
