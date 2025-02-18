@@ -20,10 +20,10 @@ var params;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var mycanvas;
     var tfs;
     var scratchers = [];
-    var scratchLimit=25;
+    var scratchLimit=30;
+    var foregrnd;
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -43,6 +43,8 @@ var params;
                 if(CrispyToast.toasts.length!=0){
                     CrispyToast.clearall();
                 }
+                scratchers[0].setImages('images/empty.jpg','images/empty.png');
+
                 confetti_effect();
             }
         }
@@ -71,7 +73,7 @@ var params;
         }
         triggered=true;
        
-            var duration = 10 * 1000;
+            var duration = 5 * 1000;
              var end = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
              var particleCount = 5 ;
@@ -93,7 +95,7 @@ var params;
           
         setTimeout(function(){
             $("#resetbutton").show();
-        }, 10000);
+        }, duration);
               
      };
     
@@ -106,6 +108,7 @@ var params;
         CrispyToast.toasts=[];
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
+            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd.value +'.jpg');
             scratchers[i].reset();
         }
        
@@ -197,7 +200,6 @@ var params;
         function onScratcherLoaded(ev) {
             
             scratcherLoadedCount++;
-            $("table1").width($(window).width());
             if (scratcherLoadedCount == scratchers.length) {
                 // all scratchers loaded!
     
@@ -208,9 +210,8 @@ var params;
     
             }
         };
-    
-        // create new scratchers
-        var scratchers = new Array(1);
+        scratchers = new Array(1);
+
         const cmessage = {
             message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
           };
@@ -242,7 +243,7 @@ var params;
         
         const pane = new Pane({
             title: 'Customization Parameters',
-            expanded: true,
+            expanded: false,
         });
         
         const btn2 = pane.addButton({
@@ -373,7 +374,6 @@ var params;
         
         var st = ctext.element.querySelector('textarea').value;
         ttext.value=50-st.length + " characters left";
-        mycanvas =scratchers[0].mainCanvas();
 
         const cmes= tab.pages[0].addBinding(cmessage, 'message', {
             view: 'textarea',
@@ -414,7 +414,20 @@ var params;
             view: 'separator',
           });
 
-        const foregrnd = tab.pages[0].addBlade({
+            const shape = tab.pages[0].addBlade({
+                view: 'list',
+                label: 'Shape',
+                options: [
+                  {text: 'Heart', value: 'heart'},
+                  {text: 'Circle', value: 'circle'},        
+                ],
+                value: 'heart',
+                }).on('change', (ev) => {
+                    scratchers[0].setShape(ev.value);
+                    scratchers[0].reset();
+                });
+
+        foregrnd = tab.pages[0].addBlade({
             view: 'list',
             label: 'Foreground',
             options: [
@@ -437,18 +450,7 @@ var params;
                 scratchers[0].setImages('images/empty.jpg','images/fore/' + ev.value +'.jpg');
             });
 
-            const shape = tab.pages[0].addBlade({
-                view: 'list',
-                label: 'Shape',
-                options: [
-                  {text: 'Heart', value: 'heart'},
-                  {text: 'Circle', value: 'circle'},        
-                ],
-                value: 'heart',
-                }).on('change', (ev) => {
-                    scratchers[0].setShape(ev.value);
-                    scratchers[0].reset();
-                });
+          
 
             const PARAMS = {
                 Shorten: true,

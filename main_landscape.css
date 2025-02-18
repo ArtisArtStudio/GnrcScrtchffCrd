@@ -155,24 +155,35 @@ text-align: right;
     width: 18em;
     height: 18em;
     top: 50%;
-    left: 0%;
+    left: 1%;
   }
 }
+/* @media (max-height:290px){ 
+  .pagetop h1 {
+    font-size: calc(3rem + 1vw);
+  }
+  #scratcher-box {
+    width: 15em;
+    height: 15em;
+    top: 52%;
+    left: 3vw;
+  } 
+} */
 @media (max-height: 375px){ 
   .pagetop h1 {
-    font-size: calc(3rem + 0.55vw);
+    font-size: calc(4rem + 1vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
   }
   .pagetop h3 {
-    font-size: calc(1rem + 1vh);
+    font-size: calc(1rem + 1vw);
   }
   #scratcher-box {
     width: 18em;
     height: 18em;
     top: 50%;
-    left: 0%;
+    left: 1%;
   }
  
   #reveal {
@@ -186,19 +197,19 @@ text-align: right;
 }
 @media (min-height:336px) and (min-width: 672px) { 
   .pagetop h1 {
-    font-size: calc(3rem + 1vw);
+    font-size: calc(4rem + 1vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
   }
   .pagetop h3 {
-    font-size: calc(1rem + 2vh);
+    font-size: calc(1rem + 1vw);
   }
   #scratcher-box {
     width: 20em;
     height: 20em;
     top: 50%;
-    left: 0%;
+    left: 1%;
   }
   #t1
   {
@@ -210,31 +221,20 @@ text-align: right;
 }
 @media (max-height:321px) and (max-width:575px){ 
   .pagetop h1 {
-    font-size: calc(2rem + 6vw);
+    font-size: calc(3rem + 1vw);
   }
   .pagetop h3 {
-    font-size: calc(1rem + 0.2vh);
+    font-size: calc(1rem + 0.8vh);
   }
   #scratcher-box {
     width: 16em;
     height: 16em;
     top: 52%;
-    left: 5%;
+    left: 1%;
   } 
 
 }
-@media screen and (max-height:290px){ 
-  .pagetop h1 {
-    font-size: calc(2rem + 6vw);
-  }
-  #scratcher-box {
-    width: 15em;
-    height: 15em;
-    top: 52%;
-    left: 3vw;
-  } 
-  
-}
+
 /* @media (max-height:351px) and (min-height:319){ 
   
   #scratcher-box {

@@ -18,16 +18,18 @@ CrispyToast.createToast = function(message, options) {
   CrispyToast.renderToast(toast);
 };
 CrispyToast.clearall = function() {
-  if (Timer !=null) {
+  /* if (Timer !=null) {
     return true;
-  }
+  } */
   var toastElements = document.querySelectorAll('.crispy-toast');
   if (toastElements.length > 0) {
-    console.log('clear');
     toastElements.forEach(function(element) {
       document.body.removeChild(element);
     });
   }
+}
+CrispyToast.getType = function(toast) {
+  return toast.type;
 }
 CrispyToast.renderToast = function(toast) {
   var toastContainer = document.createElement('div');
@@ -45,7 +47,6 @@ CrispyToast.renderToast = function(toast) {
     CrispyToast.removeToast(toast);
     Timer=null;
   }, toast.timeout);
-  console.log(toast.timeout);
 };
 
 

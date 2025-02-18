@@ -19,7 +19,8 @@ var params;
     var nosound=true;
     var pct1=0;
     var scratchers = [];
-    var scratchLimit=25;
+    var scratchLimit=30;
+    var foregrnd;
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -39,6 +40,8 @@ var params;
                 if(CrispyToast.toasts.length!=0){
                     CrispyToast.clearall();
                 }
+                scratchers[0].setImages('images/empty.jpg','images/empty.png');
+
                 confetti_effect();
             }
         }
@@ -67,7 +70,7 @@ var params;
         }
         triggered=true;
        
-            var duration = 10 * 1000;
+            var duration = 5 * 1000;
              var end = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
              var particleCount = 5 ;
@@ -89,7 +92,7 @@ var params;
           
         setTimeout(function(){
             $("#resetbutton").show();
-        }, 10000);
+        }, duration);
               
      };
     
@@ -102,6 +105,7 @@ var params;
         CrispyToast.toasts=[];
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
+            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd.value +'.jpg');
             scratchers[i].reset();
         }
         

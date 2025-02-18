@@ -155,19 +155,23 @@ Scratcher = (function() {
                 count++;
             }
         }
-        var n = count/total;
-        //n= (n*100)| 0;
+        /* var n = count/total;
+        n= (n*100)| 0;
          if (n>30){
-
-            var mainctx = this.canvas.main.getContext('2d');
-            var drawctx = this.canvas.draw.getContext('2d');
+            //ctx.clearRect(0, 0, can.width, can.height);
+             ctx.fillStyle = '#0'
+             ctx.beginPath();
+             ctx.fillRect(0,0,can.width,can.height); */
+             //var mainctx = this.canvas.main.getContext('2d');
+         
             
-            mainctx.globalCompositeOperation = 'source-in';
-            mainctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
-            drawctx.globalCompositeOperation = 'source-over';
-            drawctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
-           
-        } 
+             //var drawctx = this.canvas.draw.getContext('2d');
+            //mainctx.globalCompositeOperation = 'source-in';
+            //mainctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
+            //drawctx.globalCompositeOperation = 'source-over';
+            //drawctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
+            
+        //} 
         return count/total;
     };
      /**
