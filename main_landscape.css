@@ -113,9 +113,9 @@ text-align: right;
 }
 
 #scratcher-box {
-  width:22em;
+  width:20em;
   align-content: left;
-  height:22em;
+  height:20em;
   position:absolute;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
@@ -124,7 +124,7 @@ text-align: right;
   transform: translateY(-50%);
   /* background-color: #FFFFFF; */
   top: 50%;
-  left: 0%;
+  left: 2%;
   border-radius: 5%;
 }
 /* Styles for mobile phones */ 
@@ -136,42 +136,10 @@ text-align: right;
 
   }
 }
-@media (min-height: 365px) and (max-width: 671px) { 
-  .pagetop h1 {
-    font-size: calc(3rem + 1vw);
-  }
-  .pagetop h4 {
-    font-size: calc(0.5rem + 0.70vw);
-  }
-  .pagetop h3 {
-    font-size: calc(1rem + 1vw);
-  }
 
-  #reveal {
-    width: calc(50% - 10px);
-
-  }
-  #scratcher-box {
-    width: 18em;
-    height: 18em;
-    top: 50%;
-    left: 1%;
-  }
-}
-/* @media (max-height:290px){ 
+@media (max-height: 320px){ 
   .pagetop h1 {
-    font-size: calc(3rem + 1vw);
-  }
-  #scratcher-box {
-    width: 15em;
-    height: 15em;
-    top: 52%;
-    left: 3vw;
-  } 
-} */
-@media (max-height: 375px){ 
-  .pagetop h1 {
-    font-size: calc(4rem + 1vw);
+    font-size: 4rem;
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
@@ -183,9 +151,8 @@ text-align: right;
     width: 18em;
     height: 18em;
     top: 50%;
-    left: 1%;
+    left: 2%;
   }
- 
   #reveal {
     width: calc(50% - 10px);
 
@@ -195,9 +162,88 @@ text-align: right;
   }
   
 }
-@media (min-height:336px) and (min-width: 672px) { 
+
+/* thin wide screens */
+@media (max-height:272px) and (min-width: 672px){ 
   .pagetop h1 {
-    font-size: calc(4rem + 1vw);
+    font-size: calc(4rem);
+  }
+  .pagetop h3 {
+    font-size: calc(1rem + 0.8vw);
+  }
+  #scratcher-box {
+    width: 17em;
+    height: 17em;
+    top: 52%;
+    left: 3%;
+  } 
+  #surprise {
+    width: 55%
+  }
+} 
+
+/*thin small phones iphone 5-6 etc */
+@media (max-height:272px) and (max-width:568px){ 
+  .pagetop h1 {
+    font-size: calc(3rem + 1vw);
+  }
+  .pagetop h3 {
+    font-size: calc(1rem + 0.8vw);
+  }
+  #scratcher-box {
+    width: 16em;
+    height: 16em;
+    top: 52%;
+    left: 1%;
+  } 
+  #surprise{
+    width: 50%}
+} 
+
+/*normal size phones */
+@media (min-height: 300px) and (max-width: 702px) { 
+  .pagetop h1 {
+    font-size: 4rem;
+  }
+  .pagetop h4 {
+    font-size: calc(0.5rem + 0.70vw);
+  }
+  .pagetop h3 {
+    font-size: calc(1rem + 1vw);
+  }
+
+  #reveal {
+    width: calc(50% - 10px);
+
+  }
+  #scratcher-box {
+    width: 18em;
+    height: 18em;
+    top: 50%;
+    left: 1%;
+  }
+}
+
+
+@media (min-height:321px) and (max-width:760px){ 
+  .pagetop h1 {
+    font-size: 4rem;
+  }
+  .pagetop h3 {
+    font-size: calc(1rem + 1vw);
+  }
+  #scratcher-box {
+    width: 19em;
+    height: 19em;
+    top: 50%;
+    left: 2%;
+  } 
+}
+
+/*large screen phones like iphone max plus etc */
+@media (min-height:321px) and (min-width: 761px) { 
+  .pagetop h1 {
+    font-size: calc(4rem + 0.8vw);
   }
   .pagetop h4 {
     font-size: calc(0.5rem + 0.70vw);
@@ -206,10 +252,10 @@ text-align: right;
     font-size: calc(1rem + 1vw);
   }
   #scratcher-box {
-    width: 20em;
-    height: 20em;
+    width: 21em;
+    height: 21em;
     top: 50%;
-    left: 1%;
+    left: 2%;
   }
   #t1
   {
@@ -218,21 +264,6 @@ text-align: right;
   #reveal {
     width: calc(55% - 10px);
   }
-}
-@media (max-height:321px) and (max-width:575px){ 
-  .pagetop h1 {
-    font-size: calc(3rem + 1vw);
-  }
-  .pagetop h3 {
-    font-size: calc(1rem + 0.8vh);
-  }
-  #scratcher-box {
-    width: 16em;
-    height: 16em;
-    top: 52%;
-    left: 1%;
-  } 
-
 }
 
 /* @media (max-height:351px) and (min-height:319){ 

@@ -20,7 +20,7 @@ var params;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs;
+    var tfs,tlh;
     var scratchers = [];
     var scratchLimit=30;
     var foregrnd;
@@ -124,7 +124,23 @@ var params;
         canvas.width = $td.width();
         canvas.height = $td.height();
     }
-   
+    jQuery.expr.filters.offscreen = function(el) {
+        var rect = el.getBoundingClientRect();
+        var overlapwithscratcher=false;
+        if (window.outerWidth < window.outerHeight) {
+            var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
+            if (rect.bottom >rect2.top +10 ||rect.bottom >rect2.bottom ) {
+                overlapwithscratcher = true;
+            }
+        }
+        return (
+                 (rect.x + rect.width) < 0 
+                   || (rect.y + rect.height) < 0
+                   || (rect.x > window.innerWidth || rect.y > window.innerHeight
+                    || rect.bottom > window.innerHeight || rect.top > window.innerHeight || overlapwithscratcher )
+               );
+      };
+
     function initPage() {
         var scratcherLoadedCount = 0;
         var pct = [];
@@ -133,6 +149,12 @@ var params;
         $( "#dialog-message" ).hide();
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
         tfs = $('#surprise').css('font-size');
+        tlh = $('#surprise').css('line-height');
+        //console.log(window.innerHeight);
+        //console.log(window.innerWidth);
+        /* if (window.innerHeight>300 && window.innerWidth<703) {
+            alert("yes");
+        } */
         var iw = Math.min(window.innerWidth,screen.availWidth)/2;
             if (iw<300) {
                 iw=300;
@@ -338,6 +360,7 @@ var params;
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
           });
+
           const tfontsize = tab.pages[0].addBlade({
             view: 'list',
             label: 'Title Font Size',
@@ -349,7 +372,31 @@ var params;
             value: '0',
             }).on('change', (ev) => {
                 var arrCurSize=tfs.toUpperCase().split("PX");
+                console.log( $('#surprise').css('font-size'));
+
                 $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(ev.value)+"PX"))); 
+
+                arrCurSize=tlh.toUpperCase().split("PX");
+                var v = 2*parseInt(ev.value);
+                var c = parseInt(arrCurSize[0]);
+                if (v<0 && v>c) {
+                    v = c/2;
+                }
+                $('#surprise').css('line-height',(c+v +"PX")); 
+
+                if ($('#H3').is(':offscreen')) {
+                    c=c+v;
+                    var counter =0;
+                    while ($('#H3').is(':offscreen')) {
+                        c=c-1;
+                        $('#surprise').css('line-height',(c+"PX")); 
+                        console.log(c);  
+                        counter++;
+                        if (counter >50) {break};
+                    }
+                    console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
+
+                }
           });
           const ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
@@ -361,7 +408,6 @@ var params;
                 var char = 50 - st.length;
                 ttext.value=char + " characters left";
                 $('#H3').text(ev.value);
-
             });
 
         const ttext = tab.pages[0].addBlade({

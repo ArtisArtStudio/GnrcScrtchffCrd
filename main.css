@@ -57,10 +57,13 @@ overscroll-behavior-y: contain;
 font-family: "Birthstone", cursive;
 display:flexbox;
 flex-direction: column;
-font-size: calc(3rem + 1vw);
+font-size: calc(4rem + 1vw);
 font-weight: 400;
 text-align: center;
 white-space: normal;
+padding-inline-end: 10px;
+padding-inline-start: 10px;
+
 
 } 
 
@@ -72,6 +75,8 @@ font-weight: 400;
 color: #000000 !important;
 text-align: center;
 white-space:normal;
+padding-left: 5px;
+padding-right: 5px;
 
 } 
 h4 {
@@ -102,6 +107,7 @@ h4 {
 #surprise{
   line-height: 5vh;
   text-align: center;
+  line-height: 10vh;
 }
 
 #scratcher-box {
@@ -184,7 +190,7 @@ hr {
     font-size: calc(0.7rem + 1vw) ;
   }
   .pagetop h1 {
-    font-size: calc(4rem + 3vw);
+    font-size: calc(4rem + 2vw);
   }
   
 }
@@ -258,7 +264,7 @@ hr {
     font-size: calc(0.7rem + 0.8vw) ;
   }
   .pagetop h1 {
-    font-size: calc(3rem + 1.8vw);
+    font-size: 4rem;
   }
     .pagetop h3 {
     font-size: calc(1.3rem + 0.5vw);
@@ -293,8 +299,8 @@ hr {
 
   #scratcher-box {
     position:absolute;
-    width: 15em;
-    height: 15em; 
+    width: 17em;
+    height: 17em; 
     top: 73%;
   }
  
