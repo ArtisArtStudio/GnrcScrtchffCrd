@@ -9,6 +9,8 @@ import {Pane} from './tweakpane-4.0.5.min.js';
 import * as TextareaPlugin from './tweakpane-textarea-plugin.min.js';
 var wholelink='';
 var params;
+var checkinprogress=false;
+var mtfs=0;
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -120,9 +122,14 @@ var params;
     
     function fitCanvastoDiv() {
         var canvas = document.getElementById("scratcher1");
-        var $td = $('canvas').parent();
-        canvas.width = $td.width();
-        canvas.height = $td.height();
+        var ttd = $('canvas').parent();
+        // var ttd = document.getElementById('scratcher-box');
+        canvas.width = ttd.width();
+        canvas.height = canvas.width;
+        console.log(canvas.width);
+        if(scratchers[0]){
+            scratchers[0].resetnoclear();
+        }
     }
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
@@ -140,21 +147,8 @@ var params;
                     || rect.bottom > window.innerHeight || rect.top > window.innerHeight || overlapwithscratcher )
                );
       };
-
-    function initPage() {
-        var scratcherLoadedCount = 0;
-        var pct = [];
-        var i, i1;    
+      function resizePanel() {
         const root = document.documentElement;
-        $( "#dialog-message" ).hide();
-        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
-        tfs = $('#surprise').css('font-size');
-        tlh = $('#surprise').css('line-height');
-        //console.log(window.innerHeight);
-        //console.log(window.innerWidth);
-        /* if (window.innerHeight>300 && window.innerWidth<703) {
-            alert("yes");
-        } */
         var iw = Math.min(window.innerWidth,screen.availWidth)/2;
             if (iw<300) {
                 iw=300;
@@ -179,11 +173,67 @@ var params;
         root.style.setProperty('--f-size',iw.toString() + "px" );
         iw=iw-3;
         root.style.setProperty('--fl-size',iw.toString() + "px" );
+  }
 
-        //console.log(iw.toString() + "px");
+      function manageResizeOrientation(value) {
+        if (checkinprogress) {
+            return;
+        }
+        setTimeout(function () {
+            checkinprogress=true;
+            fitCanvastoDiv();
+            modifyLineHeight();
+            resizePanel();
+            checkinprogress=false;
+        },500);
+    }
+
+    function modifyLineHeight() {
+        var arrCurSize=tlh.toUpperCase().split("PX");
+        var v = 2*parseInt(mtfs);
+        var c = parseInt(arrCurSize[0]);
+        if (v<0 && v>c) {
+            v = c/2;
+        }
+        $('#surprise').css('line-height',(c+v +"PX")); 
+
+        if ($('#H3').is(':offscreen')) {
+            c=c+v;
+            var counter =0;
+            while ($('#H3').is(':offscreen')) {
+                c=c-1;
+                $('#surprise').css('line-height',(c+"PX")); 
+                console.log(c);  
+                counter++;
+                if (counter >50) {break};
+            }
+            console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
+
+        }
+    }
+    function initPage() {
+        var scratcherLoadedCount = 0;
+        var i, i1;    
+        $( "#dialog-message" ).hide();
+        document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
+        tfs = $('#surprise').css('font-size');
+        tlh = $('#surprise').css('line-height');
+        //console.log(window.innerHeight);
+        //console.log(window.innerWidth);
+        /* if (window.innerHeight>300 && window.innerWidth<703) {
+            alert("yes");
+        } */
+       /*  window.addEventListener('resize', function () {
+            manageResizeOrientation('resize');
+        }); */
+            
+        $( window ).on( "orientationchange", function( event ) {
+            manageResizeOrientation('orientation');
+        });
+        
+        resizePanel();
         fitCanvastoDiv();
-        //surname = params.get('surname');
-        //document.getElementById('id01').style.display='block';
+       
         $('.nosoundbtn').on("click", function (e) {
             //wholelink='./index.html' + "?" + params.toString(); // Test page
 
@@ -359,6 +409,7 @@ var params;
             value: 'Birthstone',
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
+                modifyLineHeight(tfontsize.value);
           });
 
           const tfontsize = tab.pages[0].addBlade({
@@ -373,30 +424,10 @@ var params;
             }).on('change', (ev) => {
                 var arrCurSize=tfs.toUpperCase().split("PX");
                 console.log( $('#surprise').css('font-size'));
-
+                mtfs=ev.value;
                 $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(ev.value)+"PX"))); 
+                modifyLineHeight();
 
-                arrCurSize=tlh.toUpperCase().split("PX");
-                var v = 2*parseInt(ev.value);
-                var c = parseInt(arrCurSize[0]);
-                if (v<0 && v>c) {
-                    v = c/2;
-                }
-                $('#surprise').css('line-height',(c+v +"PX")); 
-
-                if ($('#H3').is(':offscreen')) {
-                    c=c+v;
-                    var counter =0;
-                    while ($('#H3').is(':offscreen')) {
-                        c=c-1;
-                        $('#surprise').css('line-height',(c+"PX")); 
-                        console.log(c);  
-                        counter++;
-                        if (counter >50) {break};
-                    }
-                    console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
-
-                }
           });
           const ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
@@ -559,14 +590,6 @@ var params;
 
             btn.element.querySelector('button').setAttribute('style', prev+added);
 
-            
-            
-           
-        
-            /* const elem = cmes.element.querySelector('input');
-        elem.addEventListener('keyup', () => {
-            scratchers[0].setText(elem.value);
-        }); */
     };
     function display_dialog(text) {
         $( "#error" ).text(text);

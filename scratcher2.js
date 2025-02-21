@@ -491,7 +491,20 @@ Scratcher = (function() {
         // call back if we have it
         this.dispatchEvent(this.createEvent('reset'));
     };
+    Scratcher.prototype.resetnoclear = function() {
+
+        var c = this.canvas.main;
     
+        // create the temp and draw canvases, and set their dimensions
+        // to the same as the main canvas:
+        this.canvas.temp = document.createElement('canvas');
+        this.canvas.draw = document.createElement('canvas');
+        this.canvas.temp.width = this.canvas.draw.width = c.width;
+        this.canvas.temp.height = this.canvas.draw.height = c.height;
+    
+        this.recompositeCanvases();
+    
+    };
     /**
      * returns the main canvas jQuery object for this scratcher
      */

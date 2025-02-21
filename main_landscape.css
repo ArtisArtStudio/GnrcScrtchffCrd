@@ -307,7 +307,7 @@ cursor: grab;
 }
 #scratcher1, #scratcher2, #scratcher3, #scratcher4, #scratcher5, #scratcher6, #scratcher7, #scratcher8, #scratcher9 {
   width: 100%;
-  padding: 5px;
+  padding: 0px;
   
 }
 #resetbutton {
