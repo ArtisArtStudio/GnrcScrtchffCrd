@@ -81,6 +81,7 @@ Scratcher = (function() {
      * @param frontImage [string, optional] URL to foreground (top) image
      * @param shape [string] scratcher shape
      * @param containslongw {boolean}
+     * @param pixels
      */
     function Scratcher(canvasId, backImage, frontImage, cmessage) {
         this.canvas = {
@@ -138,14 +139,14 @@ Scratcher = (function() {
         var can = this.canvas.draw;
         var ctx = can.getContext("2d", { willReadFrequently: true });
         var count, total;
-        var pixels, pdata;
+        var pdata;
     
         if (!stride || stride < 1) { stride = 1; }
     
         stride *= 4; // 4 elements per pixel
         
-        pixels = ctx.getImageData(0, 0, can.width, can.height);
-        pdata = pixels.data;
+        this.pixels = ctx.getImageData(0, 0, can.width, can.height);
+        pdata = this.pixels.data;
         l = pdata.length; // 4 entries per pixel
     
         total = (l / stride)|0;
@@ -497,12 +498,14 @@ Scratcher = (function() {
     
         // create the temp and draw canvases, and set their dimensions
         // to the same as the main canvas:
-        this.canvas.temp = document.createElement('canvas');
-        this.canvas.draw = document.createElement('canvas');
+        //this.canvas.temp = document.createElement('canvas');
+        //this.canvas.draw = document.createElement('canvas');
         this.canvas.temp.width = this.canvas.draw.width = c.width;
         this.canvas.temp.height = this.canvas.draw.height = c.height;
-    
+        var ctx = this.canvas.draw.getContext('2d');
+        ctx.putImageData(this.pixels,0,0);
         this.recompositeCanvases();
+        console.log(this.pixels);
     
     };
     /**
