@@ -126,7 +126,6 @@ var mtfs=0;
         // var ttd = document.getElementById('scratcher-box');
         canvas.width = ttd.width();
         canvas.height = canvas.width;
-        console.log(canvas.width);
         if(scratchers[0]){
             scratchers[0].resetnoclear();
         }

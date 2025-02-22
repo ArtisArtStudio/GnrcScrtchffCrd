@@ -234,11 +234,10 @@ Scratcher = (function() {
         var mainctx = this.canvas.main.getContext('2d');
         var w = this.canvas.temp.width;
         var h =this.canvas.temp.height;
-    
+        
         // Step 1: clear the temp
-        this.canvas.temp.width = this.canvas.temp.width; // resizing clears
-        this.canvas.main.width = this.canvas.main.width; // resizing clears
-
+            this.canvas.temp.width = this.canvas.temp.width; // resizing clears
+            this.canvas.main.width = this.canvas.main.width; // resizing clears
         tempctx.save();
         tempctx.beginPath();
         switch(this.shape) {
@@ -492,21 +491,38 @@ Scratcher = (function() {
         // call back if we have it
         this.dispatchEvent(this.createEvent('reset'));
     };
-    Scratcher.prototype.resetnoclear = function() {
-
+    Scratcher.prototype.resetnoclear = async function() {
         var c = this.canvas.main;
-    
-        // create the temp and draw canvases, and set their dimensions
-        // to the same as the main canvas:
-        //this.canvas.temp = document.createElement('canvas');
-        //this.canvas.draw = document.createElement('canvas');
-        this.canvas.temp.width = this.canvas.draw.width = c.width;
-        this.canvas.temp.height = this.canvas.draw.height = c.height;
-        var ctx = this.canvas.draw.getContext('2d');
-        ctx.putImageData(this.pixels,0,0);
+        var cc = this.canvas.temp;
+        const resizeWidth = c.width >> 0
+        const resizeHeight = c.height >> 0
+       
+        var ratio=1;
+        if (this.pixels){
+            
+            const ibm = await window.createImageBitmap(this.pixels, 0, 0, this.canvas.draw.width, this.canvas.draw.width, {
+                resizeWidth, resizeHeight
+              })
+
+            if (c.width>cc.width) {
+                ratio = cc.width / c.width;
+            } else {
+                ratio = c.width / cc.width;
+            }
+        
+            this.canvas.temp.width  = this.canvas.draw.width = c.width;
+            this.canvas.temp.height = this.canvas.draw.height = c.height;
+
+            var ctx = this.canvas.draw.getContext('2d');
+         
+            ctx.drawImage(ibm,0,0);
+            this.pixels = ctx.getImageData(0,0,c.width,c.height);
+        } else {
+            this.canvas.temp.width = this.canvas.draw.width = c.width;
+            this.canvas.temp.height = this.canvas.draw.height = c.height;
+            
+        }
         this.recompositeCanvases();
-        console.log(this.pixels);
-    
     };
     /**
      * returns the main canvas jQuery object for this scratcher
