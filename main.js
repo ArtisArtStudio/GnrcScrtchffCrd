@@ -5,8 +5,12 @@
  */
 /*import {startParticles, stopParticles, startConfetti, stopConfetti} from './particles.js';*/
 /*import {confetti} from 'https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/umd/confetti.js';*/
-var wholelink='';
 var params;
+var checkinprogress=false;
+var canvas;
+var scratchers = [];
+var foregrnd;
+var iwidth,iheight;
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -18,9 +22,9 @@ var params;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var scratchers = [];
+    var tfs, tlh;
     var scratchLimit=30;
-    var foregrnd;
+
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -40,7 +44,7 @@ var params;
                 if(CrispyToast.toasts.length!=0){
                     CrispyToast.clearall();
                 }
-                scratchers[0].setImages('images/empty.jpg','images/empty.png');
+                scratchers[0].clear();
 
                 confetti_effect();
             }
@@ -73,7 +77,7 @@ var params;
             var duration = 5 * 1000;
              var end = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
-             var particleCount = 5 ;
+             var particleCount = 2 ;
              (function frame() {
              // launch a few confetti from the left edge
              confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
@@ -99,13 +103,13 @@ var params;
     /**
      * Reset all scratchers
      */
-    function onResetClicked(scratchers) {
+    function onResetClicked() {
         var i;
         pct1 = 0;
         CrispyToast.toasts=[];
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
-            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd.value +'.jpg');
+            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd +'.jpg');
             scratchers[i].reset();
         }
         
@@ -116,20 +120,81 @@ var params;
     };
     
     function fitCanvastoDiv() {
-        var canvas = document.getElementById("scratcher1");
-        var $td = $('canvas').parent();
-        canvas.width = $td.width();
-        canvas.height = $td.height();
+        var ttd = $(canvas).parent();
+        // var ttd = document.getElementById('scratcher-box');
+        canvas.width = ttd.width();
+        canvas.height = canvas.width;
+        if(scratchers[0]){
+            scratchers[0].resetnoclear();
+        }
     }
-   
-    function initPage() {
-        var scratcherLoadedCount = 0;
-        var pct = [];
-        var i, i1;    
-        
-        
-        fitCanvastoDiv();
+    jQuery.expr.filters.offscreen = function(el) {
+        var rect = el.getBoundingClientRect();
+        var overlapwithscratcher=false;
+        if (iwidth < iheight) {
+            var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
+            if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
+                overlapwithscratcher = true;
+            }
+        }
+        return (
+            (rect.x + rect.width) < 0 
+              || (rect.y + rect.height) < 0
+              || (rect.x > iwidth || rect.y > iheight-20
+               || rect.bottom > iheight -20|| rect.top > iheight-20 || overlapwithscratcher )
+          );
+ };
+    
 
+      function manageResizeOrientation() {
+        if (checkinprogress) {
+            return;
+        }
+        checkinprogress=true;
+        iwidth = window.innerWidth;
+        iheight = window.innerHeight;
+        setTimeout(function () {
+            fitCanvastoDiv();
+            modifyLineHeight();
+            checkinprogress=false;
+
+        },500);
+
+    }
+
+    function modifyLineHeight() {
+        var arrCurSize=tlh.toUpperCase().split("PX");
+        var v = 1.2*parseInt(tfs);
+        var c = parseInt(arrCurSize[0]);
+        if (v<0 && v>c) {
+            v = c/2;
+        }
+        $('#surprise').css('line-height',(c+v +"PX")); 
+
+        if ($('#H3').is(':offscreen')) {
+            c=c+v;
+            var counter =0;
+            while ($('#H3').is(':offscreen')) {
+                c=c-1;
+                $('#surprise').css('line-height',(c+"PX")); 
+                //console.log(c);  
+                counter++;
+                if (counter >50) {
+                    //display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+                    alert("possible out of screen");
+                    break
+                };
+            }
+            //console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
+
+        }
+    }
+    function initPage() {
+        var i, i1;    
+        canvas = document.getElementById("scratcher1");
+        $( window ).on( "resize orientationchange", function( event ) {
+            manageResizeOrientation();
+        });
         //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
             
@@ -148,26 +213,10 @@ var params;
           );
    
         
-        //document.getElementById("resetbutton").style.backgroundColor = colortxt;
-
-        // called each time a scratcher loads
-        function onScratcherLoaded(ev) {
-            
-            scratcherLoadedCount++;
-            $("table1").width($(window).width());
-            if (scratcherLoadedCount == scratchers.length) {
-                // all scratchers loaded!
-    
-                // bind the reset button to reset all scratchers
-                $('#resetbutton').on('click', function() {
-                        onResetClicked(scratchers);
-                    });
-    
-            }
-        };
-    
-        // create new scratchers
-        var scratchers = new Array(1);
+        $('#resetbutton').on('click', function() {
+            onResetClicked();
+        });
+        scratchers = new Array(1);
         
         //var end = window.btoa( rb ); 
         //end = window.atob( rb );
@@ -175,37 +224,37 @@ var params;
         params = new URLSearchParams(window.location.search.slice(1));
 
         var backgrnd = params.get("bck1");
-        var foregrnd = window.atob(params.get("fr1"));
+        foregrnd = window.atob(params.get("fr1"));
         var ctitle = decodeURIComponent(window.atob(params.get("ttl1")));
         var tfont = window.atob(params.get("tfnt1"));
         var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
         var cmes = decodeURIComponent(window.atob(params.get("cmes")));
         var shp1 = params.get("shp1");
-        var tfs = params.get("tfs");
+        tfs = params.get("tfs");
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
         var arrCurSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(tfs)+"PX"))); 
+        tlh = $('#surprise').css('line-height');
+
+        manageResizeOrientation();
 
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
             scratchers[i] = new Scratcher('scratcher' + i1);
     
             // set up this listener before calling setImages():
-            scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
+            //scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
             scratchers[i].setImages('images/empty.jpg','images/fore/' +foregrnd+ '.jpg');
             scratchers[i].setText(cmes);
             scratchers[i].setShape(shp1);
 
         }
-        
-            /* const elem = cmes.element.querySelector('input');
-        elem.addEventListener('keyup', () => {
-            scratchers[0].setText(elem.value);
-        }); */
+        scratchers[0].addEventListener('scratchesended', scratcher1Changed);
+
     };
 
     

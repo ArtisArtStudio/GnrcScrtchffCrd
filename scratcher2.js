@@ -229,7 +229,7 @@ Scratcher = (function() {
      * arbitrary-sized images, whereas in its current form, it will dog out
      * if the images are large.
      */
-    Scratcher.prototype.recompositeCanvases = function() {
+    Scratcher.prototype.recompositeCanvases = function(clear) {
         var tempctx = this.canvas.temp.getContext('2d');
         var mainctx = this.canvas.main.getContext('2d');
         var w = this.canvas.temp.width;
@@ -269,9 +269,10 @@ Scratcher = (function() {
         tempctx.closePath();
         //tempctx.restore();
         // Step 3: stamp the background on the temp (!! source-atop mode !!)
-        tempctx.globalCompositeOperation = 'source-out';
-        tempctx.drawImage(this.image.front.img, 0, 0,this.image.front.img.width, this.image.front.img.height,0,0,w,h);
-        
+        if (!clear) {
+            tempctx.globalCompositeOperation = 'source-atop';
+            tempctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,w,h);
+        }
         mainctx.save();
         mainctx.beginPath();
         switch(this.shape) {
@@ -287,7 +288,7 @@ Scratcher = (function() {
         mainctx.closePath();
         mainctx.clip();
         // Step 4: stamp the foreground on the display canvas (source-over)
-        mainctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
+        mainctx.drawImage(this.image.front.img, 0, 0,this.image.front.img.width, this.image.front.img.height,0,0,this.canvas.temp.width,this.canvas.temp.height);
         switch(this.shape) {
             case 'heart':
                 break;
@@ -297,27 +298,29 @@ Scratcher = (function() {
             default:
                 mainctx.arc(0, 0, w*0.5, 0, Math.PI * 2, true);
             }
-        mainctx.fillStyle = '#FFF';
-        mainctx.fillRect(0,0,w,h);
-        mainctx.fillStyle = '#000';
+        tempctx.fillStyle = '#FFF';
+        tempctx.fillRect(0,0,w,h);
+        tempctx.fillStyle = '#000';
         switch(this.shape) {
             case 'heart':
-                mainctx.font =  w/18 + "pt Calibri";
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/15,w-30,9);
+                tempctx.font =  w/18 + "pt Calibri";
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
                 break;
             case 'circle':
-                mainctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
+                tempctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
                 break;
             default:
-                mainctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(mainctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
+                tempctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
             }
         
-        mainctx.clip();
-        mainctx.closePath();
-        mainctx.restore();
+        tempctx.clip();
+        tempctx.closePath();
+        tempctx.restore();
         // Step 5: stamp the temp on the display canvas (source-over)
+        mainctx.globalCompositeOperation = 'source-over';
+
         mainctx.drawImage(this.canvas.temp, 0, 0);
 
     };
@@ -426,7 +429,7 @@ Scratcher = (function() {
             var local = getLocalCoords(c, getEventCoords(e));
             this.mouseDown = true;
             this.scratchLine(local.x, local.y, true);
-            this.recompositeCanvases();
+            this.recompositeCanvases(false);
             
             this.dispatchEvent(this.createEvent('scratchesbegan'));
             
@@ -445,7 +448,7 @@ Scratcher = (function() {
             var local = getLocalCoords(c, getEventCoords(e));
     
             this.scratchLine(local.x, local.y, false);
-            this.recompositeCanvases();
+            this.recompositeCanvases(false);
     
             return false;
         };
@@ -485,12 +488,15 @@ Scratcher = (function() {
     Scratcher.prototype.reset = function() {
         // clear the draw canvas
         this.canvas.draw.width = this.canvas.draw.width;
-    
-        this.recompositeCanvases();
+        this.pixels=null;
+        this.recompositeCanvases(false);
     
         // call back if we have it
         this.dispatchEvent(this.createEvent('reset'));
     };
+    Scratcher.prototype.clear = function() {
+        this.recompositeCanvases(true);
+    }
     Scratcher.prototype.resetnoclear = async function() {
         var c = this.canvas.main;
         var cc = this.canvas.temp;
@@ -522,7 +528,7 @@ Scratcher = (function() {
             this.canvas.temp.height = this.canvas.draw.height = c.height;
             
         }
-        this.recompositeCanvases();
+        this.recompositeCanvases(false);
     };
     /**
      * returns the main canvas jQuery object for this scratcher

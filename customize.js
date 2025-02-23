@@ -11,6 +11,10 @@ var wholelink='';
 var params;
 var checkinprogress=false;
 var mtfs=0;
+var canvas;
+var scratchers = [];
+var iwidth,iheight;
+
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -22,8 +26,7 @@ var mtfs=0;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs,tlh;
-    var scratchers = [];
+    var tfs, tlh;
     var scratchLimit=30;
     var foregrnd;
     function supportsCanvas() {
@@ -45,7 +48,7 @@ var mtfs=0;
                 if(CrispyToast.toasts.length!=0){
                     CrispyToast.clearall();
                 }
-                scratchers[0].setImages('images/empty.jpg','images/empty.png');
+                scratchers[0].clear();
 
                 confetti_effect();
             }
@@ -78,7 +81,7 @@ var mtfs=0;
             var duration = 5 * 1000;
              var end = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
-             var particleCount = 5 ;
+             var particleCount = 2 ;
              (function frame() {
              // launch a few confetti from the left edge
              confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
@@ -104,7 +107,7 @@ var mtfs=0;
     /**
      * Reset all scratchers
      */
-    function onResetClicked(scratchers) {
+    function onResetClicked() {
         var i;
         pct1 = 0;
         CrispyToast.toasts=[];
@@ -119,10 +122,9 @@ var mtfs=0;
         soundHandle.currentTime = 0;    
         return false;
     };
-    
+   
     function fitCanvastoDiv() {
-        var canvas = document.getElementById("scratcher1");
-        var ttd = $('canvas').parent();
+        var ttd = $(canvas).parent();
         // var ttd = document.getElementById('scratcher-box');
         canvas.width = ttd.width();
         canvas.height = canvas.width;
@@ -133,22 +135,23 @@ var mtfs=0;
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
-        if (window.outerWidth < window.outerHeight) {
+        if (iwidth < iheight) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
-            if (rect.bottom >rect2.top +10 ||rect.bottom >rect2.bottom ) {
+            if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
                 overlapwithscratcher = true;
             }
         }
         return (
                  (rect.x + rect.width) < 0 
                    || (rect.y + rect.height) < 0
-                   || (rect.x > window.innerWidth || rect.y > window.innerHeight
-                    || rect.bottom > window.innerHeight || rect.top > window.innerHeight || overlapwithscratcher )
+                   || (rect.x > iwidth || rect.y > iheight-20
+                    || rect.bottom > iheight -20|| rect.top > iheight-20 || overlapwithscratcher )
                );
       };
+
       function resizePanel() {
         const root = document.documentElement;
-        var iw = Math.min(window.innerWidth,screen.availWidth)/2;
+        var iw = Math.min(iwidth,screen.availWidth)/2;
             if (iw<300) {
                 iw=300;
             }
@@ -158,14 +161,14 @@ var mtfs=0;
                 iw=200;
             }
         root.style.setProperty('--tp-blade-value-width',iw.toString() + "px" );
-        iw = Math.min(window.innerHeight,screen.availHeight)/30;
+        iw = Math.min(iheight,screen.availHeight)/30;
         if (iw<20) {
             iw=20;
         }
         root.style.setProperty('--tp-container-unit-size',iw.toString() + "px" );
         iw=iw/5;
         root.style.setProperty('--tp-container-unit-spacing',iw.toString() + "px" );
-        iw = Math.min(window.innerHeight,screen.availHeight)/50;
+        iw = Math.min(iheight,screen.availHeight)/50;
         if (iw<15) {
             iw=15;
         }
@@ -174,22 +177,28 @@ var mtfs=0;
         root.style.setProperty('--fl-size',iw.toString() + "px" );
   }
 
-      function manageResizeOrientation(value) {
+      function manageResizeOrientation() {
+        iwidth = window.innerWidth;
+        iheight = window.innerHeight;
         if (checkinprogress) {
             return;
         }
+        checkinprogress=true;
+       
         setTimeout(function () {
-            checkinprogress=true;
             fitCanvastoDiv();
             modifyLineHeight();
             resizePanel();
             checkinprogress=false;
+
         },500);
+
     }
 
     function modifyLineHeight() {
+
         var arrCurSize=tlh.toUpperCase().split("PX");
-        var v = 2*parseInt(mtfs);
+        var v = 1.2*parseInt(mtfs);
         var c = parseInt(arrCurSize[0]);
         if (v<0 && v>c) {
             v = c/2;
@@ -202,21 +211,26 @@ var mtfs=0;
             while ($('#H3').is(':offscreen')) {
                 c=c-1;
                 $('#surprise').css('line-height',(c+"PX")); 
-                console.log(c);  
+                //console.log(c);  
                 counter++;
-                if (counter >50) {break};
+                if (counter >50) {
+                    display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+                    break
+                };
             }
-            console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
+            //console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
 
         }
     }
     function initPage() {
-        var scratcherLoadedCount = 0;
         var i, i1;    
         $( "#dialog-message" ).hide();
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
+        canvas = document.getElementById("scratcher1");
         tfs = $('#surprise').css('font-size');
         tlh = $('#surprise').css('line-height');
+        iwidth = window.innerWidth;
+        iheight = window.innerHeight;
         //console.log(window.innerHeight);
         //console.log(window.innerWidth);
         /* if (window.innerHeight>300 && window.innerWidth<703) {
@@ -226,8 +240,8 @@ var mtfs=0;
             manageResizeOrientation('resize');
         }); */
             
-        $( window ).on( "orientationchange", function( event ) {
-            manageResizeOrientation('orientation');
+        $( window ).on( "resize orientationchange", function( event ) {
+            manageResizeOrientation();
         });
         
         resizePanel();
@@ -264,23 +278,10 @@ var mtfs=0;
             false,
           );
    
-        
-        //document.getElementById("resetbutton").style.backgroundColor = colortxt;
-
-        // called each time a scratcher loads
-        function onScratcherLoaded(ev) {
-            
-            scratcherLoadedCount++;
-            if (scratcherLoadedCount == scratchers.length) {
-                // all scratchers loaded!
-    
-                // bind the reset button to reset all scratchers
-                $('#resetbutton').on('click', function() {
-                        onResetClicked(scratchers);
-                    });
-    
-            }
-        };
+   
+          $('#resetbutton').on('click', function() {
+            onResetClicked();
+        });
         scratchers = new Array(1);
 
         const cmessage = {
@@ -297,7 +298,7 @@ var mtfs=0;
             scratchers[i] = new Scratcher('scratcher' + i1);
     
             // set up this listener before calling setImages():
-            scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
+            //scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
             scratchers[i].setImages('images/empty.jpg','images/fore/Goldeng.jpg');
             scratchers[i].setText(cmessage.message);
@@ -377,7 +378,7 @@ var mtfs=0;
                 var char = 22 - st.length;
                 tlimit.value=char + " characters left";
                 $('#surprise').text(ev.value);
-
+                modifyLineHeight();
             });
             //alert(ctitle.element);
         const tlimit = tab.pages[0].addBlade({
