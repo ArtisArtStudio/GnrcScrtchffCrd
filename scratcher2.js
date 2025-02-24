@@ -506,7 +506,7 @@ Scratcher = (function() {
         var ratio=1;
         if (this.pixels){
             
-            const ibm = await window.createImageBitmap(this.pixels, 0, 0, this.canvas.draw.width, this.canvas.draw.width, {
+           /*  const ibm = await window.createImageBitmap(this.pixels, 0, 0, this.canvas.draw.width, this.canvas.draw.width, {
                 resizeWidth, resizeHeight
               })
 
@@ -522,7 +522,31 @@ Scratcher = (function() {
             var ctx = this.canvas.draw.getContext('2d');
          
             ctx.drawImage(ibm,0,0);
-            this.pixels = ctx.getImageData(0,0,c.width,c.height);
+            this.pixels = ctx.getImageData(0,0,c.width,c.height); */
+            var newCanvas = $("<canvas>")
+            .attr("width", cc.width)
+            .attr("height", cc.height)[0];
+
+            newCanvas.getContext("2d").putImageData(this.pixels, 0, 0);
+
+            // Second canvas, for scaling
+            var scaleCanvas = $("<canvas>")
+            .attr("width", c.width)
+            .attr("height", c.height)[0];
+            var scaleCtx = scaleCanvas.getContext("2d");
+            ratio = c.width / cc.width;
+
+            scaleCtx.scale(ratio, ratio);
+            scaleCtx.drawImage(newCanvas, 0, 0);
+
+            this.pixels =  scaleCtx.getImageData(0, 0, scaleCanvas.width, scaleCanvas.height);
+            this.canvas.temp.width  = this.canvas.draw.width = c.width;
+            this.canvas.temp.height = this.canvas.draw.height = c.height;
+
+            var ctx = this.canvas.draw.getContext('2d');
+            ctx.putImageData(this.pixels, 0, 0);
+
+
         } else {
             this.canvas.temp.width = this.canvas.draw.width = c.width;
             this.canvas.temp.height = this.canvas.draw.height = c.height;
