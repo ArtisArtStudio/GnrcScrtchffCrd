@@ -82,6 +82,7 @@ Scratcher = (function() {
      * @param shape [string] scratcher shape
      * @param containslongw {boolean}
      * @param pixels
+     * @param triggered {boolean}
      */
     function Scratcher(canvasId, backImage, frontImage, cmessage) {
         this.canvas = {
@@ -426,6 +427,7 @@ Scratcher = (function() {
          * Dispatches the 'scratchesbegan' event.
          */
         function mousedown_handler(e) {
+            if (this.triggered) {return;}
             var local = getLocalCoords(c, getEventCoords(e));
             this.mouseDown = true;
             this.scratchLine(local.x, local.y, true);
@@ -443,6 +445,8 @@ Scratcher = (function() {
          * the canvas
          */
         function mousemove_handler(e) {
+            if (this.triggered) {return;}
+
             if (!this.mouseDown) { return true; }
     
             var local = getLocalCoords(c, getEventCoords(e));
@@ -459,6 +463,8 @@ Scratcher = (function() {
          * Dispatches the 'scratchesended' event.
          */
         function mouseup_handler(e) {
+            if (this.triggered) {return;}
+
             if (this.mouseDown) {
                 this.mouseDown = false;
     
@@ -470,6 +476,7 @@ Scratcher = (function() {
             return true;
         };
     
+        
         $(c).on('mousedown', mousedown_handler.bind(this))
             .on('touchstart', mousedown_handler.bind(this));
         $(document).on('mousemove', mousemove_handler.bind(this));
@@ -489,22 +496,25 @@ Scratcher = (function() {
         // clear the draw canvas
         this.canvas.draw.width = this.canvas.draw.width;
         this.pixels=null;
+        this.triggered=false;
         this.recompositeCanvases(false);
     
         // call back if we have it
         this.dispatchEvent(this.createEvent('reset'));
     };
     Scratcher.prototype.clear = function() {
+        this.triggered = true;
         this.recompositeCanvases(true);
     }
-    Scratcher.prototype.resetnoclear = async function() {
+    Scratcher.prototype.resetnoclear = async function(clear) {
         var c = this.canvas.main;
         var cc = this.canvas.temp;
         const resizeWidth = c.width >> 0
         const resizeHeight = c.height >> 0
        
         var ratio=1;
-        if (this.pixels){
+        
+        if (this.pixels && !clear){
             
            /*  const ibm = await window.createImageBitmap(this.pixels, 0, 0, this.canvas.draw.width, this.canvas.draw.width, {
                 resizeWidth, resizeHeight
@@ -552,7 +562,7 @@ Scratcher = (function() {
             this.canvas.temp.height = this.canvas.draw.height = c.height;
             
         }
-        this.recompositeCanvases(false);
+        this.recompositeCanvases(clear);
     };
     /**
      * returns the main canvas jQuery object for this scratcher

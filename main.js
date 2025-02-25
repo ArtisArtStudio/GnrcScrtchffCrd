@@ -22,7 +22,7 @@ var iwidth,iheight;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs, tlh;
+    var tfs, arrCurSize;
     var scratchLimit=30;
 
     function supportsCanvas() {
@@ -34,7 +34,6 @@ var iwidth,iheight;
      * Handle scratch event on a scratcher
      */
     function checkpct() {
-        if (!triggered) {
             if (pct1 > 0 && pct1 < scratchLimit) {
                 if (CrispyToast.toasts.length===0) {
                     CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
@@ -45,14 +44,16 @@ var iwidth,iheight;
                     CrispyToast.clearall();
                 }
                 scratchers[0].clear();
+                scratchers[0].removeEventListener('scratchesended', scratcher1Changed);
 
                 confetti_effect();
             }
-        }
     };
     function scratcher1Changed(ev) {
-        pct1 = (this.fullAmount(40) * 100)|0;
-        checkpct();
+        if (!triggered){
+            pct1 = (this.fullAmount(40) * 100)|0;
+            checkpct();
+        }
     };
    
     function randomInRange(min, max) {
@@ -110,6 +111,7 @@ var iwidth,iheight;
         $("#resetbutton").hide();
         for (i = 0; i < scratchers.length; i++) {
             scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd +'.jpg');
+            scratchers[0].addEventListener('scratchesended', scratcher1Changed);
             scratchers[i].reset();
         }
         
@@ -124,8 +126,12 @@ var iwidth,iheight;
         // var ttd = document.getElementById('scratcher-box');
         canvas.width = ttd.width();
         canvas.height = canvas.width;
-        if(scratchers[0]){
-            scratchers[0].resetnoclear();
+        if(scratchers[0]){ 
+            if (triggered) {
+            scratchers[0].resetnoclear(true);
+        } else {
+            scratchers[0].resetnoclear(false);
+        }
         }
     }
     jQuery.expr.filters.offscreen = function(el) {
@@ -140,22 +146,24 @@ var iwidth,iheight;
         return (
             (rect.x + rect.width) < 0 
               || (rect.y + rect.height) < 0
-              || (rect.x > iwidth || rect.y > iheight-20
-               || rect.bottom > iheight -20|| rect.top > iheight-20 || overlapwithscratcher )
+              || (rect.x > iwidth || rect.y > iheight-10
+               || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
           );
  };
     
 
-      function manageResizeOrientation() {
+      function manageResizeOrientation(etype) {
+        iwidth = window.innerWidth;
+        iheight = window.innerHeight;
         if (checkinprogress) {
             return;
         }
         checkinprogress=true;
-        iwidth = window.innerWidth;
-        iheight = window.innerHeight;
+
         setTimeout(function () {
             fitCanvastoDiv();
             modifyLineHeight();
+        
             checkinprogress=false;
 
         },500);
@@ -163,20 +171,23 @@ var iwidth,iheight;
     }
 
     function modifyLineHeight() {
-        var arrCurSize=tlh.toUpperCase().split("PX");
-        var v = 1.2*parseInt(tfs);
+
+        //var arrCurSize=tlh.toUpperCase().split("PX");
         var c = parseInt(arrCurSize[0]);
-        if (v<0 && v>c) {
+        var v = 1.2*c;
+        if (tfs<0 && v>c) {
             v = c/2;
         }
-        $('#surprise').css('line-height',(c+v +"PX")); 
+        console.log(arrCurSize[0] + " "+v +" "+ tfs);
+
+        $('#surprise').css('line-height',(v +"PX")); 
 
         if ($('#H3').is(':offscreen')) {
-            c=c+v;
+            
             var counter =0;
             while ($('#H3').is(':offscreen')) {
-                c=c-1;
-                $('#surprise').css('line-height',(c+"PX")); 
+                v=v-1;
+                $('#surprise').css('line-height',(v+"PX")); 
                 //console.log(c);  
                 counter++;
                 if (counter >50) {
@@ -192,10 +203,13 @@ var iwidth,iheight;
     function initPage() {
         var i, i1;    
         canvas = document.getElementById("scratcher1");
-        $( window ).on( "resize orientationchange", function( event ) {
-            manageResizeOrientation();
+        $( window ).on({
+            orientationchange: function(e) {
+                manageResizeOrientation('orientation');
+            },resize: function(e) {
+                manageResizeOrientation('resize');
+            }
         });
-        //document.getElementById('id01').style.display='block';
         $('.nosoundbtn').on("click", function (e) {
             
         });
@@ -235,9 +249,8 @@ var iwidth,iheight;
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
-        var arrCurSize=$('#surprise').css('font-size').toUpperCase().split("PX");
+        arrCurSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(tfs)+"PX"))); 
-        tlh = $('#surprise').css('line-height');
 
         manageResizeOrientation();
 

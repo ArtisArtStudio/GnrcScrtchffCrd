@@ -13,8 +13,8 @@ var checkinprogress=false;
 var mtfs=0;
 var canvas;
 var scratchers = [];
+var foregrnd;
 var iwidth,iheight;
-
 (function() {
     /**
      * Returns true if this browser supports canvas
@@ -26,9 +26,9 @@ var iwidth,iheight;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs, tlh;
+    var tfs, arrCurSize;
     var scratchLimit=30;
-    var foregrnd;
+
     function supportsCanvas() {
         return !!document.createElement('canvas').getContext;
     };
@@ -38,7 +38,6 @@ var iwidth,iheight;
      * Handle scratch event on a scratcher
      */
     function checkpct() {
-        if (!triggered) {
             if (pct1 > 0 && pct1 < scratchLimit) {
                 if (CrispyToast.toasts.length===0) {
                     CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
@@ -52,11 +51,12 @@ var iwidth,iheight;
 
                 confetti_effect();
             }
-        }
     };
     function scratcher1Changed(ev) {
-        pct1 = (this.fullAmount(40) * 100)|0;
-        checkpct();
+        if (!triggered){
+            pct1 = (this.fullAmount(40) * 100)|0;
+            checkpct();
+        }
     };
    
     function randomInRange(min, max) {
@@ -129,12 +129,18 @@ var iwidth,iheight;
         canvas.width = ttd.width();
         canvas.height = canvas.width;
         if(scratchers[0]){
-            scratchers[0].resetnoclear();
+            if (triggered) {
+                scratchers[0].resetnoclear(true);
+            } else {
+                scratchers[0].resetnoclear(false);
+            }
         }
     }
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
+        //alert(iheight + " " +window.screen.availHeight);
+        //alert(rect.bottom);
         if (iwidth < iheight) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
@@ -144,8 +150,8 @@ var iwidth,iheight;
         return (
                  (rect.x + rect.width) < 0 
                    || (rect.y + rect.height) < 0
-                   || (rect.x > iwidth || rect.y > iheight-20
-                    || rect.bottom > iheight -20|| rect.top > iheight-20 || overlapwithscratcher )
+              || (rect.x > iwidth || rect.y > iheight-10
+                    || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
                );
       };
 
@@ -177,7 +183,7 @@ var iwidth,iheight;
         root.style.setProperty('--fl-size',iw.toString() + "px" );
   }
 
-      function manageResizeOrientation() {
+      function manageResizeOrientation(etype) {
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
         if (checkinprogress) {
@@ -197,20 +203,21 @@ var iwidth,iheight;
 
     function modifyLineHeight() {
 
-        var arrCurSize=tlh.toUpperCase().split("PX");
-        var v = 1.2*parseInt(mtfs);
         var c = parseInt(arrCurSize[0]);
-        if (v<0 && v>c) {
+        var v = 1.2*c;
+        if (mtfs<0 && v>c) {
             v = c/2;
         }
-        $('#surprise').css('line-height',(c+v +"PX")); 
+        console.log(arrCurSize[0] + " "+v +" "+ tfs);
+
+        $('#surprise').css('line-height',(v +"PX")); 
 
         if ($('#H3').is(':offscreen')) {
-            c=c+v;
+            
             var counter =0;
             while ($('#H3').is(':offscreen')) {
-                c=c-1;
-                $('#surprise').css('line-height',(c+"PX")); 
+                v=v-1;
+                $('#surprise').css('line-height',(v+"PX")); 
                 //console.log(c);  
                 counter++;
                 if (counter >50) {
@@ -227,8 +234,8 @@ var iwidth,iheight;
         $( "#dialog-message" ).hide();
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
         canvas = document.getElementById("scratcher1");
-        tfs = $('#surprise').css('font-size');
-        tlh = $('#surprise').css('line-height');
+        arrCurSize= $('#surprise').css('font-size').toUpperCase().split("PX");
+        //tlh = $('#surprise').css('line-height');
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
         //console.log(window.innerHeight);
@@ -240,8 +247,12 @@ var iwidth,iheight;
             manageResizeOrientation('resize');
         }); */
             
-        $( window ).on( "resize orientationchange", function( event ) {
-            manageResizeOrientation();
+        $( window ).on({
+            orientationchange: function(e) {
+                manageResizeOrientation('orientation');
+            },resize: function(e) {
+                manageResizeOrientation('resize');
+            }
         });
         
         resizePanel();
@@ -288,7 +299,7 @@ var iwidth,iheight;
             message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
           };
         const title = {
-            prop: 'To my lovely wife!'
+            prop: 'Happy Birthday Jessica'
         };
         const text = {
             prop: 'I have a special gift. Scratch to see it! Jamie'
@@ -334,6 +345,7 @@ var iwidth,iheight;
                    
         btn1.on('click', () => {
             pane.expanded= false;
+            modifyLineHeight()
         });
         pane.registerPlugin(TextareaPlugin);
         const tab = pane.addTab({
@@ -378,10 +390,11 @@ var iwidth,iheight;
                 var char = 22 - st.length;
                 tlimit.value=char + " characters left";
                 $('#surprise').text(ev.value);
-                modifyLineHeight();
+                
             });
-            //alert(ctitle.element);
-        const tlimit = tab.pages[0].addBlade({
+            //ctitle.element.addEventListener("focusout", modifyLineHeight());
+            
+            const tlimit = tab.pages[0].addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
@@ -409,24 +422,24 @@ var iwidth,iheight;
             value: 'Birthstone',
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
-                modifyLineHeight(tfontsize.value);
+                //modifyLineHeight();
           });
 
           const tfontsize = tab.pages[0].addBlade({
             view: 'list',
             label: 'Title Font Size',
             options: [
-              {text: 'Smaller', value: '-20'},
+              {text: 'Smaller', value: '-15'},
               {text: 'Normal', value: '0'},
-              {text: 'Bigger', value: '20'},
+              {text: 'Bigger', value: '10'},
             ],
             value: '0',
             }).on('change', (ev) => {
                 var arrCurSize=tfs.toUpperCase().split("PX");
-                console.log( $('#surprise').css('font-size'));
+                //console.log( $('#surprise').css('font-size'));
                 mtfs=ev.value;
                 $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(ev.value)+"PX"))); 
-                modifyLineHeight();
+                //modifyLineHeight();
 
           });
           const ctext= tab.pages[0].addBinding(text, 'prop', {

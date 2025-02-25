@@ -97,7 +97,9 @@ h4 {
     font-size:4vmin;
     text-align: center;
     }
- 
+#title {
+  padding-top: 15px;
+}
 #reveal {
   display: block;
   margin-left: auto;
@@ -105,7 +107,7 @@ h4 {
   width: 100%;
 }
 #surprise{
-  line-height: 5vh;
+  line-height: 1;
   text-align: center;
 }
 
@@ -183,15 +185,20 @@ hr {
 }
 /* Styles for mobile phones */ 
 
+/* work on this one */
 
 @media (min-width: 376px), (max-width:1024px){ 
   h4 {
     font-size: calc(0.7rem + 1vw) ;
   }
   .pagetop h1 {
-    font-size: calc(4rem + 2vw);
+    font-size: calc(4rem);
   }
-  
+  #scratcher-box {
+    width: 20em;
+    height: 20em; 
+    top: 75%;
+  } 
 }
 
 /* @media (max-width: 430px), (max-height:670px) {
@@ -240,13 +247,14 @@ hr {
     font-size: calc(1.5rem + 1.2vh);
   } 
   .pagetop h1 {
-    font-size: calc(6rem + 3vw);
+    font-size: calc(5rem + 2vw);
   }
   h4 {
     font-size: 2vh;
   }
   #surprise{
-    line-height: 15vh;
+    /*line-height: 15vh;*/
+    line-height: 1.2;
   }
   #scratcher-box {
     position:absolute;
@@ -278,16 +286,16 @@ hr {
   } */
   #scratcher-box {
     position:absolute;
-    width: 20em;
-    height: 20em; 
-    top: 75%;
+    width: 17em;
+    height: 17em; 
+    top: 76%;
   }
   
 } 
 
 @media (max-width: 320px) { 
    .pagetop h1 {
-    font-size: calc(3rem + 2vw);
+    font-size: calc(2rem + 4vw);
   }
   .pagetop h3 {
     font-size: calc(1.2rem + 0.5vw);
@@ -298,17 +306,12 @@ hr {
 
   #scratcher-box {
     position:absolute;
-    width: 17em;
-    height: 17em; 
-    top: 73%;
+    width: 14em;
+    height: 14em; 
+    top: 75%;
   }
  
-  #H3 {
-    line-height: 17px;
-  }
-/*   #t1 {
-    width: 300px;
-  } */
+
 }
 #scratcher-box canvas {
   cursor: grab;
