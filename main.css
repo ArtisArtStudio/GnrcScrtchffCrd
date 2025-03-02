@@ -112,9 +112,9 @@ h4 {
 }
 
 #scratcher-box {
-  width:22em;
+  width:20em;
   align-content: center;
-  height:22em;
+  height:20em;
   display: block;
   /*background-color: #FFFFFF;*/
   position:absolute;
@@ -187,6 +187,7 @@ hr {
 
 /* work on this one */
 
+/* 
 @media (min-width: 376px), (max-width:1024px){ 
   h4 {
     font-size: calc(0.7rem + 1vw) ;
@@ -199,25 +200,36 @@ hr {
     height: 20em; 
     top: 75%;
   } 
-}
+} */
 
-/* @media (max-width: 430px), (max-height:670px) {
-  h4 {
-    font-size: calc(0.7rem + 1vw) ;
+@media (min-width: 425px) and (max-height:745px){ 
+  h3 {
+    font-size:calc(1.5rem + 0.5vw);
   }
   .pagetop h1 {
     font-size: calc(4rem + 2vw);
   }
-  #or {
-    font-size: calc(2rem + 1vw);
+  #scratcher-box {
+    width: 20em;
+    height: 20em; 
+    top: 75%;
+  } 
+}
+ @media (max-width: 424px) and (max-height:756px) {
+
+  .pagetop h1 {
+    font-size: calc(4rem + 1vw);
   }
+ 
   .pagetop h3 {
     font-size: calc(1.5rem + 0.5vw);
   }
-  #or{
-    line-height: 5vh !important;
-  }
-}  */
+  #scratcher-box {
+    width: 20em;
+    height: 20em; 
+    top: 75%;
+  } 
+}  
 
 @media (min-width: 768px) and (min-height: 930px){ 
   
@@ -241,6 +253,7 @@ hr {
     width: 50%; /* Could be more or less, depending on screen size */
   }
 }
+
 /* landscape tablet mode */
 @media (min-height: 675px) and (min-width: 1024px){ 
   .pagetop h3 {
@@ -266,7 +279,7 @@ hr {
     width: 60%; /* Could be more or less, depending on screen size */
   }
 }
-@media (max-width: 375px), (max-height:667px) {
+@media (max-width: 375px) and (max-height:667px) {
   h4 {
     font-size: calc(0.7rem + 0.8vw) ;
   }

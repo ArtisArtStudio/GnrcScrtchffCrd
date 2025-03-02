@@ -22,7 +22,7 @@ var iwidth,iheight;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs, arrCurSize;
+    var tfs;
     var scratchLimit=30;
 
     function supportsCanvas() {
@@ -134,6 +134,7 @@ var iwidth,iheight;
         }
         }
     }
+
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
@@ -162,7 +163,7 @@ var iwidth,iheight;
 
         setTimeout(function () {
             fitCanvastoDiv();
-            modifyLineHeight();
+            modifyFontSize();
         
             checkinprogress=false;
 
@@ -170,46 +171,45 @@ var iwidth,iheight;
 
     }
 
-    function modifyLineHeight() {
-
-        //var arrCurSize=tlh.toUpperCase().split("PX");
-        var c = parseInt(arrCurSize[0]);
-        var v = 1.2*c;
-        if (tfs<0 && v>c) {
-            v = c/2;
-        }
-        console.log(arrCurSize[0] + " "+v +" "+ tfs);
-
-        $('#surprise').css('line-height',(v +"PX")); 
-
+    function modifyFontSize() {
+return;
+        var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
+        var v = parseFloat(fontSize[0]);
+        //$('#surprise').css('line-height',(v +"PX")); 
         if ($('#H3').is(':offscreen')) {
             
             var counter =0;
             while ($('#H3').is(':offscreen')) {
                 v=v-1;
-                $('#surprise').css('line-height',(v+"PX")); 
-                //console.log(c);  
-                counter++;
+                $('#surprise').css('font-size',(v+"PX")); 
+                counter++;  
                 if (counter >50) {
                     //display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
-                    alert("possible out of screen");
-                    break
+                    $('#surprise').css('font-size',(parseFloat(fontSize[0])-parseFloat(tfs)+"PX")); 
+                    if ($('#H3').is(':offscreen')) {
+                        alert("Possibly some text might be out of screen. Please contact the sender and ask to choose a smaller font/font size.");
+                    };
+                    break;
                 };
             }
-            //console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
-
         }
     }
+
     function initPage() {
         var i, i1;    
         canvas = document.getElementById("scratcher1");
+        iwidth = window.innerWidth;
+        iheight = window.innerHeight;
+        console.log(iwidth + " "+iheight);
         $( window ).on({
             orientationchange: function(e) {
                 manageResizeOrientation('orientation');
             },resize: function(e) {
                 manageResizeOrientation('resize');
             }
-        });
+        });        
+        fitCanvastoDiv();
+
         $('.nosoundbtn').on("click", function (e) {
             
         });
@@ -249,8 +249,8 @@ var iwidth,iheight;
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
-        arrCurSize=$('#surprise').css('font-size').toUpperCase().split("PX");
-        $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(tfs)+"PX"))); 
+        var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
+        $('#surprise').css('font-size',((parseFloat(fontSize[0])+parseFloat(tfs)+"PX"))); 
 
         manageResizeOrientation();
 

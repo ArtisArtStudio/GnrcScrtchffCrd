@@ -26,7 +26,7 @@ var iwidth,iheight;
     var triggered=false;
     var nosound=true;
     var pct1=0;
-    var tfs, arrCurSize;
+    var initialFontSize;
     var scratchLimit=30;
 
     function supportsCanvas() {
@@ -136,11 +136,10 @@ var iwidth,iheight;
             }
         }
     }
+    
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
-        //alert(iheight + " " +window.screen.availHeight);
-        //alert(rect.bottom);
         if (iwidth < iheight) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
@@ -193,7 +192,7 @@ var iwidth,iheight;
        
         setTimeout(function () {
             fitCanvastoDiv();
-            modifyLineHeight();
+            modifyFontSize();
             resizePanel();
             checkinprogress=false;
 
@@ -201,40 +200,32 @@ var iwidth,iheight;
 
     }
 
-    function modifyLineHeight() {
+    function modifyFontSize() {
 
-        var c = parseInt(arrCurSize[0]);
-        var v = 1.2*c;
-        if (mtfs<0 && v>c) {
-            v = c/2;
-        }
-        console.log(arrCurSize[0] + " "+v +" "+ tfs);
-
-        $('#surprise').css('line-height',(v +"PX")); 
-
+        var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
+        var v = parseFloat(fontSize[0]);
+        //$('#surprise').css('line-height',(v +"PX")); 
         if ($('#H3').is(':offscreen')) {
             
             var counter =0;
             while ($('#H3').is(':offscreen')) {
                 v=v-1;
-                $('#surprise').css('line-height',(v+"PX")); 
-                //console.log(c);  
+                $('#surprise').css('font-size',(v+"PX")); 
                 counter++;
                 if (counter >50) {
                     display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
                     break
                 };
             }
-            //console.log($('#H3').is(':offscreen')+" " + window.innerHeight);
-
         }
     }
+
     function initPage() {
         var i, i1;    
-        $( "#dialog-message" ).hide();
+        //$( "#dialog-message" ).hide();
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/Blue-Floral.jpg)';
         canvas = document.getElementById("scratcher1");
-        arrCurSize= $('#surprise').css('font-size').toUpperCase().split("PX");
+        initialFontSize = $('#surprise').css('font-size').toUpperCase().split("PX");
         //tlh = $('#surprise').css('line-height');
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
@@ -345,7 +336,7 @@ var iwidth,iheight;
                    
         btn1.on('click', () => {
             pane.expanded= false;
-            modifyLineHeight()
+            modifyFontSize();
         });
         pane.registerPlugin(TextareaPlugin);
         const tab = pane.addTab({
@@ -392,7 +383,6 @@ var iwidth,iheight;
                 $('#surprise').text(ev.value);
                 
             });
-            //ctitle.element.addEventListener("focusout", modifyLineHeight());
             
             const tlimit = tab.pages[0].addBlade({
             view: 'text',
@@ -422,7 +412,6 @@ var iwidth,iheight;
             value: 'Birthstone',
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
-                //modifyLineHeight();
           });
 
           const tfontsize = tab.pages[0].addBlade({
@@ -435,12 +424,9 @@ var iwidth,iheight;
             ],
             value: '0',
             }).on('change', (ev) => {
-                var arrCurSize=tfs.toUpperCase().split("PX");
-                //console.log( $('#surprise').css('font-size'));
                 mtfs=ev.value;
-                $('#surprise').css('font-size',((parseInt(arrCurSize[0])+parseInt(ev.value)+"PX"))); 
-                //modifyLineHeight();
-
+                $('#surprise').css('font-size',((parseFloat(initialFontSize[0])+parseFloat(ev.value)+"PX"))); 
+                
           });
           const ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
