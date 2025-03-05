@@ -24,7 +24,7 @@ var iwidth,iheight;
    
     var soundHandle = new Audio();
     var triggered=false;
-    var nosound=true;
+    var soundeffect, confettieffect;
     var pct1=0;
     var initialFontSize;
     var scratchLimit=30;
@@ -38,7 +38,7 @@ var iwidth,iheight;
      * Handle scratch event on a scratcher
      */
     function checkpct() {
-            if (pct1 > 0 && pct1 < scratchLimit) {
+            if (pct1 > 20 && pct1 < scratchLimit) {
                 if (CrispyToast.toasts.length===0) {
                     CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
                 }
@@ -48,8 +48,18 @@ var iwidth,iheight;
                     CrispyToast.clearall();
                 }
                 scratchers[0].clear();
-
-                confetti_effect();
+                var duration = 5 * 1000;
+                if (confettieffect.element.querySelector('input').checked) {
+                    confetti_effect(duration);
+                }
+                if (soundeffect.element.querySelector('input').checked) {
+                    soundHandle.volume=0.5;
+                    soundHandle.play();
+                }
+                triggered=true;
+                setTimeout(function(){
+                    $("#resetbutton").show();
+                }, duration);
             }
     };
     function scratcher1Changed(ev) {
@@ -65,30 +75,22 @@ var iwidth,iheight;
     function randomInRangeint(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
-    function confetti_effect() {
-        //defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    function confetti_effect(duration) {
         
         
         if(triggered==true) {
             return;
         }
-        if (!nosound) {
-            soundHandle.volume=0.5;
-            soundHandle.play();
-        }
-        triggered=true;
+        
        
-            var duration = 5 * 1000;
              var end = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
              var particleCount = 2 ;
              (function frame() {
              // launch a few confetti from the left edge
-             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
-             );
+             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
              // and launch a few from the right edge
-             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }}
-             );
+             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }});
           
              // keep going until we are out of time
              if (Date.now() < end) {
@@ -97,10 +99,6 @@ var iwidth,iheight;
                  return;
              }
             }());
-          
-        setTimeout(function(){
-            $("#resetbutton").show();
-        }, duration);
               
      };
     
@@ -174,8 +172,8 @@ var iwidth,iheight;
         iw=iw/5;
         root.style.setProperty('--tp-container-unit-spacing',iw.toString() + "px" );
         iw = Math.min(iheight,screen.availHeight)/50;
-        if (iw<15) {
-            iw=15;
+        if (iw<16) {
+            iw=16;
         }
         root.style.setProperty('--f-size',iw.toString() + "px" );
         iw=iw-3;
@@ -237,7 +235,13 @@ var iwidth,iheight;
        /*  window.addEventListener('resize', function () {
             manageResizeOrientation('resize');
         }); */
-            
+        soundHandle = document.getElementById('soundHandle');  
+        soundHandle.autoplay = true;
+        soundHandle.muted=false;
+        soundHandle.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+        soundHandle.src = 'audio/celebrate.mp3';
+        soundHandle.play();
+        soundHandle.pause();
         $( window ).on({
             orientationchange: function(e) {
                 manageResizeOrientation('orientation');
@@ -317,7 +321,7 @@ var iwidth,iheight;
         
         const pane = new Pane({
             title: 'Customization Parameters',
-            expanded: false,
+            expanded: true,
         });
         
         const btn2 = pane.addButton({
@@ -345,6 +349,16 @@ var iwidth,iheight;
               {title: 'Step 2'},
               {title: 'Finish'},
             ],
+          });
+          var tabel = tab.element.querySelectorAll('button');
+          tabel[0].addEventListener("click", function() {
+            modifyFontSize();
+          });
+          tabel[1].addEventListener("click", function() {
+            modifyFontSize();
+          });
+          tabel[2].addEventListener("click", function() {
+            modifyFontSize();
           });
         const backgrnd = tab.pages[0].addBlade({
             view: 'list',
@@ -382,9 +396,9 @@ var iwidth,iheight;
                 tlimit.value=char + " characters left";
                 $('#surprise').text(ev.value);
                 
-            });
+         });
             
-            const tlimit = tab.pages[0].addBlade({
+        const tlimit = tab.pages[0].addBlade({
             view: 'text',
             label: '',
             parse: (v) => String(v),
@@ -526,19 +540,39 @@ var iwidth,iheight;
                 scratchers[0].setImages('images/empty.jpg','images/fore/' + ev.value +'.jpg');
             });
 
-          
-
-            const PARAMS = {
+            var PARAMS = {
                 Shorten: true,
             };
-                  
+            var eff = tab.pages[1].addButton({
+                title: 'Effects After Reveal',
+                disabled: false,
+            });
+            var added = 'background: #B1ACAC00; color: #ffffff !important;';
+            eff.element.querySelector('button').setAttribute('style', added);
+
+            confettieffect = tab.pages[1].addBinding(PARAMS,"Shorten",{
+                label: 'Confetti', 
+            });
+            soundeffect = tab.pages[1].addBinding(PARAMS,"Shorten",{
+                label: 'Sound Effect', 
+            });
+
+            PARAMS = {
+                Shorten: true,
+            };
+            eff = tab.pages[2].addButton({
+                title: 'Finish and Create the Link',
+                disabled: false,
+            });
+            var added = 'background: #B1ACAC00; color: #ffffff !important;';
+            eff.element.querySelector('button').setAttribute('style', added);
             const shortURL = tab.pages[2].addBinding(PARAMS,"Shorten",{
                 label: 'Shorten URL', 
             });
             const btn = tab.pages[2].addButton({
                 title: 'Create the Link',
             });
-                       
+            
             btn.on('click', async () => {
                 if (scratchers[0].getLW()) {
                     display_dialog("Your message under scratch area contains words that are too long to fit in. \nPlease use shorter words or make sure you put space after punctuations. Please correct the error to continue.");   
@@ -585,8 +619,8 @@ var iwidth,iheight;
             });
             var prev = btn.element.querySelector('button').getAttribute("style");
         
-            var added = '  background: #3b88d8;  background: -moz-linear-gradient(0% 100% 90deg, #377ad0, #52a8e8);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a8e8), to(#377ad0)); background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);  border-top: 1px solid #4081af;   border-right: 1px solid #2e69a3; border-bottom: 1px solid #20559a;  border-left: 1px solid #2e69a3;  -moz-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #3275bc;  -webkit-background-clip: padding-box;'
-
+            /* var added = '  background: #3b88d8;  background: -moz-linear-gradient(0% 100% 90deg, #377ad0, #52a8e8);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52a8e8), to(#377ad0)); background: linear-gradient(top, #52a8e8 0%, #377ad0 100%);  border-top: 1px solid #4081af;   border-right: 1px solid #2e69a3; border-bottom: 1px solid #20559a;  border-left: 1px solid #2e69a3;  -moz-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #72b9eb, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #3275bc;  -webkit-background-clip: padding-box;' */
+            var added = '  background: #82D83BFF;  background: -moz-linear-gradient(0% 100% 90deg, #81D037FF, #81E852FF);  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#81E852FF), to(#81D037FF)); background: linear-gradient(top, #81E852FF 0%, #81D037FF 100%);  border-top: 1px solid #84AF40FF;   border-right: 1px solid #76A32EFF; border-bottom: 1px solid #759A20FF;  border-left: 1px solid #70A32EFF;  -moz-box-shadow: inset 0 1px 0 0 #A9EB72FF, 0 1px 2px 0 rgba(0, 0, 0, .3);  -webkit-box-shadow: inset 0 1px 0 0 #8AEB72FF, 0 1px 2px 0 rgba(0, 0, 0, .3);  text-shadow: 0 -1px 1px #52BC32FF;  -webkit-background-clip: padding-box;'
             btn.element.querySelector('button').setAttribute('style', prev+added);
 
     };

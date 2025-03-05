@@ -172,7 +172,6 @@ var iwidth,iheight;
     }
 
     function modifyFontSize() {
-return;
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         var v = parseFloat(fontSize[0]);
         //$('#surprise').css('line-height',(v +"PX")); 

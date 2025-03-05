@@ -17,12 +17,61 @@ html {
 
 } */
 
+/* Light theme 
+:root {
+  --tp-base-background-color: hsla(230, 5%, 90%, 1.00);
+  --tp-base-shadow-color: hsla(0, 0%, 0%, 0.10);
+  --tp-button-background-color: hsla(230, 7%, 75%, 1.00);
+  --tp-button-background-color-active: hsla(230, 7%, 60%, 1.00);
+  --tp-button-background-color-focus: hsla(230, 7%, 65%, 1.00);
+  --tp-button-background-color-hover: hsla(230, 7%, 70%, 1.00);
+  --tp-button-foreground-color: hsla(230, 10%, 30%, 1.00);
+  --tp-container-background-color: hsla(230, 15%, 30%, 0.20);
+  --tp-container-background-color-active: hsla(230, 15%, 30%, 0.32);
+  --tp-container-background-color-focus: hsla(230, 15%, 30%, 0.28);
+  --tp-container-background-color-hover: hsla(230, 15%, 30%, 0.24);
+  --tp-container-foreground-color: hsla(230, 10%, 30%, 1.00);
+  --tp-groove-foreground-color: hsla(230, 15%, 30%, 0.10);
+  --tp-input-background-color: hsla(230, 15%, 30%, 0.10);
+  --tp-input-background-color-active: hsla(230, 15%, 30%, 0.22);
+  --tp-input-background-color-focus: hsla(230, 15%, 30%, 0.18);
+  --tp-input-background-color-hover: hsla(230, 15%, 30%, 0.14);
+  --tp-input-foreground-color: hsla(230, 10%, 30%, 1.00);
+  --tp-label-foreground-color: hsla(230, 10%, 30%, 0.70);
+  --tp-monitor-background-color: hsla(230, 15%, 30%, 0.10);
+  --tp-monitor-foreground-color: hsla(230, 10%, 30%, 0.50);
+}*/
+
+:root {
+  --tp-base-background-color: rgb(20, 165, 184);
+  --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
+  --tp-button-background-color: hsla(0, 0%, 100%, 1.00);
+  --tp-button-background-color-active: hsla(0, 0%, 85%, 1.00);
+  --tp-button-background-color-focus: hsla(0, 0%, 90%, 1.00);
+  --tp-button-background-color-hover: hsla(0, 0%, 95%, 1.00);
+  --tp-button-foreground-color: hsla(230, 20%, 11%, 1.00);
+  --tp-container-background-color: hsla(0, 0%, 13%, 0.562);
+  --tp-container-background-color-active: hsla(0, 60%, 98%, 0.486);
+  --tp-container-background-color-focus: hsla(0, 4%, 85%, 0.3);
+  --tp-container-background-color-hover: hsla(0, 0%, 0%, 0.25);
+  --tp-container-foreground-color: hsla(0, 0%, 100%, 0.90);
+  --tp-groove-foreground-color: hsla(0, 0%, 0%, 0.50);
+  --tp-input-background-color: hsla(0, 0%, 0%, 0.50);
+  --tp-input-background-color-active: hsla(0, 0%, 0%, 0.65);
+  --tp-input-background-color-focus: hsla(0, 0%, 0%, 0.60);
+  --tp-input-background-color-hover: hsla(0, 0%, 0%, 0.55);
+  --tp-input-foreground-color: hsl(0, 0%, 100%);
+  --tp-label-foreground-color: hsla(0, 0%, 100%, 0.90);
+  --tp-monitor-background-color: hsla(0, 0%, 0%, 0.50);
+  --tp-monitor-foreground-color: hsla(0, 0%, 100%, 0.50);
+}
+
 :root {
   --tp-blade-value-width: 200px;
   --pane-width: 300px;
   --tp-container-unit-size: 20px;
   --tp-container-unit-spacing: 4px;
-  --tp-container-foreground-color: #ff0000;
+  --tp-container-foreground-color: #33ff00;
   --f-size: 15px;
   --fl-size: 15px;
 
