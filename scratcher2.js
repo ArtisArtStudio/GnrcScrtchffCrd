@@ -245,6 +245,9 @@ Scratcher = (function() {
             case 'heart':
                 drawHeart(tempctx,w*0.5,0,w,w);
                 break;
+            case 'square':
+                drawRect(tempctx,0,0,w,w);
+                break;
             case 'circle':
                 tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
                 break;
@@ -259,6 +262,9 @@ Scratcher = (function() {
         switch(this.shape) {
             case 'heart':
                 drawHeart(tempctx,w*0.5,0,w,w);
+                break;
+            case 'square':
+                drawRect(tempctx,0,0,w,w);
                 break;
             case 'circle':
                 tempctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
@@ -279,6 +285,9 @@ Scratcher = (function() {
         switch(this.shape) {
             case 'heart':
                 drawHeart(mainctx,w*0.5,0,w,w);
+                break;
+            case 'square':
+                drawRect(mainctx,0,0,w,w);
                 break;
             case 'circle':
                 mainctx.arc(w*0.5, w*0.5, w*0.5, 0, Math.PI * 2, true);
@@ -307,6 +316,10 @@ Scratcher = (function() {
                 tempctx.font =  w/18 + "pt Calibri";
                 printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
                 break;
+            case 'square':
+                tempctx.font = w/15 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3-h/15,w/12,w-20,1.5);                
+                break;
             case 'circle':
                 tempctx.font = w/17 + "pt Calibri";;
                 printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
@@ -325,6 +338,9 @@ Scratcher = (function() {
         mainctx.drawImage(this.canvas.temp, 0, 0);
 
     };
+    function drawRect(context,x,y,width,height) {
+        context.rect(x,y,width,height);
+    }
     function drawHeart(context, x, y, width, height){
         let topCurveHeight = height * 0.3;
         context.moveTo(x, y + topCurveHeight);

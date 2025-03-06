@@ -284,8 +284,7 @@ var iwidth,iheight;
             false,
           );
    
-   
-          $('#resetbutton').on('click', function() {
+        $('#resetbutton').on('click', function() {
             onResetClicked();
         });
         scratchers = new Array(1);
@@ -318,12 +317,21 @@ var iwidth,iheight;
         //scratchers[3].addEventListener('reset', scratchersChanged);
         scratchers[0].addEventListener('scratchesended', scratcher1Changed);
         
-        
+         $(function() {
+            $('body').add('#scracther1').on('click touchend', function(e) {
+                if (!(e.target.id == "panel" || $(e.target).parents("#panel").length)) {
+                    if(pane.expanded){
+                        pane.expanded=false;
+                    }
+                }
+            });
+          })
+
         const pane = new Pane({
             title: 'Customization Parameters',
             expanded: true,
         });
-        
+        pane.element.setAttribute("id", "panel");
         const btn2 = pane.addButton({
             title: 'Help',
         });
@@ -475,7 +483,12 @@ var iwidth,iheight;
                 var st = cmes.element.querySelector('textarea').value;
                 var char = 110 - st.length;
                 climit.value=char + " characters left";
-                scratchers[0].reset();
+                if (!triggered) {
+                    scratchers[0].reset();
+                } else {
+                    scratchers[0].clear();
+
+                }
             });
         
           
@@ -509,18 +522,28 @@ var iwidth,iheight;
                 label: 'Shape',
                 options: [
                   {text: 'Heart', value: 'heart'},
-                  {text: 'Circle', value: 'circle'},        
+                  {text: 'Circle', value: 'circle'},  
+                  {text: 'Square', value: 'square'},        
+      
                 ],
                 value: 'heart',
                 }).on('change', (ev) => {
                     scratchers[0].setShape(ev.value);
-                    scratchers[0].reset();
+                    if (!triggered) {
+                        scratchers[0].reset();
+                    } else {
+                        scratchers[0].clear();
+
+                    }
                 });
 
         foregrnd = tab.pages[0].addBlade({
             view: 'list',
             label: 'Foreground',
             options: [
+              {text: 'Gift Package1', value: 'Gift1'},
+              {text: 'Gift Package2', value: 'Gift2'},
+              {text: 'Gift Package3', value: 'Gift3'},
               {text: 'Golden Glitter', value: 'Goldeng'},
               {text: 'Gold Metallic1', value: 'Goldenm1'},
               {text: 'Gold Metallic2', value: 'Goldenm2'},
@@ -528,7 +551,7 @@ var iwidth,iheight;
               {text: 'Green Metallic', value: 'Greenm'},
               {text: 'Halloween1', value: 'Halloween1'},
               {text: 'Pink Glitter', value: 'Pinkg'},
-              {text: 'Pink Metallic1', value: 'Pinkm1'},
+              {text: 'Pink Metallic', value: 'Pinkm'},
               {text: 'Red Glitter', value: 'Redg'},
               {text: 'Silver Glitter', value: 'Silverg'},             
               {text: 'Silver Metallic1', value: 'Silverm1'},
@@ -539,7 +562,8 @@ var iwidth,iheight;
             }).on('change', (ev) => {
                 scratchers[0].setImages('images/empty.jpg','images/fore/' + ev.value +'.jpg');
             });
-
+            
+            
             var PARAMS = {
                 Shorten: true,
             };
@@ -612,8 +636,9 @@ var iwidth,iheight;
                         }
                         display_dialog(error_text);
                         return;
-                       
                     }
+                    document.getElementById('link').innerHTML= wholelink;
+
                 }
                 document.getElementById('id01').style.display='block';
             });
