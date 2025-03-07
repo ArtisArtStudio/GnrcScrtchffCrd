@@ -20,6 +20,7 @@ var iwidth,iheight;
 
     var soundHandle = new Audio();
     var triggered=false;
+    var soundeffect, confettieffect;
     var nosound=true;
     var pct1=0;
     var tfs;
@@ -34,7 +35,7 @@ var iwidth,iheight;
      * Handle scratch event on a scratcher
      */
     function checkpct() {
-            if (pct1 > 0 && pct1 < scratchLimit) {
+            if (pct1 > 20 && pct1 < scratchLimit) {
                 if (CrispyToast.toasts.length===0) {
                     CrispyToast.success('Scratch MORE!', { position: 'top-center', timeout: 2000});
                 }
@@ -44,9 +45,18 @@ var iwidth,iheight;
                     CrispyToast.clearall();
                 }
                 scratchers[0].clear();
-                scratchers[0].removeEventListener('scratchesended', scratcher1Changed);
-
-                confetti_effect();
+                var duration = 5 * 1000;
+                if (confettieffect==1) {
+                    confetti_effect(duration);
+                }
+                if (soundeffect==1&&!nosound) {
+                    soundHandle.volume=0.5;
+                    soundHandle.play();
+                }
+                triggered=true;
+                setTimeout(function(){
+                    $("#resetbutton").show();
+                }, duration);
             }
     };
     function scratcher1Changed(ev) {
@@ -62,42 +72,28 @@ var iwidth,iheight;
     function randomInRangeint(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
-    function confetti_effect() {
-        //defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    function confetti_effect(duration) {
         
         
         if(triggered==true) {
             return;
         }
-        if (!nosound) {
-            soundHandle.volume=0.5;
-            soundHandle.play();
-        }
-        triggered=true;
-       
-            var duration = 5 * 1000;
-             var end = Date.now() + duration;
+ 
+        var animationEnd = Date.now() + duration;
              var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
-             var particleCount = 2 ;
-             (function frame() {
-             // launch a few confetti from the left edge
-             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }}
-             );
-             // and launch a few from the right edge
-             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }}
-             );
+        
+        var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
           
-             // keep going until we are out of time
-             if (Date.now() < end) {
-                 requestAnimationFrame(frame);
-                 
-                 return;
-             }
-            }());
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
           
-        setTimeout(function(){
-            $("#resetbutton").show();
-        }, duration);
+            var particleCount = 50 * (timeLeft / duration);
+            // since particles fall down, start a bit higher than random
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+          }, 250);
               
      };
     
@@ -109,11 +105,8 @@ var iwidth,iheight;
         pct1 = 0;
         CrispyToast.toasts=[];
         $("#resetbutton").hide();
-        for (i = 0; i < scratchers.length; i++) {
-            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd +'.jpg');
-            scratchers[0].addEventListener('scratchesended', scratcher1Changed);
-            scratchers[i].reset();
-        }
+        scratchers[0].setImages('images/empty.jpg','images/fore/' + foregrnd +'.jpg');
+        scratchers[0].reset();
         
         triggered = false;
         soundHandle.pause();
@@ -138,19 +131,17 @@ var iwidth,iheight;
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
-        if (iwidth < iheight) {
+        if (window.matchMedia('(orientation:portrait)').matches) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
                 overlapwithscratcher = true;
             }
         }
-        return (
-            (rect.x + rect.width) < 0 
-              || (rect.y + rect.height) < 0
-              || (rect.x > iwidth || rect.y > iheight-10
+        var a = (rect.x > iwidth || rect.y > iheight-10
                || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
-          );
- };
+
+            return a;
+            };
     
 
       function manageResizeOrientation(etype) {
@@ -210,10 +201,20 @@ var iwidth,iheight;
         fitCanvastoDiv();
 
         $('.nosoundbtn').on("click", function (e) {
-            
+            document.getElementById('id01').style.display='none';
+            nosound=true;
         });
         $('.withsoundbtn').on("click", function (e) {
-            
+            document.getElementById('id01').style.display='none';
+            nosound=false;
+            if (soundHandle.currentTime!=0) {return;}
+                soundHandle = document.getElementById('soundHandle');  
+                soundHandle.autoplay = true;
+                soundHandle.muted=false;
+                soundHandle.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+                soundHandle.src = 'audio/celebrate.mp3';
+                soundHandle.play();
+                soundHandle.pause();
         });
         document.addEventListener(
             "visibilitychange",
@@ -243,6 +244,11 @@ var iwidth,iheight;
         var ctext = decodeURIComponent(window.atob(params.get("ttl2")));
         var cmes = decodeURIComponent(window.atob(params.get("cmes")));
         var shp1 = params.get("shp1");
+        soundeffect = params.get("snd1");
+        confettieffect = params.get("conf1");
+        if (soundeffect==1){
+            document.getElementById('id01').style.display='block';
+        };
         tfs = params.get("tfs");
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);

@@ -82,23 +82,21 @@ var iwidth,iheight;
             return;
         }
         
-       
-             var end = Date.now() + duration;
-             var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
-             var particleCount = 2 ;
-             (function frame() {
-             // launch a few confetti from the left edge
-             confetti({...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
-             // and launch a few from the right edge
-             confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }});
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 10, spread: 360, ticks: 70, zIndex: 0 };
+        
+        var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
           
-             // keep going until we are out of time
-             if (Date.now() < end) {
-                 requestAnimationFrame(frame);
-                 
-                 return;
-             }
-            }());
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
+          
+            var particleCount = 50 * (timeLeft / duration);
+            // since particles fall down, start a bit higher than random
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }});
+            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+          }, 250);
               
      };
     
@@ -110,10 +108,8 @@ var iwidth,iheight;
         pct1 = 0;
         CrispyToast.toasts=[];
         $("#resetbutton").hide();
-        for (i = 0; i < scratchers.length; i++) {
-            scratchers[i].setImages('images/empty.jpg','images/fore/' + foregrnd.value +'.jpg');
-            scratchers[i].reset();
-        }
+        scratchers[0].setImages('images/empty.jpg','images/fore/' + foregrnd.value +'.jpg');
+        scratchers[0].reset();
        
         triggered = false;
         soundHandle.pause();
@@ -138,20 +134,20 @@ var iwidth,iheight;
     jQuery.expr.filters.offscreen = function(el) {
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
-        if (iwidth < iheight) {
+        if (window.matchMedia('(orientation:portrait)').matches) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
                 overlapwithscratcher = true;
             }
         }
-        return (
-                 (rect.x + rect.width) < 0 
-                   || (rect.y + rect.height) < 0
-              || (rect.x > iwidth || rect.y > iheight-10
-                    || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
-               );
+        var a = (rect.x > iwidth || rect.y > iheight-10
+         || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
+        
+         return a;
+        
       };
 
+    
       function resizePanel() {
         const root = document.documentElement;
         var iw = Math.min(iwidth,screen.availWidth)/2;
@@ -181,8 +177,10 @@ var iwidth,iheight;
   }
 
       function manageResizeOrientation(etype) {
+        //alert(iwidth+" before");
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
+
         if (checkinprogress) {
             return;
         }
@@ -202,6 +200,7 @@ var iwidth,iheight;
 
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         var v = parseFloat(fontSize[0]);
+        //alert(iwidth+" during");
         //$('#surprise').css('line-height',(v +"PX")); 
         if ($('#H3').is(':offscreen')) {
             
@@ -215,6 +214,10 @@ var iwidth,iheight;
                     break
                 };
             }
+            if (counter>0)
+            {
+                display_dialog("The font size has been reduced automatically because the text boxes were going out of the screen or overlapping");
+            }
         }
     }
 
@@ -227,8 +230,7 @@ var iwidth,iheight;
         //tlh = $('#surprise').css('line-height');
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
-        //console.log(window.innerHeight);
-        //console.log(window.innerWidth);
+       
         /* if (window.innerHeight>300 && window.innerWidth<703) {
             alert("yes");
         } */
@@ -322,6 +324,7 @@ var iwidth,iheight;
                 if (!(e.target.id == "panel" || $(e.target).parents("#panel").length)) {
                     if(pane.expanded){
                         pane.expanded=false;
+                        modifyFontSize();   
                     }
                 }
             });
@@ -442,7 +445,7 @@ var iwidth,iheight;
             options: [
               {text: 'Smaller', value: '-15'},
               {text: 'Normal', value: '0'},
-              {text: 'Bigger', value: '10'},
+              {text: 'Bigger', value: '50'},
             ],
             value: '0',
             }).on('change', (ev) => {
@@ -618,7 +621,10 @@ var iwidth,iheight;
                 params.append("ttl2",window.btoa(encodeURIComponent(ctext.element.querySelector('textarea').value)));
                 params.append("cmes",window.btoa(encodeURIComponent(cmes.element.querySelector('textarea').value)));
                 params.append("shp1",shape.value);
-
+                var a = (soundeffect.element.querySelector('input').checked) ? "1":"0";
+                params.append("snd1",a);
+                a = (confettieffect.element.querySelector('input').checked) ? "1":"0";
+                params.append("conf1",a);
                 wholelink='https://artisartstudio.github.io/GnrcScrtchffCrd/index.html' + "?" + params.toString();
                 if (shortURL.element.querySelector('input').checked){
                     try {
