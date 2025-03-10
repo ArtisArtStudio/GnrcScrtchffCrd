@@ -230,7 +230,7 @@ var iwidth,iheight;
         //tlh = $('#surprise').css('line-height');
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
-       
+        
         /* if (window.innerHeight>300 && window.innerWidth<703) {
             alert("yes");
         } */
@@ -400,10 +400,10 @@ var iwidth,iheight;
             view: 'textarea',
             label: 'Title',
             rows:2,
-            limit:22,
+            limit:25,
             }).on('change', (ev) => {
                 var st = ctitle.element.querySelector('textarea').value;
-                var char = 22 - st.length;
+                var char = 25 - st.length;
                 tlimit.value=char + " characters left";
                 $('#surprise').text(ev.value);
                 
@@ -413,19 +413,19 @@ var iwidth,iheight;
             view: 'text',
             label: '',
             parse: (v) => String(v),
-            value: '22 characters left',
+            value: '25 characters left',
             disabled: true
         });
         
         var st = ctitle.element.querySelector('textarea').value;
-        tlimit.value=22-st.length + " characters left";
+        tlimit.value=25-st.length + " characters left";
 
         const tfont = tab.pages[0].addBlade({
             view: 'list',
             label: 'Title Font',
             options: [
               {text: 'Font1', value: 'Birthstone'},
-              {text: 'Font2', value: 'Mea Culpa'},
+              {text: 'Font2', value: 'Great Vibes'},
               {text: 'Font3', value: 'Oooh Baby'},
               {text: 'Font4', value: 'Girassol'},
               {text: 'Font5', value: 'Playball'},
@@ -445,7 +445,7 @@ var iwidth,iheight;
             options: [
               {text: 'Smaller', value: '-15'},
               {text: 'Normal', value: '0'},
-              {text: 'Bigger', value: '50'},
+              {text: 'Bigger', value: '10'},
             ],
             value: '0',
             }).on('change', (ev) => {
@@ -513,7 +513,7 @@ var iwidth,iheight;
         }); 
 
         cmes.element.querySelector('textarea').setAttribute('maxlength', 110)
-        ctitle.element.querySelector('textarea').setAttribute('maxlength', 22)
+        ctitle.element.querySelector('textarea').setAttribute('maxlength', 25)
         ctext.element.querySelector('textarea').setAttribute('maxlength', 50)
 
         tab.pages[0].addBlade({
@@ -571,10 +571,10 @@ var iwidth,iheight;
                 Shorten: true,
             };
             var eff = tab.pages[1].addButton({
-                title: 'Effects After Reveal',
+                title: 'Effects',
                 disabled: false,
             });
-            var added = 'background: #B1ACAC00; color: #ffffff !important;';
+            var added = 'background: #B1ACAC00; color: #ffffff !important;font-weight:lighter !important;';
             eff.element.querySelector('button').setAttribute('style', added);
 
             confettieffect = tab.pages[1].addBinding(PARAMS,"Shorten",{
@@ -591,7 +591,7 @@ var iwidth,iheight;
                 title: 'Finish and Create the Link',
                 disabled: false,
             });
-            var added = 'background: #B1ACAC00; color: #ffffff !important;';
+            var added = 'background: #B1ACAC00; color: #ffffff !important;font-weight:lighter !important;';
             eff.element.querySelector('button').setAttribute('style', added);
             const shortURL = tab.pages[2].addBinding(PARAMS,"Shorten",{
                 label: 'Shorten URL', 

@@ -15,7 +15,9 @@
     max-width: 100vw;
     min-width: 400px;*/
   }
- 
+  .thumbnail{
+    display: inline-flex;
+}
   @keyframes gradient {
       0% {
           background-position: 0% 50%;
