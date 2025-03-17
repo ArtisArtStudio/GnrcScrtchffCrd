@@ -140,6 +140,11 @@ var iwidth,iheight;
                 overlapwithscratcher = true;
             }
         }
+        console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
+
+        if ($(el).innerWidth()>iwidth) {
+            overlapwithscratcher = true;
+        }
         var a = (rect.x > iwidth || rect.y > iheight-10
          || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
         
@@ -202,6 +207,11 @@ var iwidth,iheight;
         var v = parseFloat(fontSize[0]);
         //alert(iwidth+" during");
         //$('#surprise').css('line-height',(v +"PX")); 
+        
+        if ($('#surprise').is(':offscreen')) {
+            display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+
+        }
         if ($('#H3').is(':offscreen')) {
             
             var counter =0;
