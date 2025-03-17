@@ -306,7 +306,7 @@ var iwidth,iheight;
             message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
           };
         const title = {
-            prop: 'Happy Birthday Jessica'
+            prop: 'HappyBirthdayJessica'
         };
         const text = {
             prop: 'I have a special gift. Scratch to see it! Jamie'
@@ -332,7 +332,7 @@ var iwidth,iheight;
         
          $(function() {
             $('body').add('#scracther1').on('click touchend', function(e) {
-                if (!(e.target.id == "panel" || $(e.target).parents("#panel").length)) {
+                if (!(e.target.id == "panel" || $(e.target).parents("#panel").length) && !(e.target.id == "dialog-message"|| $(e.target).parents(".ui-dialog").length || $(e.target).hasClass('ui-widget-overlay')||$(e.target).hasClass('ui-dialog')) ) {
                     if(pane.expanded){
                         pane.expanded=false;
                         modifyFontSize();   
