@@ -263,10 +263,11 @@ var iwidth,iheight;
               );             
         });
         $('.withsoundbtn').on("click", function (e) {
+            var s = stext.element.querySelector('textarea').value;
             if (navigator.share) {
                 navigator.share({
                   title: 'Something Special',
-                  text : "Here is something for you",
+                  text : s,
                   url: wholelink
                 }).then(() => {
 
@@ -593,9 +594,44 @@ var iwidth,iheight;
             });
             var added = 'background: #B1ACAC00; color: #ffffff !important;font-weight:lighter !important;';
             eff.element.querySelector('button').setAttribute('style', added);
+
             const shortURL = tab.pages[2].addBinding(PARAMS,"Shorten",{
                 label: 'Shorten URL', 
             });
+            var short = shortURL.element.querySelector('input');
+            short.addEventListener("click", function() {
+                if (!shortURL.element.querySelector('input').checked){
+                    document.getElementById('link').innerHTML= "";
+
+                }
+            });
+            const stitle = {
+                prop: 'Here is something for you'
+            };
+            const stext= tab.pages[2].addBinding(stitle, 'prop', {
+                view: 'textarea',
+                label: 'Text while Sharing',
+                rows:2,
+                limit:25,
+                }).on('change', (ev) => {
+                    var st = stext.element.querySelector('textarea').value;
+                    var char = 25 - st.length;
+                    slimit.value=char + " characters left";                    
+             });
+                
+            const slimit = tab.pages[2].addBlade({
+                view: 'text',
+                label: '',
+                parse: (v) => String(v),
+                value: '25 characters left',
+                disabled: true
+            });
+            
+            var st = stext.element.querySelector('textarea').value;
+            slimit.value=25-st.length + " characters left";
+
+            stext.element.querySelector('textarea').setAttribute('maxlength', 25)
+
             const btn = tab.pages[2].addButton({
                 title: 'Create the Link',
             });
