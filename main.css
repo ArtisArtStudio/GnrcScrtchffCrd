@@ -106,7 +106,7 @@ overscroll-behavior-y: contain;
 font-family: "Birthstone", cursive;
 display:flexbox;
 flex-direction: column;
-font-size: calc(4rem + 1vw);
+font-size: 4rem;
 font-weight: 400;
 text-align: center;
 white-space: normal;
@@ -269,7 +269,7 @@ hr {
  @media (max-width: 424px) and (max-height:756px) {
 
   .pagetop h1 {
-    font-size: calc(4rem + 1vw);
+    font-size: 4rem;
   }
  
   .pagetop h3 {

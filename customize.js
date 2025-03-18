@@ -24,7 +24,7 @@ var iwidth,iheight;
    
     var soundHandle = new Audio();
     var triggered=false;
-    var soundeffect, confettieffect;
+    var soundeffect, confettieffect, tabel;
     var pct1=0;
     var initialFontSize;
     var scratchLimit=30;
@@ -140,7 +140,7 @@ var iwidth,iheight;
                 overlapwithscratcher = true;
             }
         }
-        console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
+        //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
 
         if ($(el).innerWidth()>iwidth) {
             overlapwithscratcher = true;
@@ -182,10 +182,15 @@ var iwidth,iheight;
   }
 
       function manageResizeOrientation(etype) {
-        //alert(iwidth+" before");
+        //alert(iheight+" before" + iwidth);
+        var beforewidth = iwidth;
+        var beforeheight = iheight;
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
-
+        //alert(iheight+" after" + iwidth);
+        if (iwidth==beforewidth && iwidth<beforeheight){
+            return;
+        }
         if (checkinprogress) {
             return;
         }
@@ -205,12 +210,13 @@ var iwidth,iheight;
 
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         var v = parseFloat(fontSize[0]);
-        //alert(iwidth+" during");
+        //alert(iheight+" during" + window.innerHeight + " " + iwidth);
         //$('#surprise').css('line-height',(v +"PX")); 
         
         if ($('#surprise').is(':offscreen')) {
             display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
-
+            $(tabel[0]).focus();
+            $(tabel[0]).click();
         }
         if ($('#H3').is(':offscreen')) {
             
@@ -221,6 +227,7 @@ var iwidth,iheight;
                 counter++;
                 if (counter >50) {
                     display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+                    
                     break
                 };
             }
@@ -254,6 +261,7 @@ var iwidth,iheight;
         soundHandle.src = 'audio/celebrate.mp3';
         soundHandle.play();
         soundHandle.pause();
+
         $( window ).on({
             orientationchange: function(e) {
                 manageResizeOrientation('orientation');
@@ -365,22 +373,30 @@ var iwidth,iheight;
             modifyFontSize();
         });
         pane.registerPlugin(TextareaPlugin);
-        const tab = pane.addTab({
+        var tab = pane.addTab({
             pages: [
               {title: 'Step 1'},
               {title: 'Step 2'},
               {title: 'Finish'},
             ],
           });
-          var tabel = tab.element.querySelectorAll('button');
+          tabel = tab.element.querySelectorAll('button');
+          $(tabel[0]).focus();
           tabel[0].addEventListener("click", function() {
-            modifyFontSize();
+            if (!$(tabel[0]).is(":focus")){
+                modifyFontSize();
+            }
+    
           });
           tabel[1].addEventListener("click", function() {
-            modifyFontSize();
+            if (!$(tabel[1]).is(":focus")){
+                modifyFontSize();
+            }
           });
           tabel[2].addEventListener("click", function() {
-            modifyFontSize();
+            if (!$(tabel[2]).is(":focus")){
+                modifyFontSize();
+            }
           });
         const backgrnd = tab.pages[0].addBlade({
             view: 'list',
