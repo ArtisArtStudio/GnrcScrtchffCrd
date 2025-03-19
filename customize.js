@@ -26,6 +26,7 @@ var iwidth,iheight;
     var triggered=false;
     var soundeffect, confettieffect, tabel;
     var pct1=0;
+    var currenttab=1;
     var initialFontSize;
     var scratchLimit=30;
 
@@ -136,13 +137,14 @@ var iwidth,iheight;
         var overlapwithscratcher=false;
         if (window.matchMedia('(orientation:portrait)').matches) {
             var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
+            
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
                 overlapwithscratcher = true;
             }
         }
         //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
 
-        if ($(el).innerWidth()>iwidth) {
+        if (el.id == "surprise" && $(el).innerWidth()>iwidth-2) {
             overlapwithscratcher = true;
         }
         var a = (rect.x > iwidth || rect.y > iheight-10
@@ -214,8 +216,9 @@ var iwidth,iheight;
         //$('#surprise').css('line-height',(v +"PX")); 
         
         if ($('#surprise').is(':offscreen')) {
-            display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+            display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
             $(tabel[0]).focus();
+            currenttab=1;
             $(tabel[0]).click();
         }
         if ($('#H3').is(':offscreen')) {
@@ -225,8 +228,8 @@ var iwidth,iheight;
                 v=v-1;
                 $('#surprise').css('font-size',(v+"PX")); 
                 counter++;
-                if (counter >50) {
-                    display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
+                if (counter >50 || v<16) {
+                    display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
                     
                     break
                 };
@@ -343,7 +346,7 @@ var iwidth,iheight;
                 if (!(e.target.id == "panel" || $(e.target).parents("#panel").length) && !(e.target.id == "dialog-message"|| $(e.target).parents(".ui-dialog").length || $(e.target).hasClass('ui-widget-overlay')||$(e.target).hasClass('ui-dialog')) ) {
                     if(pane.expanded){
                         pane.expanded=false;
-                        modifyFontSize();   
+                        //modifyFontSize();   
                     }
                 }
             });
@@ -382,21 +385,12 @@ var iwidth,iheight;
           });
           tabel = tab.element.querySelectorAll('button');
           $(tabel[0]).focus();
-          tabel[0].addEventListener("click", function() {
-            if (!$(tabel[0]).is(":focus")){
-                modifyFontSize();
-            }
-    
-          });
+         
           tabel[1].addEventListener("click", function() {
-            if (!$(tabel[1]).is(":focus")){
-                modifyFontSize();
-            }
+            modifyFontSize();
           });
           tabel[2].addEventListener("click", function() {
-            if (!$(tabel[2]).is(":focus")){
-                modifyFontSize();
-            }
+             modifyFontSize();
           });
         const backgrnd = tab.pages[0].addBlade({
             view: 'list',

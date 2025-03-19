@@ -247,7 +247,7 @@ var iwidth,iheight;
         soundeffect = params.get("snd1");
         confettieffect = params.get("conf1");
         if (soundeffect==1){
-            document.getElementById('id01').style.display='block';
+            //document.getElementById('id01').style.display='block';
         };
         tfs = params.get("tfs");
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';

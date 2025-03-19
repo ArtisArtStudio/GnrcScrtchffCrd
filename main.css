@@ -253,7 +253,7 @@ hr {
   } 
 } */
 
-@media (min-width: 425px) and (max-height:745px){ 
+@media (min-width: 425px){ 
   h3 {
     font-size:calc(1.5rem + 0.5vw);
   }
@@ -261,23 +261,23 @@ hr {
     font-size: calc(4rem + 2vw);
   }
   #scratcher-box {
-    width: 20em;
-    height: 20em; 
+    width: 22em;
+    height: 22em; 
     top: 75%;
   } 
 }
- @media (max-width: 424px) and (max-height:756px) {
+ @media (max-width: 424px) {
 
   .pagetop h1 {
-    font-size: 4rem;
+    font-size: calc(4rem + 1vw);
   }
  
   .pagetop h3 {
     font-size: calc(1.5rem + 0.5vw);
   }
   #scratcher-box {
-    width: 20em;
-    height: 20em; 
+    width: 21em;
+    height: 21em; 
     top: 75%;
   } 
 }  
@@ -330,28 +330,43 @@ hr {
     width: 60%; /* Could be more or less, depending on screen size */
   }
 }
-@media (max-width: 375px) and (max-height:667px) {
+
+@media (max-width: 393px) {
   h4 {
     font-size: calc(0.7rem + 0.8vw) ;
   }
   .pagetop h1 {
-    font-size: 4rem;
+    font-size: calc(4rem);
   }
     .pagetop h3 {
     font-size: calc(1.3rem + 0.5vw);
   }
-  /* #mainbody {
-    position: inherit;
-      -webkit-transform-origin: top left;
-      -ms-transform-origin: top left;
-      -moz-transform-origin: top left;
-      -o-transform-origin: top left;
-      transform-origin: top left;
-  } */
+
   #scratcher-box {
     position:absolute;
-    width: 17em;
-    height: 17em; 
+    width: 20em;
+    height: 20em; 
+    top: 76%;
+  }
+  
+} 
+
+
+@media (max-width: 375px) {
+  h4 {
+    font-size: calc(0.7rem + 0.8vw) ;
+  }
+  .pagetop h1 {
+    font-size: calc(3rem + 3vw);
+  }
+    .pagetop h3 {
+    font-size: calc(1.3rem + 0.5vw);
+  }
+
+  #scratcher-box {
+    position:absolute;
+    width: 19em;
+    height: 19em; 
     top: 76%;
   }
   
