@@ -190,7 +190,7 @@ var iwidth,iheight;
         canvas = document.getElementById("scratcher1");
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
-        console.log(iwidth + " "+iheight);
+        //console.log(iwidth + " "+iheight);
         $( window ).on({
             orientationchange: function(e) {
                 manageResizeOrientation('orientation');

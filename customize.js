@@ -143,8 +143,7 @@ var iwidth,iheight;
             }
         }
         //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
-
-        if (el.id == "surprise" && $(el).innerWidth()>iwidth-2) {
+        if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
             overlapwithscratcher = true;
         }
         var a = (rect.x > iwidth || rect.y > iheight-10
@@ -184,21 +183,20 @@ var iwidth,iheight;
   }
 
       function manageResizeOrientation(etype) {
-        //alert(iheight+" before" + iwidth);
         var beforewidth = iwidth;
         var beforeheight = iheight;
-        iwidth = window.innerWidth;
-        iheight = window.innerHeight;
-        //alert(iheight+" after" + iwidth);
-        if (iwidth==beforewidth && iwidth<beforeheight){
-            return;
-        }
+        
         if (checkinprogress) {
             return;
         }
         checkinprogress=true;
        
         setTimeout(function () {
+            iwidth = window.innerWidth;
+            iheight = window.innerHeight;
+            if (iwidth==beforewidth && iheight<beforeheight){
+                return;
+            }
             fitCanvastoDiv();
             modifyFontSize();
             resizePanel();
@@ -214,30 +212,35 @@ var iwidth,iheight;
         var v = parseFloat(fontSize[0]);
         //alert(iheight+" during" + window.innerHeight + " " + iwidth);
         //$('#surprise').css('line-height',(v +"PX")); 
-        
+        var big = false;
         if ($('#surprise').is(':offscreen')) {
-            display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
-            $(tabel[0]).focus();
-            currenttab=1;
-            $(tabel[0]).click();
+            big = true;
         }
         if ($('#H3').is(':offscreen')) {
             
             var counter =0;
             while ($('#H3').is(':offscreen')) {
-                v=v-1;
+                v = v-1;
+                if (v<50) {
+                    v=50;
+                }
                 $('#surprise').css('font-size',(v+"PX")); 
                 counter++;
-                if (counter >50 || v<16) {
-                    display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
-                    
-                    break
+                if (counter >50) {
+                    big = true;
                 };
             }
-            if (counter>0)
-            {
-                display_dialog("The font size has been reduced automatically because the text boxes were going out of the screen or overlapping");
-            }
+            if (counter>0 && counter<=50)
+                {
+                    display_dialog("The font size has been reduced automatically because the text boxes were going out of the screen or overlapping");
+                }           
+        }
+        if (big) {
+            display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
+            $(tabel[0]).focus();
+            currenttab=1;
+            $(tabel[0]).click();
+            return;
         }
     }
 
@@ -445,17 +448,21 @@ var iwidth,iheight;
             view: 'list',
             label: 'Title Font',
             options: [
-              {text: 'Font1', value: 'Birthstone'},
-              {text: 'Font2', value: 'Great Vibes'},
-              {text: 'Font3', value: 'Oooh Baby'},
-              {text: 'Font4', value: 'Girassol'},
-              {text: 'Font5', value: 'Playball'},
-              {text: 'Font6', value: 'Engagement'},
-              {text: 'Halloween Font1', value: 'Creepster'},
-
+              {text: 'Standard Font1', value: 'Instrument Serif'},
+              {text: 'Calligraphy Font1', value: 'Birthstone'},
+              {text: 'Calligraphy Font2', value: 'Engagement'},
+              {text: 'Handwriting Font2', value: 'Tangerine'},
+              {text: 'Handwriting Font6', value: 'Corinthia'},
+              {text: 'Handwriting Font6', value: 'Lovers Quarrel'},
+              {text: 'Bold Font1', value: 'Teko'},
+              {text: 'Bold Font2', value: 'League Gothic'},
+              {text: 'Bold Font3', value: 'Mouse Memoirs'},
+              {text: 'Christmas Font1', value: 'Princess Sofia'},
+              {text: 'Christmas Font2', value: 'Ruge Boogie'},
+              {text: 'Halloween Font', value: 'Creepster'},
 
             ],
-            value: 'Birthstone',
+            value: 'Birthstone',initialFontSize
             }).on('change', (ev) => {
                 $('#surprise').css('font-family',ev.value);
           });
@@ -471,8 +478,7 @@ var iwidth,iheight;
             value: '0',
             }).on('change', (ev) => {
                 mtfs=ev.value;
-                $('#surprise').css('font-size',((parseFloat(initialFontSize[0])+parseFloat(ev.value)+"PX"))); 
-                
+                $('#surprise').css('font-size',((parseFloat(initialFontSize[0])+parseInt(ev.value)+"PX")));                 
           });
           const ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
