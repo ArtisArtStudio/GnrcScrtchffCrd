@@ -137,6 +137,10 @@ var iwidth,iheight;
                 overlapwithscratcher = true;
             }
         }
+        //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
+        if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
+            overlapwithscratcher = true;
+        }
         var a = (rect.x > iwidth || rect.y > iheight-10
                || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
 
@@ -163,14 +167,22 @@ var iwidth,iheight;
     }
 
     function modifyFontSize() {
+
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         var v = parseFloat(fontSize[0]);
         //$('#surprise').css('line-height',(v +"PX")); 
-        if ($('#H3').is(':offscreen')) {
+        var big = false;
+        if ($('#surprise').is(':offscreen')) {
+            big = true;
+        }
+        if ($('#H3').is(':offscreen') || $('#surprise').is(':offscreen')) {
             
             var counter =0;
-            while ($('#H3').is(':offscreen')) {
-                v=v-1;
+            while ($('#H3').is(':offscreen')||$('#surprise').is(':offscreen')) {
+                v = v-1;
+                if (v<50) {
+                    v=50;
+                }
                 $('#surprise').css('font-size',(v+"PX")); 
                 counter++;  
                 if (counter >50) {

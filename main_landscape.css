@@ -60,7 +60,6 @@ body {
 
 }
 .pagetop h1 {
-  font-family: "Birthstone", cursive;
   display:flexbox;
 flex-direction: column;
 font-size: calc(4rem + 0.8vw);
@@ -71,13 +70,11 @@ white-space: normal;
 }
 
 .pagetop h3 {
-font-family: "Bona Nova SC", serif;
 color: #000000 !important;
 font-size: calc(1rem + 1vw);
 text-align: right;
 } 
 .pagetop h4 {
-  font-family: "Roboto", sans-serif;
   display:inline;
   font-weight: 400;
   color: #000000;
@@ -91,7 +88,6 @@ text-align: right;
   
 }  
   .tabletop h4 {
-    font-family: "Roboto", sans-serif;
     font-weight: 400;
     color: #000000;
     flex-direction: column;

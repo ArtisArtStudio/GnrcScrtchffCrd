@@ -136,16 +136,21 @@ var iwidth,iheight;
         var rect = el.getBoundingClientRect();
         var overlapwithscratcher=false;
         if (window.matchMedia('(orientation:portrait)').matches) {
-            var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();
-            
+            var rect2 =document.getElementById('scratcher-box').getBoundingClientRect();     
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
+                overlapwithscratcher = true;
+            }
+            if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
+                overlapwithscratcher = true;
+            }
+        }
+        if (window.matchMedia('(orientation:landscape)').matches) {
+            if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
                 overlapwithscratcher = true;
             }
         }
         //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
-        if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
-            overlapwithscratcher = true;
-        }
+       
         var a = (rect.x > iwidth || rect.y > iheight-10
          || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
         
@@ -320,7 +325,7 @@ var iwidth,iheight;
             message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
           };
         const title = {
-            prop: 'HappyBirthdayJessica'
+            prop: 'HappyBirthdayJessica!!!!!'
         };
         const text = {
             prop: 'I have a special gift. Scratch to see it! Jamie'
@@ -449,11 +454,12 @@ var iwidth,iheight;
             label: 'Title Font',
             options: [
               {text: 'Standard Font1', value: 'Instrument Serif'},
+              {text: 'Fancy Font1', value: 'Fleur De Leah'},
               {text: 'Calligraphy Font1', value: 'Birthstone'},
               {text: 'Calligraphy Font2', value: 'Engagement'},
-              {text: 'Handwriting Font2', value: 'Tangerine'},
-              {text: 'Handwriting Font6', value: 'Corinthia'},
-              {text: 'Handwriting Font6', value: 'Lovers Quarrel'},
+              {text: 'Handwriting Font1', value: 'Tangerine'},
+              {text: 'Handwriting Font2', value: 'Corinthia'},
+              {text: 'Handwriting Font3', value: 'Lovers Quarrel'},
               {text: 'Bold Font1', value: 'Teko'},
               {text: 'Bold Font2', value: 'League Gothic'},
               {text: 'Bold Font3', value: 'Mouse Memoirs'},
