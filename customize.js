@@ -179,7 +179,7 @@ var iwidth,iheight;
         root.style.setProperty('--fl-size',iw.toString() + "px" );
   }
 
-      function manageResizeOrientation(etype) {
+    function manageResizeOrientation(etype) {
         var beforewidth = iwidth;
         var beforeheight = iheight;
         
@@ -191,9 +191,10 @@ var iwidth,iheight;
         setTimeout(function () {
             iwidth = window.innerWidth;
             iheight = window.innerHeight;
-            if (iwidth==beforewidth && iheight<beforeheight){
+            if (iwidth==beforewidth && iheight<=beforeheight){
                 return;
             }
+            //console.log(iheight + " "+beforeheight);
             fitCanvastoDiv();
             modifyFontSize();
             resizePanel();
