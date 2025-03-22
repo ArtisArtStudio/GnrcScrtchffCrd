@@ -160,8 +160,18 @@ h4 {
 #surprise{
   line-height: 1;
   text-align: center;
+  display: inline-flex;
 }
-
+#spanMeasure 
+{
+    position:absolute;
+    top:0px;
+    left:0px;
+    visibility:hidden;
+    width:10px;
+    white-space:nowrap;
+    overflow:hidden
+}
 #scratcher-box {
   width:20em;
   align-content: center;

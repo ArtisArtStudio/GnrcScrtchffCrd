@@ -140,22 +140,14 @@ var iwidth,iheight;
             if (rect.bottom >rect2.top ||rect.bottom >rect2.bottom ) {
                 overlapwithscratcher = true;
             }
-            if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
-                overlapwithscratcher = true;
-            }
         }
-        if (window.matchMedia('(orientation:landscape)').matches) {
-            if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
-                overlapwithscratcher = true;
-            }
-        }
-        //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
-       
+        if (el.id == "surprise" && el.scrollWidth + rect.x >iwidth-rect.x) {
+            overlapwithscratcher = true;
+        }               
         var a = (rect.x > iwidth || rect.y > iheight-10
          || rect.bottom > iheight -10|| rect.top > iheight-10 || overlapwithscratcher )
         
          return a;
-        
       };
 
     

@@ -137,8 +137,7 @@ var iwidth,iheight;
                 overlapwithscratcher = true;
             }
         }
-        //console.log($(el)[0].scrollWidth + " "+ $(el).innerWidth()+ " " + iwidth);
-        if (el.id == "surprise" && $(el).innerWidth()+ rect.x >iwidth-2) {
+        if (el.id == "surprise" && el.scrollWidth + rect.x >iwidth-rect.x) {
             overlapwithscratcher = true;
         }
         var a = (rect.x > iwidth || rect.y > iheight-10
@@ -180,7 +179,7 @@ var iwidth,iheight;
             var counter =0;
             while ($('#H3').is(':offscreen')||$('#surprise').is(':offscreen')) {
                 v = v-1;
-                if (v<50) {
+                if (v<50 && !big) {
                     v=50;
                 }
                 $('#surprise').css('font-size',(v+"PX")); 

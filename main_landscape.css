@@ -99,8 +99,11 @@ text-align: right;
 }
 #surprise{
   line-height: 1;
-  display: inline-table;
+  display:inline-flex;
   /*padding-right: 5px; */
+  justify-content: flex-start;
+
+
   width: 55%;
 }
 #reveal {
