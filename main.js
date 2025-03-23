@@ -23,7 +23,7 @@ var iwidth,iheight;
     var soundeffect, confettieffect;
     var nosound=true;
     var pct1=0;
-    var tfs;
+    var initialFontSize;
     var scratchLimit=30;
 
     function supportsCanvas() {
@@ -137,7 +137,7 @@ var iwidth,iheight;
                 overlapwithscratcher = true;
             }
         }
-        if (el.id == "surprise" && el.scrollWidth + rect.x >iwidth-rect.x) {
+        if (el.id == "surprise" && el.scrollWidth + rect.x >iwidth-2) {
             overlapwithscratcher = true;
         }
         var a = (rect.x > iwidth || rect.y > iheight-10
@@ -148,25 +148,27 @@ var iwidth,iheight;
     
 
       function manageResizeOrientation(etype) {
-        iwidth = window.innerWidth;
-        iheight = window.innerHeight;
         if (checkinprogress) {
             return;
         }
         checkinprogress=true;
 
         setTimeout(function () {
+            if (iwidth==window.innerWidth && window.innerHeight<=iheight){
+                return;
+            }
+            //console.log(iheight + " "+beforeheight);
+            iwidth = window.innerWidth;
+            iheight = window.innerHeight;
             fitCanvastoDiv();
             modifyFontSize();
         
             checkinprogress=false;
 
-        },500);
-
+        },1000);
     }
 
     function modifyFontSize() {
-
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         var v = parseFloat(fontSize[0]);
         //$('#surprise').css('line-height',(v +"PX")); 
@@ -186,7 +188,7 @@ var iwidth,iheight;
                 counter++;  
                 if (counter >50) {
                     //display_dialog("The font you chose doesnt fit to the screen. So please either choose different font or smaller font size.");
-                    $('#surprise').css('font-size',(parseFloat(fontSize[0])-parseFloat(tfs)+"PX")); 
+                    $('#surprise').css('font-size',(parseFloat(fontSize[0])-parseFloat(initialFontSize)+"PX")); 
                     if ($('#H3').is(':offscreen')) {
                         alert("Possibly some text might be out of screen. Please contact the sender and ask to choose a smaller font/font size.");
                     };
@@ -260,13 +262,13 @@ var iwidth,iheight;
         if (soundeffect==1){
             //document.getElementById('id01').style.display='block';
         };
-        tfs = params.get("tfs");
+        initialFontSize = params.get("tfs");
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';
         $('#surprise').text(ctitle);
         $('#surprise').css('font-family',tfont);
         $('#H3').text(ctext);
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
-        $('#surprise').css('font-size',((parseFloat(fontSize[0])+parseFloat(tfs)+"PX"))); 
+        $('#surprise').css('font-size',((parseFloat(fontSize[0])+parseFloat(initialFontSize)+"PX"))); 
 
         manageResizeOrientation();
 
