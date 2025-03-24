@@ -565,6 +565,8 @@ var iwidth,iheight;
             view: 'list',
             label: 'Foreground',
             options: [
+                {text: 'Christmas1', value: 'Chrstms1'},
+                {text: 'Colorful1', value: 'Colorful1'},
               {text: 'Gift Package1', value: 'Gift1'},
               {text: 'Gift Package2', value: 'Gift2'},
               {text: 'Gift Package3', value: 'Gift3'},
