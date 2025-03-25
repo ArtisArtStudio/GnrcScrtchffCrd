@@ -24,7 +24,7 @@ var iwidth,iheight;
    
     var soundHandle = new Audio();
     var triggered=false;
-    var soundeffect, confettieffect, tabel;
+    var soundeffect, confettieffect, tabel, ctitle, ctext, cmes;
     var pct1=0;
     var currenttab=1;
     var initialFontSize;
@@ -230,11 +230,25 @@ var iwidth,iheight;
         }
         if (big) {
             display_dialog("The text for the 'title' is too big to fit to the screen. So please either choose different font or smaller font size. Make sure you pick words shorter than 17 characters.");
-            $(tabel[0]).focus();
-            currenttab=1;
-            $(tabel[0]).click();
+            preventprogress();
             return;
         }
+    }
+
+    function checkforEmptytext() {
+        var a = ctitle.element.querySelector('textarea').value;
+        var b = ctext.element.querySelector('textarea').value;
+        var c = cmes.element.querySelector('textarea').value;
+        if (a=="" || b=="" || c=="") {
+            display_dialog("You have to enter all the text before you can continue.");
+            preventprogress();
+        }
+    }
+
+    function preventprogress(){
+        $(tabel[0]).focus();
+        currenttab=1;
+        $(tabel[0]).click();
     }
 
     function initPage() {
@@ -260,6 +274,9 @@ var iwidth,iheight;
         soundHandle.src = 'audio/celebrate.mp3';
         soundHandle.play();
         soundHandle.pause();
+
+        localStorage.clear()
+        
         // Save form data before the tab is discarded
         window.addEventListener("beforeunload", () => {
             document.querySelectorAll("input, textarea, select").forEach(input => {
@@ -271,6 +288,7 @@ var iwidth,iheight;
         window.addEventListener("load", () => {
             document.querySelectorAll("input, textarea, select").forEach(input => {
             if (localStorage.getItem(input.id)) {
+                alert(localStorage.getItem(input.id));
                 input.value = localStorage.getItem(input.id);
             }
             });
@@ -324,13 +342,13 @@ var iwidth,iheight;
         scratchers = new Array(1);
 
         const cmessage = {
-            message: 'This is a very long message. It wraps the text inside the heart. This is a test to see how the text wraps'
+            message: ''
           };
         const title = {
-            prop: 'HappyBirthdayJessica!!!!!'
+            prop: ''
         };
         const text = {
-            prop: 'I have a special gift. Scratch to see it! Jamie'
+            prop: ''
         };
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;
@@ -383,7 +401,7 @@ var iwidth,iheight;
                    
         btn1.on('click', () => {
             pane.expanded= false;
-            modifyFontSize();
+            //modifyFontSize();
         });
         pane.registerPlugin(TextareaPlugin);
         var tab = pane.addTab({
@@ -398,9 +416,11 @@ var iwidth,iheight;
          
           tabel[1].addEventListener("click", function() {
             modifyFontSize();
+            checkforEmptytext();
           });
           tabel[2].addEventListener("click", function() {
              modifyFontSize();
+             checkforEmptytext();
           });
         const backgrnd = tab.pages[0].addBlade({
             view: 'list',
@@ -428,11 +448,12 @@ var iwidth,iheight;
                 document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/' + ev.value + '.jpg)';
           });
 
-        const ctitle= tab.pages[0].addBinding(title, 'prop', {
+        ctitle= tab.pages[0].addBinding(title, 'prop', {
             view: 'textarea',
             label: 'Title',
             rows:2,
             limit:25,
+            placeholder: 'Enter your title here'
             }).on('change', (ev) => {
                 var st = ctitle.element.querySelector('textarea').value;
                 var char = 25 - st.length;
@@ -489,11 +510,12 @@ var iwidth,iheight;
                 mtfs=ev.value;
                 $('#surprise').css('font-size',((parseFloat(initialFontSize[0])+parseInt(ev.value)+"PX")));                 
           });
-          const ctext= tab.pages[0].addBinding(text, 'prop', {
+          ctext= tab.pages[0].addBinding(text, 'prop', {
             view: 'textarea',
             label: 'Text under Title',
             rows:3,
             limit:50,
+            placeholder: 'Enter your text here'
             }).on('change', (ev) => {
                 var st = ctext.element.querySelector('textarea').value;
                 var char = 50 - st.length;
@@ -512,11 +534,12 @@ var iwidth,iheight;
         var st = ctext.element.querySelector('textarea').value;
         ttext.value=50-st.length + " characters left";
 
-        const cmes= tab.pages[0].addBinding(cmessage, 'message', {
+        cmes= tab.pages[0].addBinding(cmessage, 'message', {
             view: 'textarea',
             label: 'Message Under Scratch Area',
             rows:6,
             limit:110,
+            placeholder: 'Enter your message here'
             }).on('change', (ev) => {
                 scratchers[0].setText(ev.value);
                 var st = cmes.element.querySelector('textarea').value;
