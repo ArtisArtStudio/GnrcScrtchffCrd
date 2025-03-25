@@ -260,7 +260,21 @@ var iwidth,iheight;
         soundHandle.src = 'audio/celebrate.mp3';
         soundHandle.play();
         soundHandle.pause();
-
+        // Save form data before the tab is discarded
+        window.addEventListener("beforeunload", () => {
+            document.querySelectorAll("input, textarea, select").forEach(input => {
+            localStorage.setItem(input.id, input.value);
+            });
+        });
+        
+        // Restore data when the page loads
+        window.addEventListener("load", () => {
+            document.querySelectorAll("input, textarea, select").forEach(input => {
+            if (localStorage.getItem(input.id)) {
+                input.value = localStorage.getItem(input.id);
+            }
+            });
+        });
         $( window ).on({
             orientationchange: function(e) {
                 manageResizeOrientation('orientation');
@@ -402,6 +416,7 @@ var iwidth,iheight;
               {text: 'Pink1', value: 'Pink1'},
               {text: 'Pink-Blue1', value: 'Pink-Blue1'},
               {text: 'Pink-Blue2', value: 'Pink-Blue2'},
+              {text: 'Pink-Blue3', value: 'Pink-Blue3'},
               {text: 'Pink-Floral', value: 'Pink-Floral'},
               {text: 'StPatricks1', value: 'StPatricks1'},
               {text: 'StPatricks2', value: 'StPatricks2'},

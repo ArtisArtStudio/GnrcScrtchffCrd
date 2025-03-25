@@ -87,6 +87,9 @@ body {
   -o-background-size: cover;
   background-size:cover;
   min-height: 100vh;
+/*   background-size: auto 100%;
+  min-height: 100%; */
+
   -webkit-text-size-adjust: none;
    -moz-text-size-adjust: none;
     -ms-text-size-adjust: none;
