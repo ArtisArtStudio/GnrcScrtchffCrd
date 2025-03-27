@@ -388,48 +388,44 @@ Scratcher = (function() {
     offCtx.fillStyle = context.fillStyle; // Copy fill style
     offCtx.textAlign = "center";
     offCtx.textBaseline = "top"; 
-    if (fitWidth <= 0)
-    {
-        context.fillText( text, x, y );
-        return;
-    }
-    var words = text.split(' ');
+    var words = text.split(" ");
     var currentLine = 0;
     var idx = 1;
     var lw = false;
-    var lwcount=0;
+    var lwcount = 0;
+
     for (let index = 0; index < words.length; index++) {
-        if (words[index].length>9) {
+        if (words[index].length > 9) {
             lwcount++;
-        };
+        }
     }
-    while (words.length > 0 && idx <= words.length)
-    {
-        var str = words.slice(0,idx).join(' ');
-        var st = words.slice(idx-1,idx).join(' ');
-        var w = context.measureText(str).width;
-        if (context.measureText(st).width>fitWidth-(currentLine*Math.pow(indent,1.55)) || (lwcount>5 && currentLine>5 && indent>2)){
+
+    while (words.length > 0 && idx <= words.length) {
+        var str = words.slice(0, idx).join(" ");
+        var st = words.slice(idx - 1, idx).join(" ");
+        var w = offCtx.measureText(str).width;
+
+        if (offCtx.measureText(st).width > fitWidth - (currentLine * Math.pow(indent, 1.55)) || (lwcount > 5 && currentLine > 5 && indent > 2)) {
             this.containslongw = true;
-            lw=true;
+            lw = true;
         }
-        if ( w > fitWidth - (currentLine*Math.pow(indent,1.55)))
-        {
-            if (idx==1)
-            {
-                idx=2;
+        if (w > fitWidth - (currentLine * Math.pow(indent, 1.55))) {
+            if (idx == 1) {
+                idx = 2;
             }
-            context.fillText( words.slice(0,idx-1).join(' '), x, y + (lineHeight*currentLine) );
+            offCtx.fillText(words.slice(0, idx - 1).join(" "), fitWidth / 2, lineHeight * currentLine);
             currentLine++;
-            words = words.splice(idx-1);
+            words = words.splice(idx - 1);
             idx = 1;
+        } else {
+            idx++;
         }
-        else
-        {idx++;}
     }
-    if  (idx > 0)
-        context.fillText( words.join(' '), x, y + (lineHeight*currentLine) );
+    if (idx > 0) {
+        offCtx.fillText(words.join(" "), fitWidth / 2, lineHeight * currentLine);
+    }
     if (!lw) {
-        this.containslongw=false;
+        this.containslongw = false;
     }
     //alert(lwcount+ " "+currentLine);
      // Now draw this offscreen canvas as an image onto the main canvas
