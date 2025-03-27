@@ -233,12 +233,16 @@ Scratcher = (function() {
     Scratcher.prototype.recompositeCanvases = function(clear) {
         var tempctx = this.canvas.temp.getContext('2d');
         var mainctx = this.canvas.main.getContext('2d');
+        var offCanvas = document.createElement('canvas');
         var w = this.canvas.temp.width;
         var h =this.canvas.temp.height;
         
         // Step 1: clear the temp
-            this.canvas.temp.width = this.canvas.temp.width; // resizing clears
-            this.canvas.main.width = this.canvas.main.width; // resizing clears
+        this.canvas.temp.width = this.canvas.temp.width; // resizing clears
+        this.canvas.main.width = this.canvas.main.width; // resizing clears
+        offCanvas.width = this.canvas.main.width; // resizing clears
+        offCanvas.height = this.canvas.main.height; // resizing clears
+
         tempctx.save();
         tempctx.beginPath();
         switch(this.shape) {
@@ -287,19 +291,19 @@ Scratcher = (function() {
         switch(this.shape) {
             case 'heart':
                 tempctx.font =  w/18 + "pt Calibri";
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
+                printAtWordWrap(offCanvas, tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
                 break;
             case 'square':
                 tempctx.font = w/15 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3-h/15,w/12,w-20,1.5);                
+                printAtWordWrap(offCanvas, tempctx,this.cmessage,w/2,h/3-h/15,w/12,w-40,1.5);                
                 break;
             case 'circle':
                 tempctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
+                printAtWordWrap(offCanvas, tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
                 break;
             default:
                 tempctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
+                printAtWordWrap(offCanvas, tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
             }
         
         tempctx.clip();
@@ -375,15 +379,12 @@ Scratcher = (function() {
         
 
     }
-    function printAtWordWrap( context , text, x, y, lineHeight, fitWidth,indent)
+    function printAtWordWrap( offCanvas, context , text, x, y, lineHeight, fitWidth,indent)
 {
     fitWidth = fitWidth || 0;
-    context.textAlign="center";
-    let offCanvas = document.createElement("canvas");
+    //context.textAlign="center";
     let offCtx = offCanvas.getContext("2d");
 
-    offCanvas.width = fitWidth; 
-    offCanvas.height = lineHeight * 10; // Adjust based on max expected lines
     offCtx.font = context.font; // Copy font settings
     offCtx.fillStyle = context.fillStyle; // Copy fill style
     offCtx.textAlign = "center";
@@ -429,7 +430,7 @@ Scratcher = (function() {
     }
     //alert(lwcount+ " "+currentLine);
      // Now draw this offscreen canvas as an image onto the main canvas
-     context.drawImage(offCanvas, x - fitWidth / 2, y);
+     context.drawImage(offCanvas, x-fitWidth/2, y-lineHeight);
 }
   
    
