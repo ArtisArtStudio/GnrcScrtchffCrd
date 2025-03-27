@@ -374,11 +374,20 @@ Scratcher = (function() {
         
         
 
-    };
+    }
     function printAtWordWrap( context , text, x, y, lineHeight, fitWidth,indent)
 {
     fitWidth = fitWidth || 0;
     context.textAlign="center";
+    let offCanvas = document.createElement("canvas");
+    let offCtx = offCanvas.getContext("2d");
+
+    offCanvas.width = fitWidth; 
+    offCanvas.height = lineHeight * 10; // Adjust based on max expected lines
+    offCtx.font = context.font; // Copy font settings
+    offCtx.fillStyle = context.fillStyle; // Copy fill style
+    offCtx.textAlign = "center";
+    offCtx.textBaseline = "top"; 
     if (fitWidth <= 0)
     {
         context.fillText( text, x, y );
@@ -423,6 +432,8 @@ Scratcher = (function() {
         this.containslongw=false;
     }
     //alert(lwcount+ " "+currentLine);
+     // Now draw this offscreen canvas as an image onto the main canvas
+     context.drawImage(offCanvas, x - fitWidth / 2, y);
 }
   
    
