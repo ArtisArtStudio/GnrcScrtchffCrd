@@ -274,12 +274,36 @@ Scratcher = (function() {
             }
         tempctx.clip();
         tempctx.closePath();
+        
         //tempctx.restore();
         // Step 3: stamp the background on the temp (!! source-atop mode !!)
         if (!clear) {
             tempctx.globalCompositeOperation = 'source-atop';
             tempctx.drawImage(this.image.back.img, 0, 0,this.image.back.img.width, this.image.back.img.height,0,0,w,h);
         }
+        tempctx.fillStyle = '#FFF';
+        tempctx.fillRect(0,0,w,h);
+        tempctx.fillStyle = '#000';
+        switch(this.shape) {
+            case 'heart':
+                tempctx.font =  w/18 + "pt Calibri";
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
+                break;
+            case 'square':
+                tempctx.font = w/15 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3-h/15,w/12,w-20,1.5);                
+                break;
+            case 'circle':
+                tempctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
+                break;
+            default:
+                tempctx.font = w/17 + "pt Calibri";;
+                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
+            }
+        
+        tempctx.clip();
+        tempctx.closePath();
         mainctx.save();
         mainctx.beginPath();
         switch(this.shape) {
@@ -308,30 +332,8 @@ Scratcher = (function() {
             default:
                 mainctx.arc(0, 0, w*0.5, 0, Math.PI * 2, true);
             }
-        tempctx.fillStyle = '#FFF';
-        tempctx.fillRect(0,0,w,h);
-        tempctx.fillStyle = '#000';
-        switch(this.shape) {
-            case 'heart':
-                tempctx.font =  w/18 + "pt Calibri";
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/15,w-30,9);
-                break;
-            case 'square':
-                tempctx.font = w/15 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3-h/15,w/12,w-20,1.5);                
-                break;
-            case 'circle':
-                tempctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                
-                break;
-            default:
-                tempctx.font = w/17 + "pt Calibri";;
-                printAtWordWrap(tempctx,this.cmessage,w/2,h/3,w/13,w-40,1.5);                       
-            }
-        
-        tempctx.clip();
-        tempctx.closePath();
-        tempctx.restore();
+       
+        //tempctx.restore();
         // Step 5: stamp the temp on the display canvas (source-over)
         mainctx.globalCompositeOperation = 'source-over';
 
