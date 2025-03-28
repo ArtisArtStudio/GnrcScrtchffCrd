@@ -270,7 +270,7 @@ var iwidth,iheight;
         var fontSize=$('#surprise').css('font-size').toUpperCase().split("PX");
         $('#surprise').css('font-size',((parseFloat(fontSize[0])+parseFloat(initialFontSize)+"PX"))); 
 
-        manageResizeOrientation();
+        modifyFontSize();
 
         for (i = 0; i < scratchers.length; i++) {
             i1 = i + 1;

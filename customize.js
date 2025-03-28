@@ -342,7 +342,7 @@ var iwidth,iheight;
         scratchers = new Array(1);
 
         const cmessage = {
-            message: 'Happy birthday! Wishing you a magnificent, unforgettable celebration filled with extraordinary happiness! ♥️'
+            message: ''
           };
         const title = {
             prop: ''
