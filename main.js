@@ -154,9 +154,9 @@ var iwidth,iheight;
         checkinprogress=true;
 
         setTimeout(function () {
-            if (iwidth==window.innerWidth && window.innerHeight<=iheight){
+/*             if (iwidth==window.innerWidth && window.innerHeight<=iheight){
                 return;
-            }
+            } */
             //console.log(iheight + " "+beforeheight);
             iwidth = window.innerWidth;
             iheight = window.innerHeight;
@@ -200,6 +200,7 @@ var iwidth,iheight;
 
     function initPage() {
         var i, i1;    
+        var scratcherLoadedCount = 0;      
         canvas = document.getElementById("scratcher1");
         iwidth = window.innerWidth;
         iheight = window.innerHeight;
@@ -211,7 +212,6 @@ var iwidth,iheight;
                 manageResizeOrientation('resize');
             }
         });        
-        fitCanvastoDiv();
 
         $('.nosoundbtn').on("click", function (e) {
             document.getElementById('id01').style.display='none';
@@ -238,11 +238,25 @@ var iwidth,iheight;
             },
             false,
           );
-   
-        
-        $('#resetbutton').on('click', function() {
-            onResetClicked();
-        });
+    
+               // called each time a scratcher loads
+               function onScratcherLoaded(ev) {
+
+                scratcherLoadedCount++;
+                if (scratcherLoadedCount == scratchers.length) {
+                    // all scratchers loaded!
+    
+                    // bind the reset button to reset all scratchers
+                    $('#resetbutton').on('click', function () {
+                        onResetClicked();
+                    });
+                    fitCanvastoDiv();
+    
+                    // hide loading text, show instructions text
+                    //$('#loading-text').hide();
+                    //$('#inst-text').show();
+                }
+            };
         scratchers = new Array(1);
         
         //var end = window.btoa( rb ); 
@@ -260,7 +274,7 @@ var iwidth,iheight;
         soundeffect = params.get("snd1");
         confettieffect = params.get("conf1");
         if (soundeffect==1){
-            //document.getElementById('id01').style.display='block';
+            document.getElementById('id01').style.display='block';
         };
         initialFontSize = params.get("tfs");
         document.getElementsByTagName("body")[0].style.backgroundImage = 'url(images/back/'+backgrnd+ '.jpg)';
@@ -277,7 +291,7 @@ var iwidth,iheight;
             scratchers[i] = new Scratcher('scratcher' + i1);
     
             // set up this listener before calling setImages():
-            //scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
+            scratchers[i].addEventListener('imagesloaded', onScratcherLoaded);
     
             scratchers[i].setImages('images/empty.jpg','images/fore/' +foregrnd+ '.jpg');
             scratchers[i].setText(cmes);
